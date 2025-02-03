@@ -2,29 +2,32 @@
 
 Desenvolvimento de projeto referente à disciplina de Programação Web II (PWEBII).
 
-## Sobre o projeto
+## 1. Sobre o projeto
 
 O sistema terá como proposta uma plataforma de cursos online de tecnologia chamada Learnify. Nela, os alunos assinam um plano e poderão estudar cursos da área de front-end, back-end, data science e marketing digital. Além disso, os professores e administradores da plataforma podem gerenciar os cursos, seus conteúdos além de seus alunos, dentro de suas devidas competências.
 
-## Tecnologias utilizadas
+## 2. Tecnologias utilizadas
 
-## Dependências necessárias
+<img src="https://cdn-icons-png.flaticon.com/128/5968/5968292.png" width="50" height="50"> <img src="https://cdn-icons-png.flaticon.com/128/5968/5968322.png" width="50" height="50"> <img src="https://cdn-icons-png.flaticon.com/128/15772/15772797.png" width="50" height="50"> <img src="https://cdn-icons-png.flaticon.com/128/15466/15466163.png" width="50" height="50"> 
 
-## Como rodar a aplicação
 
-## Funcionalidades
+## 3. Dependências necessárias
 
-## Pontos de melhoria
+## 4. Como rodar a aplicação
 
-## Colaboradores
+## 5. Funcionalidades
 
-André Casimiro da Silva  (https://github.com/Andre-nemesis)
+## 6. Pontos de melhoria
 
-Francisca Geovanna de Lima da Silva  (https://github.com/FranciscaGeovanna)
+## 7. Colaboradores
 
-Guilherme Bandeira Dias  (https://github.com/DevGuiBan)
+🌎 André Casimiro da Silva  (https://github.com/Andre-nemesis)
 
-Nickolas Davi Vieira Lima  (https://github.com/niickol4s)
+🚀 Francisca Geovanna de Lima da Silva  (https://github.com/FranciscaGeovanna)
 
-Raimundo Gabriel Pereira Ferreira  (https://github.com/thegabriew)
+☄️ Guilherme Bandeira Dias  (https://github.com/DevGuiBan)
+
+⚡ Nickolas Davi Vieira Lima  (https://github.com/niickol4s)
+
+🪐 Raimundo Gabriel Pereira Ferreira  (https://github.com/thegabriew)
 
