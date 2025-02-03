@@ -18,7 +18,7 @@ O sistema terá como proposta uma plataforma de cursos online de tecnologia cham
 
 ## Colaboradores
 
-André Casimiro da Silva  
+André Casimiro da Silva  (https://github.com/Andre-nemesis)
 
 Francisca Geovanna de Lima da Silva  
 
