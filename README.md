@@ -20,11 +20,11 @@ O sistema terá como proposta uma plataforma de cursos online de tecnologia cham
 
 André Casimiro da Silva  (https://github.com/Andre-nemesis)
 
-Francisca Geovanna de Lima da Silva  
+Francisca Geovanna de Lima da Silva  (https://github.com/FranciscaGeovanna)
 
-Guilherme Bandeira Dias  
+Guilherme Bandeira Dias  (https://github.com/DevGuiBan)
 
-Nickolas Davi Vieira Lima  
+Nickolas Davi Vieira Lima  (https://github.com/niickol4s)
 
-Raimundo Gabriel Pereira Ferreira  
+Raimundo Gabriel Pereira Ferreira  (https://github.com/thegabriew)
 
