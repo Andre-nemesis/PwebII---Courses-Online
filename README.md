@@ -18,8 +18,13 @@ O sistema terá como proposta uma plataforma de cursos online de tecnologia cham
 
 ## Colaboradores
 
-André Casimiro da Silva
-Francisca Geovanna de Lima da Silva
-Guilherme Bandeira Dias
-Nickolas Davi Vieira Lima
-Raimundo Gabriel Pereira Ferreira
+André Casimiro da Silva  
+
+Francisca Geovanna de Lima da Silva  
+
+Guilherme Bandeira Dias  
+
+Nickolas Davi Vieira Lima  
+
+Raimundo Gabriel Pereira Ferreira  
+
