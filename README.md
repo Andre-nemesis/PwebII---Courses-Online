@@ -8,8 +8,7 @@ O sistema terá como proposta uma plataforma de cursos online de tecnologia cham
 
 ## 2. Tecnologias utilizadas
 
-<img src="https://cdn-icons-png.flaticon.com/128/5968/5968292.png" width="50" height="50"> <img src="https://cdn-icons-png.flaticon.com/128/5968/5968322.png" width="50" height="50"> <img src="https://cdn-icons-png.flaticon.com/128/15772/15772797.png" width="50" height="50"> <img src="https://cdn-icons-png.flaticon.com/128/15466/15466163.png" width="50" height="50"> 
-
+<img src="https://cdn-icons-png.flaticon.com/128/5968/5968292.png" width="50" height="50"> &nbsp; &nbsp; &nbsp; &nbsp; <img src="https://cdn-icons-png.flaticon.com/128/5968/5968322.png" width="50" height="50"> &nbsp; &nbsp; &nbsp; &nbsp; <img src="https://cdn-icons-png.flaticon.com/128/15772/15772797.png" width="50" height="50"> &nbsp; &nbsp; &nbsp; &nbsp; <img src="https://cdn-icons-png.flaticon.com/128/15466/15466163.png" width="50" height="50"> 
 
 ## 3. Dependências necessárias
 
@@ -21,13 +20,13 @@ O sistema terá como proposta uma plataforma de cursos online de tecnologia cham
 
 ## 7. Colaboradores
 
-🌎 André Casimiro da Silva  (https://github.com/Andre-nemesis)
+🌎 André Casimiro da Silva  (https://github.com/Andre-nemesis);
 
-🚀 Francisca Geovanna de Lima da Silva  (https://github.com/FranciscaGeovanna)
+🚀 Francisca Geovanna de Lima da Silva  (https://github.com/FranciscaGeovanna);
 
-☄️ Guilherme Bandeira Dias  (https://github.com/DevGuiBan)
+☄️ Guilherme Bandeira Dias  (https://github.com/DevGuiBan);
 
-⚡ Nickolas Davi Vieira Lima  (https://github.com/niickol4s)
+⚡ Nickolas Davi Vieira Lima  (https://github.com/niickol4s);
 
-🪐 Raimundo Gabriel Pereira Ferreira  (https://github.com/thegabriew)
+🪐 Raimundo Gabriel Pereira Ferreira  (https://github.com/thegabriew).
 
