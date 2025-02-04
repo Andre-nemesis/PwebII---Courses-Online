@@ -2,6 +2,9 @@
 const {
   Model
 } = require('sequelize');
+
+const bcrypt = require('bcrypt');
+
 module.exports = (sequelize, DataTypes) => {
   class Admnistrator extends Model {
     /**
@@ -60,6 +63,14 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Admnistrator',
+    hook: {
+      beforeCreate: async (admnistrator) => {
+        if (admnistrator.password) {
+          const salt = await bcrypt.genSalt(10);
+          admnistrator.password = await bcrypt.hash(admnistrator.password, salt);
+        }
+      }
+    }
   });
   return Admnistrator;
 };

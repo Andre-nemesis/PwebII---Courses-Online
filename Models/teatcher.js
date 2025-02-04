@@ -2,6 +2,9 @@
 const {
   Model
 } = require('sequelize');
+
+const bcrypt = require('bcrypt');
+
 module.exports = (sequelize, DataTypes) => {
   class Teatcher extends Model {
     static associate(models) {
@@ -127,6 +130,14 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Teatcher',
+    hooks: {
+      beforeCreate: async (teatcher) => {
+        if (teatcher.password) {
+          const salt = await bcrypt.genSalt(10);
+          teatcher.password = await bcrypt.hash(teatcher.password, salt);
+        }
+      }
+    }
   });
   return Teatcher;
 };

@@ -2,6 +2,9 @@
 const {
   Model
 } = require('sequelize');
+
+const bcrypt = require('bcrypt');
+
 module.exports = (sequelize, DataTypes) => {
   class Student extends Model {
     static associate(models) {
@@ -92,6 +95,14 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Student',
+    hooks: {
+      beforeCreate: async (student) => {
+        if(student.password) {
+          const salt = await bcrypt.genSalt(10);
+          student.password = await bcrypt.hash(student.password, salt);
+        }
+      }
+    }
   });
   return Student;
 };
