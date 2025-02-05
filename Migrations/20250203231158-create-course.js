@@ -13,16 +13,37 @@ module.exports = {
         type: Sequelize.STRING
       },
       course_module_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'course_module', 
+          key: 'id' 
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       qtd_hours: {
         type: Sequelize.INTEGER
       },
       student_course_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'course_student', 
+          key: 'id' 
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       admin_id: {
-        type: Sequelize.UUID
+        type: Sequelize.UUIDV4,
+        allowNull: false,
+        references: {
+          model: 'administrator', 
+          key: 'id' 
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       percent_complet: {
         type: Sequelize.FLOAT
@@ -30,7 +51,13 @@ module.exports = {
       certificate_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        unique: true
+        unique: true,
+        references: {
+          model: 'certificade', 
+          key: 'id' 
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       created_at: {
         allowNull: false,

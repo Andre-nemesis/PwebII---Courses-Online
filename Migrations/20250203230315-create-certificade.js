@@ -10,10 +10,24 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       student_id: {
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: 'student', 
+          key: 'id' 
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       course_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'course',
+          key: id,
+        },
+        onUpdate: 'CASACADE',
+        onDelete: 'CASCADE'
       },
       issue_date: {
         type: Sequelize.DATE

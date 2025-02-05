@@ -10,10 +10,24 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       teatcher_id: {
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: 'teatcher', 
+          key: 'id' 
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       module_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'module', 
+          key: 'id' 
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       created_at: {
         allowNull: false,

@@ -13,7 +13,14 @@ module.exports = {
         type: Sequelize.STRING
       },
       teatcher_id: {
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: 'teatcher',
+          key: 'id' 
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       qtd_ativities: {
         type: Sequelize.INTEGER
