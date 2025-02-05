@@ -16,7 +16,7 @@ O sistema terá como proposta uma plataforma de cursos online de tecnologia cham
 
 ## 5. Funcionalidades
 
-As funcionalidades do sistema estão de acordo com as competências dos atores. Os atores deste sistema estão organizados da seguinte forma:  
+As funcionalidades do sistema estão de acordo com as competências dos atores. Os atores deste sistema estão organizados da seguinte forma:    
 
 * **Administrador:** administrador geral da plataforma Learnify. Gestão de usuários e cursos;
 * **Aluno:** aluno assinante da Learnify. Acesso aos cursos, certificados;
