@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    teatcher_id: {
+    teacher_id: {
       type: DataTypes.UUID,
       references: {
         model: models.Teacher,

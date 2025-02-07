@@ -9,11 +9,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      teatcher_id: {
+      teacher_id: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'teatcher', 
+          model: 'teacher', 
           key: 'id' 
         },
         onUpdate: 'CASCADE',

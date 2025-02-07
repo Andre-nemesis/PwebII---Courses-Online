@@ -12,11 +12,11 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      teatcher_id: {
+      teacher_id: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'teatcher',
+          model: 'teacher',
           key: 'id' 
         },
         onUpdate: 'CASCADE',
