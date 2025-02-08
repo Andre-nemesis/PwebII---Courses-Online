@@ -129,7 +129,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'Teatcher',
+    modelName: 'Teachers',
     hooks: {
       beforeCreate: async (teatcher) => {
         if (teatcher.password) {
