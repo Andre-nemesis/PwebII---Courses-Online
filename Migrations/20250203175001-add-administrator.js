@@ -6,7 +6,6 @@ module.exports = {
     await queryInterface.createTable('Administrator', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -36,11 +35,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
+    await queryInterface.dropTable('Administrator');
   }
 };

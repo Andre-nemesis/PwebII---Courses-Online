@@ -1,11 +1,11 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Teachers', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -14,10 +14,13 @@ module.exports = {
         type: Sequelize.STRING
       },
       cpf: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: false
       },
       phone_number: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
       },
       academic_formation: {
         type: Sequelize.STRING
@@ -26,15 +29,20 @@ module.exports = {
         type: Sequelize.STRING
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: false
       },
       password: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       created_at: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       updated_at: {
+        allowNull: false,
         type: Sequelize.DATE
       }
     });

@@ -1,4 +1,5 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -23,7 +24,8 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       qtd_hours: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       student_course_id: {
         type: Sequelize.INTEGER,

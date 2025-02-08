@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('Studant', {
+    await queryInterface.createTable('Student', {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -12,10 +12,12 @@ module.exports = {
       },
       cpf: {
         allowNull: false,
+        unique: true,
         type: Sequelize.STRING
       },
       cell_phone_number: {
         allowNull: false,
+        unique: true,
         type: Sequelize.STRING
       },
       city: {
@@ -47,6 +49,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('Student');
   }
 };
