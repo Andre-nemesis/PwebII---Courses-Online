@@ -14,7 +14,17 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'module',
+          model: 'Modules',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
+      teacher_id: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: 'Teachers',
           key: 'id'
         },
         onUpdate: 'CASCADE',

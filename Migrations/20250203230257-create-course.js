@@ -19,16 +19,6 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
-      student_course_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Student_courses',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
       admin_id: {
         type: Sequelize.UUID,
         allowNull: false,
@@ -41,17 +31,6 @@ module.exports = {
       },
       percent_complet: {
         type: Sequelize.FLOAT
-      },
-      certificate_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: true,
-        references: {
-          model: 'Certificades',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
       },
       created_at: {
         allowNull: false,

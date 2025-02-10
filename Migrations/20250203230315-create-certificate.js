@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Certificades', {
+    await queryInterface.createTable('Certificates', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -24,26 +24,32 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Course',
+          model: 'Courses',
           key: 'id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
       issue_date: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        allowNull: false
       },
       certificate_code: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       status: {
-        type: Sequelize.ENUM('pending', 'issued', 'revoked'),
+        type: Sequelize.ENUM('Pendente', 'Aprovado', 'Rejeitado'),
+        allowNull: false,
+        defaultValue: 'Pendente'
       },
       final_score: {
-        type: Sequelize.FLOAT
+        type: Sequelize.FLOAT,
+        allowNull: false
       },
       download_link: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       created_at: {
         allowNull: false,
@@ -56,6 +62,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Certificades');
+    await queryInterface.dropTable('Certificates');
   }
 };
