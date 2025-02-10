@@ -3,13 +3,13 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Certificade extends Model {
+  class Certificate extends Model {
     static associate(models) {
-      Certificade.belongsTo(models.Student, {foreignKey:'student_id'});
-      Certificade.belongsTo(models.Course, {foreignKey:'course_id'});
+      Certificate.belongsTo(models.Student, {foreignKey:'student_id'});
+      Certificate.belongsTo(models.Course, {foreignKey:'course_id'});
     }
   }
-  Certificade.init({
+  Certificate.init({
     id:{
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -79,7 +79,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'Certificade',
+    modelName: 'Certificate',
   });
-  return Certificade;
+  return Certificate;
 };
