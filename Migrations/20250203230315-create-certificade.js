@@ -24,10 +24,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'course',
-          key: id,
+          model: 'Course',
+          key: 'id',
         },
-        onUpdate: 'CASACADE',
+        onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
       issue_date: {
@@ -37,7 +37,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       status: {
-        type: Sequelize.ENUM
+        type: Sequelize.ENUM('pending', 'issued', 'revoked'),
       },
       final_score: {
         type: Sequelize.FLOAT

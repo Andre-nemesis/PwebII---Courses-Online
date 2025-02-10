@@ -1,5 +1,7 @@
 'use strict';
 
+const sequelize = require('sequelize');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -13,16 +15,6 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      course_module_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'course_module', 
-          key: 'id' 
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
       qtd_hours: {
         type: Sequelize.INTEGER,
         allowNull: false
@@ -31,18 +23,18 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'course_student', 
-          key: 'id' 
+          model: 'Student_courses',
+          key: 'id'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
       admin_id: {
-        type: Sequelize.UUIDV4,
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'administrator', 
-          key: 'id' 
+          model: 'administrator',
+          key: 'id'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
@@ -51,12 +43,12 @@ module.exports = {
         type: Sequelize.FLOAT
       },
       certificate_id: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
         unique: true,
         references: {
-          model: 'certificade', 
-          key: 'id' 
+          model: 'Certificades',
+          key: 'id'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
@@ -69,8 +61,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    });
+    });    
   },
+
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Courses');
   }

@@ -14,7 +14,7 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'studant', 
+          model: 'student', 
           key: 'id' 
         },
         onUpdate: 'CASCADE',
@@ -24,7 +24,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'course', 
+          model: 'Course', 
           key: 'id' 
         },
         onUpdate: 'CASCADE',

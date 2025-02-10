@@ -2,30 +2,23 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Modules', {
+  async up (queryInterface, Sequelize) {
+    await queryInterface.createTable('Course_module', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      teacher_id: {
-        type: Sequelize.UUID,
+      module_id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'teachers',
-          key: 'id' 
+          model: 'module',
+          key: 'id'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
-      },
-      qtd_ativities: {
-        type: Sequelize.INTEGER
       },
       created_at: {
         allowNull: false,
@@ -35,9 +28,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    });
+    });    
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Modules');
+
+  async down (queryInterface, Sequelize) {
+    await queryInterface.dropTable('Course_module');
   }
 };
