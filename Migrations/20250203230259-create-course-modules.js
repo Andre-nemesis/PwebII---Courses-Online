@@ -2,7 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up (queryInterface, Sequelize) {
     await queryInterface.createTable('Course_module', {
       id: {
         allowNull: false,
@@ -10,22 +10,22 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      teacher_id: {
-        type: Sequelize.UUID,
-        allowNull: false,
-        references: {
-          model: 'teacher', 
-          key: 'id' 
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
       module_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'module', 
-          key: 'id' 
+          model: 'Modules',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
+      teacher_id: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: 'Teachers',
+          key: 'id'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
@@ -38,9 +38,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    });
+    });    
   },
-  async down(queryInterface, Sequelize) {
+
+  async down (queryInterface, Sequelize) {
     await queryInterface.dropTable('Course_module');
   }
 };
