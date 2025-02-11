@@ -1,14 +1,13 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+
+const { Model } = require('sequelize');
 
 const bcrypt = require('bcrypt');
 
 module.exports = (sequelize, DataTypes) => {
   class Teatcher extends Model {
     static associate(models) {
-      Teacher.belongsTo(models.Course, {foreignKey: 'teacher_id'});
+      Teatcher.hasMany(models.module), {foreignKey: 'teacher_id'}
     }
   }
   Teatcher.init({
