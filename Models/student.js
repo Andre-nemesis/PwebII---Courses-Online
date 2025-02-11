@@ -1,7 +1,6 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+
+const { Model } = require('sequelize');
 
 const bcrypt = require('bcrypt');
 
@@ -9,8 +8,7 @@ module.exports = (sequelize, DataTypes) => {
   class Student extends Model {
     static associate(models) {
       Student.hasMany(models.Certificate, { foreignKey: "id" })
-      Student.hasMany(models.Student_course, { through: 'Student_course',
-                                              foreignKey: "id"})
+      Student.hasMany(models.Course, { through: 'Student_course', foreignKey: "id"})
     }
   }
   Student.init({
