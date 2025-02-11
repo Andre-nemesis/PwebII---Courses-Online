@@ -10,6 +10,8 @@ module.exports = (sequelize, DataTypes) => {
       Course.hasMany(models.Student, { through: 'Student_courses',
                                         foreignKey: 'course_id' });
       Course.hasMany(models.Certificate, { foreignKey: "certificate_id" })
+
+      Course.belongsTo(models.Administrator, { foreignKey: "admin_id"});
     }
   }
   Course.init({
