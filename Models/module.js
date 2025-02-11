@@ -38,13 +38,14 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       }
     },
-    qtd_ativities: {
+    qtd_hours: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 0,
       validate: {
         min: {
-          args: 1,
-          msg: "O número de atividades deve ser maior ou igual a 1"
+          args: [1],
+          msg: "A quantidade de horas deve ser pelo menos 1"
         }
       }
     },
