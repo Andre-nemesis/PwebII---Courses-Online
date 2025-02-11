@@ -44,8 +44,8 @@ module.exports = (sequelize, DataTypes) => {
       unique: true
     },
     status: {
-      type: DataTypes.ENUM('pendente', 'aprovado', 'reprovado'),
-      defaultValue: 'pendente',
+      type: DataTypes.ENUM('Pendente', 'Aprovado', 'Rejeitado'),
+      defaultValue: 'Pendente',
       allowNull: false,
     },
     final_score: {

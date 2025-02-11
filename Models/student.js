@@ -7,8 +7,8 @@ const bcrypt = require('bcrypt');
 module.exports = (sequelize, DataTypes) => {
   class Student extends Model {
     static associate(models) {
-      Student.hasMany(models.Certificate, { foreignKey: "id" })
-      Student.hasMany(models.Course, { through: 'Student_course', foreignKey: "id"})
+      Student.hasMany(models.Certificate, { foreignKey: "student_id" })
+      Student.hasMany(models.Course, { through: 'Student_course', foreignKey: "student_id"})
     }
   }
   Student.init({
