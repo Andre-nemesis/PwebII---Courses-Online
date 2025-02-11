@@ -13,7 +13,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       qtd_hours: {
         type: Sequelize.INTEGER,
@@ -30,7 +31,8 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       percent_complet: {
-        type: Sequelize.FLOAT
+        type: Sequelize.FLOAT,
+        allowNull: false
       },
       created_at: {
         allowNull: false,
