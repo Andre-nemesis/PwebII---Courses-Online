@@ -5,11 +5,10 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Course extends Model {
     static associate(models) {
-      Course.hasMany(models.Module, { through : 'Course_module', foreignKey: 'course_id' });
+      Course.hasMany(models.Module, { through: 'Course_module', foreignKey: 'course_id' });
       Course.hasMany(models.Student, { through: 'Student_courses', foreignKey: 'course_id' });
-      Course.hasMany(models.Certificate, { foreignKey: "certificate_id" })
-
-      Course.belongsTo(models.Administrator, { foreignKey: "admin_id"});
+      Course.hasMany(models.Certificate, { foreignKey: "course_id" })
+      Course.belongsTo(models.Administrator, { foreignKey: "admin_id" });
     }
   }
   Course.init({
@@ -34,16 +33,6 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    course_module_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: model.Course_module,
-        key: 'id'
-      },
-      onDelete: 'CASCADE',
-      onUpdate: 'CASCADE',
-    },
     qtd_hours: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -54,19 +43,11 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    student_course_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'student_courses',
-        key: 'id'
-      }
-    },
     admin_id: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'admnistrator',
+        model: 'adimnistrator',
         key: 'id'
       }
     },
@@ -82,19 +63,6 @@ module.exports = (sequelize, DataTypes) => {
           args: 100,
           msg: "O percentual de completude do curso deve ser menor ou igual a 100"
         }
-      }
-    },
-    certificate_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      unique: true,
-      validate: {
-        references: {
-          model: 'certificate',
-          key: 'id'
-        },
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
       }
     },
     created_at: {

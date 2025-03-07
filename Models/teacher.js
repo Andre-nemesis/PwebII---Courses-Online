@@ -5,12 +5,12 @@ const { Model } = require('sequelize');
 const bcrypt = require('bcrypt');
 
 module.exports = (sequelize, DataTypes) => {
-  class Teatcher extends Model {
+  class Teacher extends Model {
     static associate(models) {
-      Teatcher.hasMany(models.module), {foreignKey: 'teacher_id'}
+      Teacher.hasMany(models.Module, {foreignKey: 'teacher_id'});
     }
   }
-  Teatcher.init({
+  Teacher.init({
     id:{
       type: DataTypes.UUID,
       primaryKey: true,
@@ -130,8 +130,8 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Teachers',
     hooks: {
-      beforeCreate: async (teatcher) => {
-        if (teatcher.password) {
+      beforeCreate: async (teacher) => {
+        if (teacher.password) {
           const salt = await bcrypt.genSalt(10);
           teatcher.password = await bcrypt.hash(teatcher.password, salt);
         }
