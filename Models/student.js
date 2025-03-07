@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
   class Student extends Model {
     static associate(models) {
       Student.hasMany(models.Certificate, { foreignKey: "student_id" })
-      Student.hasMany(models.Course, { through: 'Student_course', foreignKey: "student_id"})
+      Student.belongsToMany(models.Course, { through: 'Student_course', foreignKey: "student_id"})
     }
   }
   Student.init({

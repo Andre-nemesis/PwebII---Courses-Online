@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   class Module extends Model {
     static associate(models) {
       Module.belongsTo(models.Teacher, {foreignKey: 'teacher_id'});
-      Module.hasMany(models.Course,{through : 'Course_module', foreignKey: 'module_id'})
+      Module.belongsToMany(models.Course,{through : 'Course_module', foreignKey: 'module_id'})
     }
   }
   Module.init({
@@ -52,11 +52,12 @@ module.exports = (sequelize, DataTypes) => {
     created_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
-      allowNull: false,
+      allowNull: false
     },
     updated_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
+      allowNull: false
     }
   }, {
     sequelize,
