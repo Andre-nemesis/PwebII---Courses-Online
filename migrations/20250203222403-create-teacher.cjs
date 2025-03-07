@@ -3,31 +3,28 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Modules', {
+    await queryInterface.createTable('Teachers', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
       },
-      name: {
+      user_id:{
+        type: Sequelize.UUID,
+        references: {
+          model: 'Users',
+          key: 'id'
+        },
+        allowNull: false
+      },
+      academic_formation: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      teacher_id: {
-        type: Sequelize.UUID,
-        allowNull: false,
-        references: {
-          model: 'teachers',
-          key: 'id' 
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      qtd_hours: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        defaultValue: 0
+      tecnic_especialization: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
       created_at: {
         allowNull: false,
@@ -40,6 +37,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Modules');
+    await queryInterface.dropTable('Teachers');
   }
 };

@@ -3,12 +3,26 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('Administrator', {
+    await queryInterface.createTable('Users', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
+        defaultValue: Sequelize.UUIDV4,    
+      },
+      cpf: {
+        allowNull: false,
+        unique: true,
+        type: Sequelize.STRING
+      },
+      cell_phone_number: {
+        allowNull: false,
+        unique: true,
+        type: Sequelize.STRING
+      },
+      city: {
+        allowNull: false,
+        type: Sequelize.STRING
       },
       name: {
         allowNull: false,
@@ -16,12 +30,17 @@ module.exports = {
       },
       email: {
         allowNull: false,
-        type: Sequelize.STRING,
-        unique:true
+        unique: true,
+        type: Sequelize.STRING
       },
       password: {
         allowNull: false,
         type: Sequelize.STRING
+      },
+      role:{
+        type: Sequelize.ENUM('admin','student','teatcher'),
+        allowNull: false,
+        defaultValue: 'student'
       },
       created_at: {
         allowNull: false,
@@ -35,6 +54,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('Administrator');
+    
   }
 };

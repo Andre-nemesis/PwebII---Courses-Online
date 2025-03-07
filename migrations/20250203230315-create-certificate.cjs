@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Student_courses', {
+    await queryInterface.createTable('Certificates', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -14,21 +14,42 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'student', 
+          model: 'Users', 
           key: 'id' 
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'RESTRICT'
       },
       course_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Courses', 
-          key: 'id' 
+          model: 'Courses',
+          key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'RESTRICT'
+      },
+      issue_date: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      certificate_code: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      status: {
+        type: Sequelize.ENUM('Pendente', 'Aprovado', 'Rejeitado'),
+        allowNull: false,
+        defaultValue: 'Pendente'
+      },
+      final_score: {
+        type: Sequelize.FLOAT,
+        allowNull: false
+      },
+      download_link: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
       created_at: {
         allowNull: false,
@@ -41,6 +62,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Student_courses');
+    await queryInterface.dropTable('Certificates');
   }
 };

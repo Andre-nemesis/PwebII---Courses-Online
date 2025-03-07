@@ -18,7 +18,7 @@ module.exports = {
           key: 'id'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'RESTRICT'
       },
       created_at: {
         allowNull: false,

@@ -1,11 +1,9 @@
 'use strict';
 
-const sequelize = require('sequelize');
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Courses', {
+    await queryInterface.createTable('Modules', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -16,23 +14,20 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      qtd_hours: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-      },
-      admin_id: {
+      teacher_id: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'administrator',
-          key: 'id'
+          model: 'Teachers',
+          key: 'id' 
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'RESTRICT'
       },
-      percent_complet: {
-        type: Sequelize.FLOAT,
-        allowNull: false
+      qtd_hours: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0
       },
       created_at: {
         allowNull: false,
@@ -42,10 +37,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    });    
+    });
   },
-
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Courses');
+    await queryInterface.dropTable('Modules');
   }
 };
