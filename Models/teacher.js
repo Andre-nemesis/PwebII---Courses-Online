@@ -2,66 +2,28 @@
 
 const { Model } = require('sequelize');
 
-const bcrypt = require('bcrypt');
-
 module.exports = (sequelize, DataTypes) => {
   class Teacher extends Model {
     static associate(models) {
 
       Teacher.hasMany(models.Module, {foreignKey: 'teacher_id'});
+      Teacher.belongsTo(models.User, { foreignKey: 'user_id' });
 
     }
   }
+  
   Teacher.init({
-    id:{
+    id: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4
     },
-    name: {
-      type: DataTypes.STRING,
+    user_id: {
+      type: DataTypes.UUID,
       allowNull: false,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: 'Nome não pode ser vazio.'
-        },
-        isAlpha: {
-          args: true,
-          msg: 'Nome deve conter apenas letras.'
-        }
-      }
-    },
-    cpf: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: 'CPF não pode ser vazio.'
-        },
-        isNumeric: {
-          args: true,
-          msg: 'CPF deve conter apenas números.'
-        },
-        isLength: {
-          args: [11],
-          msg: 'CPF deve ter 11 dígitos.'
-        }
-      }
-    },
-    phone_number: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: 'Número de telefone não pode ser vazio.'
-        },
-        isNumeric: {
-          args: true,
-          msg: 'Número de telefone deve conter apenas números.'
-        }
+      references: {
+        model: 'users',
+        key: 'id'
       }
     },
     academic_formation: {
@@ -84,62 +46,19 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: 'Email não pode ser vazio.'
-        },
-        isEmail: {
-          args: true,
-          msg: 'Email inválido.'
-        }
-      }
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: 'Senha não pode ser vazia.'
-        },
-        isLength: {
-          args: [8, 20],
-          msg: 'Senha deve ter entre 8 e 20 caracteres.'
-        }
-      }
-    },
     created_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
-      allowNull: false,
-      validate: {
-        isDate: {
-          args: true,
-          msg: 'Data de criação inválida.'
-        }
-      }
+      allowNull: false
     },
     updated_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
+      allowNull: false
     }
   }, {
     sequelize,
-    modelName: 'Teachers',
-    
-    hooks: {
-      beforeCreate: async (teacher) => {
-        if (teacher.password) {
-          const salt = await bcrypt.genSalt(10);
-          teacher.password = await bcrypt.hash(teacher.password, salt);
-        }
-      }
-    }
+    modelName: 'Teacher',
   });
   return Teacher;
 };
