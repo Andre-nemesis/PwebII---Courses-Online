@@ -1,20 +1,9 @@
 'use strict';
 
-const { Model } = require('sequelize');
+import { DataTypes } from 'sequelize';
 
-module.exports = (sequelize, DataTypes) => {
-  class Course extends Model {
-    static associate(models) {
-
-      Course.belongsToMany(models.Module, { through : 'Course_module', foreignKey: 'course_id' }); 
-      Course.belongsToMany(models.Student, { through: 'Student_courses', foreignKey: 'course_id' });
-      Course.hasMany(models.Certificate, { foreignKey: "course_id" })
-
-      Course.belongsTo(models.Administrator, { foreignKey: "admin_id"});
-
-    }
-  }
-  Course.init({
+export default (sequelize) => {
+  const Course = sequelize.define('Course', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -50,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'adimnistrator',
+        model: 'user',
         key: 'id'
       }
     },
@@ -78,9 +67,15 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW,
       allowNull: false,
     },
-  }, {
-    sequelize,
-    modelName: 'Course',
   });
+
+  Course.associate = (models) => {
+      Course.belongsToMany(models.Module, { through : 'Course_module', foreignKey: 'course_id' }); 
+      Course.belongsToMany(models.Student, { through: 'Student_courses', foreignKey: 'course_id' });
+      Course.hasMany(models.Certificate, { foreignKey: "course_id" })
+
+      Course.belongsTo(models.User, { foreignKey: "user_id"});
+  }
+
   return Course;
 };

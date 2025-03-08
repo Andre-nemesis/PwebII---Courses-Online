@@ -1,18 +1,9 @@
 'use strict';
 
-const { Model } = require('sequelize');
+import { DataTypes } from 'sequelize';
 
-module.exports = (sequelize, DataTypes) => {
-  class Teacher extends Model {
-    static associate(models) {
-
-      Teacher.hasMany(models.Module, {foreignKey: 'teacher_id'});
-      Teacher.belongsTo(models.User, { foreignKey: 'user_id' });
-
-    }
-  }
-  
-  Teacher.init({
+export default (sequelize) => {
+  const Teacher = sequelize.define('Teacher', {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -56,9 +47,12 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW,
       allowNull: false
     }
-  }, {
-    sequelize,
-    modelName: 'Teacher',
   });
+
+  Teacher.associate = (models) => {
+    Teacher.hasMany(models.Module, {foreignKey: 'teacher_id'});
+    Teacher.belongsTo(models.User, { foreignKey: 'user_id' });
+  }
+
   return Teacher;
 };

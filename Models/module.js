@@ -1,14 +1,8 @@
 'use strict';
-const { Model } = require('sequelize');
+import { DataTypes } from 'sequelize';
 
-module.exports = (sequelize, DataTypes) => {
-  class Module extends Model {
-    static associate(models) {
-      Module.belongsTo(models.Teacher, {foreignKey: 'teacher_id'});
-      Module.belongsToMany(models.Course,{through : 'Course_module', foreignKey: 'module_id'})
-    }
-  }
-  Module.init({
+export default (sequelize) => {
+  const Module = sequelize.define('Module', {
     id:{
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -34,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     teacher_id: {
       type: DataTypes.UUID,
       references: {
-        model: models.Teacher,
+        model: 'Teacher',
         key: 'id'
       }
     },
@@ -59,9 +53,12 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW,
       allowNull: false
     }
-  }, {
-    sequelize,
-    modelName: 'Module',
   });
+
+  Module.associate = (models) => {
+    Module.belongsTo(models.Teacher, {foreignKey: 'teacher_id'});
+    Module.belongsToMany(models.Course,{through : 'Course_module', foreignKey: 'module_id'});
+  }
+  
   return Module;
 };

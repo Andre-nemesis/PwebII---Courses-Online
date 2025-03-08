@@ -1,15 +1,9 @@
 'use strict';
 
-const { Model } = require('sequelize');
+import { DataTypes } from 'sequelize';
 
-module.exports = (sequelize, DataTypes) => {
-  class Certificate extends Model {
-    static associate(models) {
-      Certificate.belongsTo(models.Student, {foreignKey:'student_id'});
-      Certificate.belongsTo(models.Course, {foreignKey:'course_id'});
-    }
-  }
-  Certificate.init({
+export default (sequelize) => {
+  const Certificate = sequelize.define('Certificate', {
     id:{
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -21,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
       references: {
-        model: models.Student,
+        model: 'Student',
         key: 'id',
       }
     },
@@ -29,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: models.Course,
+        model: 'Course',
         key: 'id',
       }
     },
@@ -70,16 +64,18 @@ module.exports = (sequelize, DataTypes) => {
     created_at:{
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
-      allowNull: false,
+      allowNull: false
     },
     updated_at:{
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
-      allowNull: false,
+      allowNull: false
     }
-  }, {
-    sequelize,
-    modelName: 'Certificate',
   });
+  Certificate.associate = (models) => {
+    Certificate.belongsTo(models.Student, {foreignKey:'student_id'});
+    Certificate.belongsTo(models.Course, {foreignKey:'course_id'});
+  }
+
   return Certificate;
 };
