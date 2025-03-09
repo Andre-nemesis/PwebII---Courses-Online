@@ -12,7 +12,7 @@ header {
     top: 0;
     left: 0;
     background-color: var(--secondy-color);
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    box-shadow: rgba(4,13,51,0) 0px 8px 24px;
 }
 
 nav.header__nav {
