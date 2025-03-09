@@ -1,0 +1,7 @@
+@import 'geral.css';
+
+svg.course__icon {
+    padding: 10px;
+    background-color: var(--primary-color);
+    border-radius: 2px;
+}
