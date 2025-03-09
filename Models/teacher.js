@@ -3,7 +3,7 @@
 import { DataTypes } from 'sequelize';
 
 export default (sequelize) => {
-  const Teacher = sequelize.define('Teacher', {
+  const Teachers = sequelize.define('Teachers', {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -13,8 +13,10 @@ export default (sequelize) => {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: 'users',
-        key: 'id'
+        model: 'Users',
+        key: 'id',
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT'
       }
     },
     academic_formation: {
@@ -45,14 +47,13 @@ export default (sequelize) => {
     updated_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
-      allowNull: false
     }
   });
 
-  Teacher.associate = (models) => {
-    Teacher.hasMany(models.Module, {foreignKey: 'teacher_id'});
-    Teacher.belongsTo(models.User, { foreignKey: 'user_id' });
+  Teachers.associate = (models) => {
+    Teachers.hasMany(models.Module, {foreignKey: 'teacher_id'});
+    Teachers.belongsTo(models.User, { foreignKey: 'user_id' });
   }
 
-  return Teacher;
+  return Teachers;
 };

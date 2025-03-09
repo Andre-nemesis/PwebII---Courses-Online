@@ -3,41 +3,40 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Teachers', {
+    await queryInterface.createTable('Students', {
       id: {
-        allowNull: false,
-        primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
-      },
-      user_id:{
+        allowNull: false,
+        primaryKey: true
+      }, 
+      user_id: {
         type: Sequelize.UUID,
         references: {
           model: 'Users',
           key: 'id'
         },
+        onDelete: 'CASCADE',
+        onUpdate: 'RESTRICT',
         allowNull: false
       },
-      academic_formation: {
+      city:{
         type: Sequelize.STRING,
         allowNull: false
       },
-      tecnic_especialization: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      created_at: {
-        allowNull: false,
+      createdAt: {
         type: Sequelize.DATE,
+        allowNull: false,
         defaultValue: Sequelize.NOW(),
       },
-      updated_at: {
-        allowNull: false,
-        type: Sequelize.DATE
+      updatedAt:{
+        type: Sequelize.DATE,
+        allowNull: false
       }
     });
-  },
+},
+
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Teachers');
-  }
+    await queryInterface.dropTable('Students');
+}
 };

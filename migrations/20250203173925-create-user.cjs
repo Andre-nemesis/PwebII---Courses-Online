@@ -15,13 +15,9 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING
       },
-      cell_phone_number: {
+      phone_number: {
         allowNull: false,
         unique: true,
-        type: Sequelize.STRING
-      },
-      city: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       name: {
@@ -37,8 +33,8 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      role:{
-        type: Sequelize.ENUM('admin','student','teatcher'),
+      type:{
+        type: Sequelize.ENUM('admin','student','teacher'),
         allowNull: false,
         defaultValue: 'student'
       },
@@ -54,6 +50,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    
+    await queryInterface.dropTable('Users')
   }
 };

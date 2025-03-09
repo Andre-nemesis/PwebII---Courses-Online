@@ -65,7 +65,6 @@ export default (sequelize) => {
     updated_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
-      allowNull: false,
     },
   });
 
@@ -73,8 +72,7 @@ export default (sequelize) => {
       Course.belongsToMany(models.Module, { through : 'Course_module', foreignKey: 'course_id' }); 
       Course.belongsToMany(models.Student, { through: 'Student_courses', foreignKey: 'course_id' });
       Course.hasMany(models.Certificate, { foreignKey: "course_id" })
-
-      Course.belongsTo(models.User, { foreignKey: "user_id"});
+      Course.belongsTo(models.Admin, { foreignKey: "admin_id"});
   }
 
   return Course;

@@ -4,7 +4,7 @@ import { Model } from 'sequelize';
 import bcrypt from 'bcrypt';
 
 export default (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
+  const Users = sequelize.define('Users', {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
@@ -53,7 +53,7 @@ export default (sequelize, DataTypes) => {
         }
       }
     },
-    role: {
+    type: {
       type: DataTypes.ENUM('admin', 'student', 'teacher'),
       defaultValue: 'student',
       allowNull: false
@@ -117,8 +117,9 @@ export default (sequelize, DataTypes) => {
   });
 
   User.associate = (models) => {
-    User.hasOne(models.Teacher, { foreignKey: 'user_id'});
-    User.hasOne(models.Student, { foreignKey: 'user_id '});
+    User.hasMany(models.Teacher, { foreignKey: 'user_id'});
+    User.hasMany(models.Student, { foreignKey: 'user_id '});
+    User.hasMany(models.Admin, { foreignKey: 'user_id '});
   }
 
   hooks: {
@@ -130,5 +131,5 @@ export default (sequelize, DataTypes) => {
     }
   }
 
-  return User;
+  return Users;
 };

@@ -69,7 +69,6 @@ export default (sequelize) => {
     updated_at:{
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
-      allowNull: false
     }
   });
   Certificate.associate = (models) => {
