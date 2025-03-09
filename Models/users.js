@@ -1,6 +1,5 @@
 'use strict';
 
-import { Model } from 'sequelize';
 import bcrypt from 'bcrypt';
 
 export default (sequelize, DataTypes) => {
@@ -114,6 +113,10 @@ export default (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW,
       allowNull: false
     },
+  }, {
+    sequelize,
+    timestamps: true,
+    underscored: true
   });
 
   Users.associate = (models) => {
