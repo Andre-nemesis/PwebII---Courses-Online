@@ -116,17 +116,17 @@ export default (sequelize, DataTypes) => {
     },
   });
 
-  User.associate = (models) => {
-    User.hasMany(models.Teacher, { foreignKey: 'user_id'});
-    User.hasMany(models.Student, { foreignKey: 'user_id '});
-    User.hasMany(models.Admin, { foreignKey: 'user_id '});
+  Users.associate = (models) => {
+    Users.hasMany(models.Teachers, { foreignKey: 'user_id'});
+    Users.hasMany(models.Student, { foreignKey: 'user_id '});
+    Users.hasMany(models.Admin, { foreignKey: 'user_id '});
   }
 
   hooks: {
-    beforeCreate: async (user) => {
-      if (user.password) {
+    beforeCreate: async (users) => {
+      if (users.password) {
         const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(user.password, salt);
+        users.password = await bcrypt.hash(users.password, salt);
       }
     }
   }
