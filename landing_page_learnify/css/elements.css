@@ -1,7 +1,26 @@
 @import 'geral.css';
 
-svg.course__icon {
+svg.card__icon {
     padding: 10px;
     background-color: var(--primary-color);
     border-radius: 2px;
+}
+
+img {
+    height: 400px;
+    width: 400px;
+    border: 1px solid var(--primary-color);
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    line-height: 30px;
+    display: flex;
+    gap: 5px;
+    font-family: sans-serif;
+    font-size: 16px;
+    color: aliceblue;
 }

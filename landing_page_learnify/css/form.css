@@ -1,0 +1,68 @@
+@import 'geral.css';
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+    padding: 20px;
+    width: 40%;
+    background-color: var(--secundary-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 1px;
+}
+
+label {
+    font-size: 18px;
+    font-family: sans-serif;
+    font-weight: 500;
+    color: #dee2e6;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--primary-color);
+    border-radius: 1px;
+    background-color: var(--secundary-color);
+    font-family: sans-serif;
+    color: #dee2e6;
+}
+
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 1px;
+    background-color: var(--primary-color);
+    color: var(--secundary-color);
+    font-family: sans-serif;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 600;
+}
+
+input[type="reset"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--primary-color);
+    border-radius: 1px;
+    background-color: var(--secundary-color);
+    color: var(--primary-color);
+    font-family: sans-serif;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 600;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--primary-color);
+    border-radius: 1px;
+    background-color: var(--secundary-color);
+    font-family: sans-serif;
+    color: #dee2e6;
+    resize: none;
+}

@@ -24,6 +24,10 @@ p {
     color: #ced4da;
 }
 
+p.score {
+    color: var(--primary-color)
+}
+
 p#s2 {
     width: 40%;
     text-align: right;
