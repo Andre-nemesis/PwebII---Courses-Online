@@ -24,7 +24,7 @@ const verifyToken = (req, res, next) => {
     });
 };
 
-//Entendi a aplicação do código abaixo, mas por enquanto não está sendo usado.
+//Por enquanto não está sendo usado.
 //Qual quer coisa é só apagar.
 
 const authorizeRole = (role) => {
