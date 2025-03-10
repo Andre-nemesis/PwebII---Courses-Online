@@ -7,7 +7,7 @@ export default (sequelize, DataTypes) => {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV4 
+      defaultValue: DataTypes.UUIDV4
     },
     name: {
       type: DataTypes.STRING,
@@ -45,10 +45,6 @@ export default (sequelize, DataTypes) => {
         notEmpty: {
           args: true,
           msg: 'Senha não pode ser vazia.'
-        },
-        isLength: {
-          args: [8, 20],
-          msg: 'Senha deve ter entre 8 e 20 caracteres.'
         }
       }
     },
@@ -69,10 +65,6 @@ export default (sequelize, DataTypes) => {
         isNumeric: {
           args: true,
           msg: 'CPF deve conter apenas números.'
-        },
-        isLength: {
-          args: [11],
-          msg: 'CPF deve ter 11 dígitos.'
         },
         isCPF(value) {
           const cpfRegex = /^(?:[0-9]{3}\.?){3}[0-9]{2}$/;
@@ -120,9 +112,9 @@ export default (sequelize, DataTypes) => {
   });
 
   Users.associate = (models) => {
-    Users.hasMany(models.Teachers, { foreignKey: 'user_id'});
-    Users.hasMany(models.Student, { foreignKey: 'user_id '});
-    Users.hasMany(models.Admin, { foreignKey: 'user_id '});
+    Users.hasMany(models.Teachers, { foreignKey: 'user_id' });
+    Users.hasMany(models.Student, { foreignKey: 'user_id ' });
+    Users.hasMany(models.Admin, { foreignKey: 'user_id ' });
   }
 
   hooks: {

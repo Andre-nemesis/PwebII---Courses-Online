@@ -29,7 +29,7 @@ const verifyToken = (req, res, next) => {
 
 const authorizeRole = (role) => {
     return (req, res, next) => {
-        if (req.user.role !== role) {
+        if (req.user.type !== role) {
             return res.status(403).json({ message: 'Acesso negado' });
         }
         next();
