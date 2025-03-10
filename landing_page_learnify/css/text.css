@@ -12,10 +12,20 @@ h2 {
     color: #dee2e6;
 }
 
+h3 {
+    font-size: 22px;
+    font-family: sans-serif;
+    color: #dee2e6;
+}
+
 p {
     line-height: 20px;
     font-family: sans-serif;
     color: #ced4da;
+}
+
+p.score {
+    color: var(--primary-color)
 }
 
 p#s2 {
@@ -33,6 +43,9 @@ span {
 }
 
 a {
+    display: flex;
+    align-items: center;
+    gap: 5px;
     font-family: 'Helvetica', sans-serif;
     text-decoration: none;
     color: var(--primary-color);
@@ -43,6 +56,6 @@ a.header__nav-link {
     letter-spacing: 3px;
 }
 
-a.header__nav-link:hover {
+a:hover {
     text-decoration: underline;
 }

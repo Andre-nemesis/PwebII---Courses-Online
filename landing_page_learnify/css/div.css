@@ -32,22 +32,17 @@ div.section-course__courses-list {
 }
 
 div.section-course__courses-list__course {
-    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
     width: 300px;
-    background-color: lightblue;
+    padding: 10px;
+    background-color: var(--secondy-color);
     border-radius: 2px;
+    border: 1px solid var(--primary-color);
 }
 
-div#section-course__courses-list__course-frontend {
-    background-image: url('../img/Cyberpunk\ Phone\ Case\ Exclusive\ \ by\ papi1998\ _\ Redbubble.jpeg');
-    background-position: top;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-
-div#section-course__courses-list__course-backend {
-    background-image: url('../img/baixados.jpeg');
-    background-position: top;
-    background-size: cover;
-    background-repeat: no-repeat;
+div#plano-pro {
+    background-image: linear-gradient(318deg, rgba(4,13,51,0.5) 26%, rgba(33,118,255,0.4) 98%);;
 }
