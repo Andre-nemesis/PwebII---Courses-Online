@@ -12,5 +12,4 @@ app.use('/api/students',studentsRoutes);
 app.use('/api/teachers',teachersRoutes);
 app.use('/api/admin',adminRoutes)
 
-
 export default app;
