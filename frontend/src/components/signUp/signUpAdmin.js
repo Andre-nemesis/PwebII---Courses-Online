@@ -78,6 +78,7 @@ export const SignUpAdmin = () => {
                         mask="(99) 99999-9999"
                         label="Número de Telefone"
                         icon={<PhoneIcon sx={{ color: 'action.active', mr: 1 }} />}
+                        sx={{ mt: 2 }} 
                     />
 
                     <FormControl fullWidth margin="normal">
@@ -120,6 +121,13 @@ export const SignUpAdmin = () => {
                         sx={{ mt: 3, mb: 2, bgcolor: 'primary.main', '&:hover': { bgcolor: 'primary.dark' } }}
                     >
                         {loading ? <CircularProgress size={24} /> : 'Cadastrar'}
+                    </Button>
+                    <Button
+                        type="button"
+                        fullWidth
+                        variant="outlined"
+                    >
+                        Voltar 
                     </Button>
                 </Box>
             </Paper>
