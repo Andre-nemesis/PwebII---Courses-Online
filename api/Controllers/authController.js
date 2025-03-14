@@ -1,4 +1,4 @@
-import db from '../Models/index.js';
+import db from '../models/index.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
