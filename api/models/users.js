@@ -62,12 +62,8 @@ export default (sequelize, DataTypes) => {
           args: true,
           msg: 'CPF não pode ser vazio.'
         },
-        isNumeric: {
-          args: true,
-          msg: 'CPF deve conter apenas números.'
-        },
         isCPF(value) {
-          const cpfRegex = /^(?:[0-9]{3}\.?){3}[0-9]{2}$/;
+          const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
           if (!cpfRegex.test(value)) {
             throw new Error('CPF inválido');
           }
@@ -83,14 +79,10 @@ export default (sequelize, DataTypes) => {
           args: true,
           msg: 'Número de telefone não pode ser vazio.'
         },
-        isNumeric: {
-          args: true,
-          msg: 'Número de telefone deve conter apenas números.'
-        },
         isPhoneNumber(value) {
-          const phoneRegex = /^\+55\d{2}9\d{8}$/;
+          const phoneRegex = /^\(\d{2}\) \d{5}-\d{4}$/;
           if (!phoneRegex.test(value)) {
-            throw new Error('Número de telefone inválido. O formato deve ser: +55DD9XXXXXXXX');
+            throw new Error('Número de telefone inválido. O formato deve ser: (99) 99999-9999');
           }
         }
       }
