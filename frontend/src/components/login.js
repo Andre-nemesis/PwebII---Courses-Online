@@ -19,7 +19,7 @@ const Login = ({ onLogin }) => {
             onLogin();
         
         } catch (err) {
-            setError('E-mail ou senha inválida!');
+            setError('E-mail ou senha inválida!'+err);
         
         } finally {
             setLoading(false);

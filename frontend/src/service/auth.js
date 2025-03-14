@@ -20,6 +20,7 @@ export const signUp = async (name, email, cpf, phone_number, type, role, academi
     }
 };
 
-export const logout = () => {
+export const logout = (setAuthenticated) => {
     localStorage.removeItem('token');
+    setAuthenticated(false);
 };

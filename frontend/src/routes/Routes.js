@@ -16,7 +16,8 @@ import Login from '../components/login.js';
         <Route path="/signUp" element={<SignUpAdmin />} />
         <Route path="/Hello" element={<Hello />} />
         <Route path="/login" element={!isAuthenticated ? <Login onLogin={handleLogin} /> : <Navigate to="/mainScreen" />} />
-        <Route path="/mainScreen" element={<MainScreen />} />
+        <Route path="/mainScreen" element={isAuthenticated ? <MainScreen setAuthenticated={setAuthenticated} /> : <Navigate to="/login"/> } />
+
 
         <Route path="/*"
           element = {
