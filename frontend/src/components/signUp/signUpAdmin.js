@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { TextField, Container, Button, Typography, Paper, Box, FormControl, InputLabel, Select, MenuItem, CircularProgress } from '@mui/material';
 import { Email, Lock } from '@mui/icons-material';
 import { signUp } from '../../service/auth';
@@ -6,6 +7,7 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import MaskedTextField from './maskTextField';
 
 export const SignUpAdmin = () => {
+    const navigate = useNavigate();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -23,7 +25,8 @@ export const SignUpAdmin = () => {
         setError(null);
 
         try {
-            await signUp(name, email, password, cpf, phone_number, type, role);
+            await signUp(name, email, password, cpf, phone_number, type, role,undefined,undefined,undefined);
+            navigate('/login');
         } catch (err) {
             setError('Falha na criação do Administrador!');
         } finally {

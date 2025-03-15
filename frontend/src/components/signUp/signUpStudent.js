@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { TextField, Container, Button, Typography, Paper, Box, CircularProgress, IconButton, InputAdornment } from '@mui/material';
 import { Email, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import { signUp } from '../../service/auth';
 import PhoneIcon from '@mui/icons-material/Phone';
 import MaskedTextField from './maskTextField';
-import { useNavigate } from 'react-router-dom';
 
 export const SignUpStudent = () => {
+	const navigate = useNavigate();
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [city, setCity] = useState('');
@@ -27,7 +28,8 @@ export const SignUpStudent = () => {
 		console.log('Dados enviados:', { name, email, password, cpf, phone_number, type, city });
 
 		try {
-			await signUp(name, email, password, cpf, phone_number, type, city,);
+			await signUp(name, email, password, cpf, phone_number, type,undefined,undefined,undefined,city);
+			navigate('/login')
 		} catch (err) {
 			setError('Falha no cadastro!'+err);
 		} finally {
@@ -40,8 +42,6 @@ export const SignUpStudent = () => {
 	const passwordVisibility = () => {
     setShowPassword(!showPassword);
   };
-
-	const navigate = useNavigate();
 
 	return (
 		<Container component='main' maxWidth='sm'>
