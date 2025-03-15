@@ -7,11 +7,17 @@ const router = express.Router();
 router.delete('/deleteAccount/id');
 router.delete('/deleteTeacher/id');
 router.delete('/deleteCourse/id');
+router.delete('/unregisterStudentFromCourse');
 
 router.get('/viewStudent',verifyToken,authorizeRole('admin'),adminController.viewStudent);
 router.get('/viewTeacher');
+router.get('/viewCourse');
 
 router.post('/createCourse');
+router.post('/createModule');
+router.post('/registerStudentToCourse');
+router.post('/completeCourse');
+router.post('/registerModuleToCourse');
 
 router.put('/editCourse/id');
 
