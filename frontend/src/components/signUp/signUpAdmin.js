@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Container, Button, Typography, Paper, Box, FormControl, InputLabel, Select, MenuItem, CircularProgress } from '@mui/material';
+import { TextField, Container, Button, Typography, Paper, Box, FormControl, FormHelperText, Select, MenuItem, CircularProgress } from '@mui/material';
 import { Email, Lock } from '@mui/icons-material';
 import { signUp } from '../../service/auth';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -85,7 +85,7 @@ export const SignUpAdmin = () => {
                     />
 
                     <FormControl fullWidth margin="normal">
-                        <InputLabel id="role">Tipo de Administrador</InputLabel>
+                        <FormHelperText id="role">Tipo de Administrador</FormHelperText>
                         <Select
                             labelId="role"
                             id="role"
