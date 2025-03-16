@@ -8,11 +8,23 @@ const Menu = ({ userRole }) => {
       {/* O Menu já filtra as opções com base no userRole, e o UsersList verifica se o usuário é admin. */}
       <ul style={{ listStyle: 'none', display: 'flex', gap: '20px', margin: 0, padding: 0 }}>
         {userRole === 'admin' && (
+          <>
           <li>
-            <Link to="/users" style={{ textDecoration: 'none', color: '#333' }}>
-              Usuários
+            <Link to="/teachers" style={{ textDecoration: 'none', color: '#333' }}>
+              Porfessores
             </Link>
           </li>
+          <li>
+            <Link to="/students" style={{ textDecoration: 'none', color: '#333' }}>
+              Estudantes
+            </Link>
+          </li>
+          <li>
+            <Link to="/admins" style={{ textDecoration: 'none', color: '#333' }}>
+              Outros Administradores
+            </Link>
+          </li>
+          </>
         )}
         {userRole === 'teacher' && (
           <>

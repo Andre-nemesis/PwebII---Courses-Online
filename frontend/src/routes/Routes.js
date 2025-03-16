@@ -8,6 +8,8 @@ import { SignUpStudent } from '../components/signUp/signUpStudent.js';
 import SignUpTeacher from '../components/signUp/SignUpTeacher.js';
 import CoursesList from '../components/pages/studens/coursesList.js';
 import SubscribedCourses from '../components/pages/studens/subcribetCourses.js';
+import TeachersList from '../components/pages/Admins/teachersList.js';
+import StudentsList from '../components/pages/Admins/studentsList.js';
 
 const Layout = ({ setAuthenticated }) => {
   const handleLogout = () => {
@@ -18,7 +20,7 @@ const Layout = ({ setAuthenticated }) => {
   return (
     <div>
       <header style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', backgroundColor: '#f8f8f8' }}>
-        <h1>Bem-vindo ao Sistema</h1>
+        <h1>Bem-vindo(a) à Learnify!</h1>
         <button onClick={handleLogout} style={{ padding: '5px 10px' }}>
           Sair
         </button>
@@ -51,6 +53,8 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated }) => {
             <Route path="/mainScreen" element={<MainScreen setAuthenticated={setAuthenticated} />} />
             <Route path="/courses" element={<CoursesList />} />
             <Route path="/subscribed-courses" element={<SubscribedCourses />} />
+            <Route path="/teachers" element={<TeachersList />} />
+            <Route path="/students" element={<StudentsList />} />
             <Route index element={<p>Selecione uma opção no menu acima.</p>} />
           </Route>
         ) : (

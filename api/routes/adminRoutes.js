@@ -1,6 +1,7 @@
 import express from 'express';
- import adminController from '../Controllers/adminController.js';
- import { authorizeRole, verifyToken } from '../middleware/authMiddleware.js';
+import teacherController from '../Controllers/teacherController.js';
+import adminController from '../Controllers/adminController.js';
+import { authorizeRole, verifyToken } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ router.delete('/deleteCourse/id');
 router.delete('/unregisterStudentFromCourse');
 
 router.get('/viewStudent',verifyToken,authorizeRole('admin'),adminController.viewStudent);
-router.get('/viewTeacher');
+router.get('/viewTeacher', adminController.viewTeacher);
 router.get('/viewCourse');
 
 router.post('/createCourse');
