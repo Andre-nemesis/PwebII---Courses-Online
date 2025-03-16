@@ -45,7 +45,7 @@ export default (sequelize) => {
   Student.associate = (models) => {
     Student.hasMany(models.Certificate, { foreignKey: "student_id" })
     Student.belongsToMany(models.Course, { through: 'Student_course', foreignKey: "student_id"})
-    Student.belongsTo(models.Users, { foreignKey: "user_id" });
+    Student.belongsTo(models.Users, { foreignKey: 'user_id', as: 'User' });
   }
 
   return Student;

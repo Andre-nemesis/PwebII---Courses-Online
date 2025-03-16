@@ -1,41 +1,30 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { logout } from '../service/auth.js'; 
+import React, { useEffect, useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+import Menu from '../components/pages/Menu.js';
 
-const MainScreen = ({ setAuthenticated }) => {
-  const navigate = useNavigate();
+const MainScreen = () => {
+  const [userRole, setUserRole] = useState(null);
 
-  const handleLogout = () => {
-      logout(setAuthenticated);
-      navigate('/login'); 
-  };
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setUserRole(decoded.role);
+      } catch (error) {
+        console.error('Erro ao decodificar token:', error);
+        localStorage.removeItem('token');
+      }
+    }
+  }, []);
 
   return (
-      <div style={styles.container}>
-          <h1 style={styles.title}>Bem-vindo(a) à Learnify!</h1>
-          <button onClick={handleLogout}>Logout</button>
-      </div>
+    <div>
+      <Menu userRole={userRole} />
+      <Outlet context={{ userRole }} /> {/* Passa o userRole para as rotas filhas */}
+    </div>
   );
-};
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100vh',
-    backgroundColor: '#f0f0f0',
-    padding: '20px',
-  },
-  title: {
-    fontSize: '2.5rem',
-    color: '#333',
-  },
-  text: {
-    fontSize: '1.2rem',
-    color: '#555',
-  },
 };
 
 export default MainScreen;

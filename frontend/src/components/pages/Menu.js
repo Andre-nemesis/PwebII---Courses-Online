@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Menu = ({ userRole }) => {
+  console.log(userRole);
   return (
     <nav style={{ backgroundColor: '#f0f0f0', padding: '10px' }}>
       {/* O Menu já filtra as opções com base no userRole, e o UsersList verifica se o usuário é admin. */}
@@ -13,7 +14,7 @@ const Menu = ({ userRole }) => {
             </Link>
           </li>
         )}
-        {userRole === 'user' && (
+        {userRole === 'teacher' && (
           <>
             <li>
               <Link to="/categories" style={{ textDecoration: 'none', color: '#333' }}>
@@ -28,6 +29,20 @@ const Menu = ({ userRole }) => {
             <li>
               <Link to="/sales" style={{ textDecoration: 'none', color: '#333' }}>
                 Vendas
+              </Link>
+            </li>
+          </>
+        )}
+        {userRole === 'student' && (
+          <>
+            <li>
+              <Link to="/subscribed-courses" style={{ textDecoration: 'none', color: '#333' }}>
+                Cursos incritos
+              </Link>
+            </li>
+            <li>
+              <Link to="/courses" style={{ textDecoration: 'none', color: '#333' }}>
+                Cursos
               </Link>
             </li>
           </>

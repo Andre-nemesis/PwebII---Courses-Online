@@ -105,7 +105,7 @@ export default (sequelize, DataTypes) => {
 
   Users.associate = (models) => {
     Users.hasMany(models.Teachers, { foreignKey: 'user_id' });
-    Users.hasMany(models.Student, { foreignKey: 'user_id ' });
+    Users.hasOne(models.Student, { foreignKey: 'user_id', as: 'Student' });
     Users.hasMany(models.Admin, { foreignKey: 'user_id ' });
   }
 
