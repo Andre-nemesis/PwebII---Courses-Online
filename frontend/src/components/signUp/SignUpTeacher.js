@@ -6,11 +6,12 @@ import { signUp } from '../../service/auth';
 import PhoneIcon from '@mui/icons-material/Phone';
 import MaskedTextField from './maskTextField';
 
-export const SignUpStudent = () => {
+export const SignUpTeacher = () => {
 	const navigate = useNavigate();
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
-	const [city, setCity] = useState('');
+	const [academic_formation, setAcademicFormation] = useState('');
+	const [tecnic_especialization, setTecnicEspecialization] = useState('');
 	const [password, setPassword] = useState('');
 	const [cpf, setCpf] = useState('');
 	const [phone_number, setPhoneNumber] = useState('');
@@ -18,7 +19,7 @@ export const SignUpStudent = () => {
 	const [error, setError] = useState(null);
 	const [showPassword, setShowPassword] = useState(true);
 
-	const type = 'student';
+	const type = 'teacher';
 
 	const handleSignUp = async (e) => {
 		e.preventDefault();
@@ -26,10 +27,10 @@ export const SignUpStudent = () => {
 		setError(null);
 
 		try {
-			await signUp(name, email, password, cpf, phone_number, type, undefined, undefined, undefined, city);
+			await signUp(name, email, password, cpf, phone_number, type, undefined, academic_formation, tecnic_especialization, undefined);
 			navigate('/login')
 		} catch (err) {
-			setError('Falha no cadastro!');
+			setError('Falha no cadastro!' +err);
 		} finally {
 			setLoading(false);
 		}
@@ -38,8 +39,8 @@ export const SignUpStudent = () => {
 	const isEmailValid = () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 	const passwordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+		setShowPassword(!showPassword);
+	};
 
 	return (
 		<Container component='main' maxWidth='sm'>
@@ -80,15 +81,6 @@ export const SignUpStudent = () => {
 						mask="999.999.999-99"
 						label="CPF"
 					/>
-					<TextField
-						fullWidth
-						margin="normal"
-						id="Cidade"
-						label="Cidade"
-						type="text"
-						value={city}
-						onChange={(e) => setCity(e.target.value)}
-					/>
 					<MaskedTextField
 						id="phone_number"
 						value={phone_number}
@@ -97,6 +89,24 @@ export const SignUpStudent = () => {
 						label="Número de Telefone"
 						icon={<PhoneIcon sx={{ color: 'action.active', mr: 1 }} />}
 						sx={{ mt: 2 }} 
+					/>
+					<TextField
+						fullWidth
+						margin="normal"
+						id="FormacaoAcademica"
+						label="Formação Acadêmica"
+						type="text"
+						value={academic_formation}
+						onChange={(e) => setAcademicFormation(e.target.value)}
+					/>
+					<TextField
+						fullWidth
+						margin="normal"
+						id="EspecializacaoTec"
+						label="Especialização Técnica"
+						type="text"
+						value={tecnic_especialization}
+						onChange={(e) => setTecnicEspecialization(e.target.value)}
 					/>
 
 					{/* Campo de Senha */}
@@ -142,27 +152,17 @@ export const SignUpStudent = () => {
 
 					{/* Botão de ir para o login*/}
 					<Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Typography variant="body1">
-              Já tem conta?
-            </Typography>
-            <Button
-              type="button"
-              variant="text"
-							onClick={() => navigate('/login')}
-            >
-              Fazer Login
-            </Button>
-          </Box>
+						sx={{
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+					</Box>
 				</Box>
 			</Paper>
 		</Container>
 	);
 }
 
-export default SignUpStudent;
+export default SignUpTeacher;

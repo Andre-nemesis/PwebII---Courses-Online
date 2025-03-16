@@ -56,7 +56,7 @@ const Login = ({ onLogin }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             error={!!email && !isEmailValid()} 
-            helperText={!!email && !isEmailValid() ? 'Email inválido' : ''}
+            helperText={!!email && !isEmailValid() ? 'Email ou senha inválida' : ''}
             InputProps={{
               startAdornment: <Email sx={{ color: 'action.active', mr: 1 }} />, // Ícone de email
             }}

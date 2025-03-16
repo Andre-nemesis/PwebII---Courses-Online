@@ -1,9 +1,9 @@
-import { Teacher, User, Module } from '../models/index.js';
+import { Teachers, User, Module } from '../models/index.js';
 
 const teacherController = {
   async getAll(req, res) {
     try {
-      const teachers = await Teacher.findAll({
+      const teachers = await Teachers.findAll({
         include: [
           { model: User, attributes: ['id', 'name', 'email'] },
           { model: Module, attributes: ['id', 'name'] }
@@ -18,7 +18,7 @@ const teacherController = {
   async getById(req, res) {
     try {
       const { id } = req.params;
-      const teacher = await Teacher.findByPk(id, {
+      const teacher = await Teachers.findByPk(id, {
         include: [
           { model: User, attributes: ['id', 'name', 'email'] },
           { model: Module, attributes: ['id', 'name'] }
@@ -35,9 +35,9 @@ const teacherController = {
 
   async create(req, res) {
     try {
-      const { user_id, academic_formation, bio } = req.body;
+      const { user_id, academic_formation, tecnic_especialization } = req.body;
 
-      const newTeacher = await Teacher.create({ user_id, academic_formation, bio });
+      const newTeacher = await Teachers.create({ user_id, academic_formation, tecnic_especialization });
 
       res.status(201).json(newTeacher);
     } catch (error) {

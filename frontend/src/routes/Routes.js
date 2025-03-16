@@ -5,6 +5,7 @@ import { Hello } from '../components/HelloReact';
 import MainScreen from '../components/mainScreen.js';
 import Login from '../components/login.js';
 import { SignUpStudent } from '../components/signUp/signUpStudent.js';
+import SignUpTeacher from '../components/signUp/SignUpTeacher.js';
 
 
   const AppRoutes = ({ isAuthenticated, setAuthenticated }) => {
@@ -16,7 +17,9 @@ import { SignUpStudent } from '../components/signUp/signUpStudent.js';
       <Routes>
         <Route path="/signUp" element={<SignUpAdmin />} />
         <Route path="/signUp-student" element={<SignUpStudent />} />
+        <Route path="/signUp-teacher" element={<SignUpTeacher/>} />
         <Route path="/login" element={!isAuthenticated ? <Login onLogin={handleLogin} /> : <Navigate to="/mainScreen" />} />
+        
         <Route path="/Hello" element={<Hello />} />
         <Route path="/mainScreen" element={isAuthenticated ? <MainScreen setAuthenticated={setAuthenticated} /> : <Navigate to="/login"/> } />
 
