@@ -44,7 +44,7 @@ const Menu = ({ userRole }) => {
           <>
             <li>
               <Link to="/subscribed-courses" style={{ textDecoration: 'none', color: '#333' }}>
-                Cursos incritos
+                Cursos inscritos
               </Link>
             </li>
             <li>

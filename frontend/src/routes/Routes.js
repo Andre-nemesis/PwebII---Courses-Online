@@ -21,10 +21,17 @@ const Layout = ({ setAuthenticated }) => {
   };
 
   return (
-    <div>
-      <header style={{ display: 'flex', justifyContent: 'space-between', padding: '10px', backgroundColor: '#f8f8f8' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }} >
+      <header 
+        style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          padding: '10px', 
+          backgroundColor: 'rgba(181, 178, 240, 0.41)', 
+        }}>
         <h1>Bem-vindo(a) à Learnify!</h1>
-        <button onClick={handleLogout} style={{ padding: '5px 10px' }}>
+        <button onClick={handleLogout} style={{ borderRadius: '5px', border: 'none', backgroundColor: '#FF7B5A', color: '#fff', padding: '10px 20px' }}>
           Sair
         </button>
       </header>
@@ -61,7 +68,7 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated }) => {
             <Route path="/admins" element={<AdminList />} />
             <Route path="/module/view" element={<ModulesTeacherList />} />
             <Route path="/module/view/all" element={<ModulesList />} />
-            <Route index element={<p>Selecione uma opção no menu acima.</p>} />
+            <Route index element={<p></p>} />
           </Route>
         ) : (
           <Route path="/*" element={<Navigate to="/login" />} />

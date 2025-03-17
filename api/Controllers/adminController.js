@@ -163,6 +163,21 @@ const adminController = {
     }
   },
 
+  async deleteCourse(req, res) {
+    try {
+      const { id } = req.params;
+      const course = await db.Course.findByPk(id);
+      
+      if (!course) return res.status(404).json({ error: 'Curso não encontrado' });
+      await course.destroy();
+
+      res.json({ message: 'Curso deletado com sucesso' });
+    
+    } catch (error) {
+      res.status(500).json({ error: 'Erro ao deletar curso', details: error.message });
+    }
+  },
+
   async assignModuleToCourse(req, res) {
     try {
       const { course_id, module_id } = req.body;

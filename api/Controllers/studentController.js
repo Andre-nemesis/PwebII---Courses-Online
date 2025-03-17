@@ -1,9 +1,9 @@
-import { Student, User, Course, Certificate, Student_course, Teacher, Module } from '../models/index.js';
+import db from '../models/index.js';
 
 const studentController = {
   async getAll(req, res) {
     try {
-      const students = await Student.findAll({
+      const students = await db.Student.findAll({
         include: [
           { model: User, attributes: ['id', 'name', 'email'] },
           { model: Course, through: Student_course, attributes: ['id', 'name'] },
@@ -19,7 +19,7 @@ const studentController = {
   async getById(req, res) {
     try {
       const { id } = req.params;
-      const student = await Student.findByPk(id, {
+      const student = await db.Student.findByPk(id, {
         include: [
           { model: User, attributes: ['id', 'name', 'email'] },
           { model: Course, through: Student_course, attributes: ['id', 'name'] },
@@ -38,7 +38,7 @@ const studentController = {
   async create(req, res) {
     try {
       const { user_id, phone_number, city } = req.body;
-      const user = await User.findByPk(user_id);
+      const user = await db.User.findByPk(user_id);
       if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
 
       const newStudent = await Student.create({ user_id, phone_number, city });
@@ -54,7 +54,7 @@ const studentController = {
       const { id } = req.params;
       const { phone_number, city } = req.body;
 
-      const student = await Student.findByPk(id);
+      const student = await db.Student.findByPk(id);
       if (!student) return res.status(404).json({ error: 'Estudante não encontrado' });
 
       await student.update({ phone_number, city });
@@ -68,7 +68,7 @@ const studentController = {
   async delete(req, res) {
     try {
       const { id } = req.params;
-      const student = await Student.findByPk(id);
+      const student = await db.Student.findByPk(id);
       if (!student) return res.status(404).json({ error: 'Estudante não encontrado' });
 
       await student.destroy();
@@ -80,7 +80,7 @@ const studentController = {
 
   async viewStudent(req, res) {
     try {
-      const students = await Student.findAll({ include: [{ model: User, attributes: ['id', 'name', 'email'] }] });
+      const students = await db.Student.findAll({ include: [{ model: User, attributes: ['id', 'name', 'email'] }] });
       res.json(students);
     } catch (error) {
       res.status(500).json({ error: 'Erro ao visualizar estudantes', details: error.message });
@@ -89,7 +89,7 @@ const studentController = {
 
   async viewTeacher(req, res) {
     try {
-      const teachers = await Teacher.findAll({ include: [{ model: User, attributes: ['id', 'name', 'email'] }] });
+      const teachers = await db.Teacher.findAll({ include: [{ model: User, attributes: ['id', 'name', 'email'] }] });
       res.json(teachers);
     } catch (error) {
       res.status(500).json({ error: 'Erro ao visualizar professores', details: error.message });
@@ -99,7 +99,7 @@ const studentController = {
   async searchCourse(req, res) {
     try {
       const { name } = req.query;
-      const courses = await Course.findAll({
+      const courses = await db.Course.findAll({
         where: { name: { [Op.like]: `%${name}%` } }
       });
       res.json(courses);
@@ -112,7 +112,7 @@ const studentController = {
     try {
       const { id } = req.params;
       const { newPassword } = req.body;
-      const student = await Student.findByPk(id, { include: [User] });
+      const student = await db.Student.findByPk(id, { include: [User] });
 
       if (!student) return res.status(404).json({ error: 'Estudante não encontrado' });
 
@@ -127,7 +127,7 @@ const studentController = {
   async viewCompletedCourses(req, res) {
     try {
       const { id } = req.params;
-      const completedCourses = await Student_course.findAll({
+      const completedCourses = await db.Student_course.findAll({
         where: { student_id: id, completed: true },
         include: [{ model: Course, attributes: ['id', 'name'] }]
       });
@@ -140,7 +140,7 @@ const studentController = {
   async viewModules(req, res) {
     try {
       const { id } = req.params;
-      const studentCourses = await Student_course.findAll({
+      const studentCourses = await db.Student_course.findAll({
         where: { student_id: id },
         include: [{ model: Course, include: [{ model: Module, attributes: ['id', 'name'] }] }]
       });
