@@ -3,7 +3,21 @@ import db from '../models/index.js';
 const moduleController = {
   async getAll(req, res) {
     try {
-      const modules = await db.Module.findAll();
+      const modules = await db.Module.findAll({
+        include: [
+          {
+            model: db.Teachers,
+            as:'Author',
+            include: [
+              {
+                model: db.Users,
+                as: 'User',
+                attributes: ['id', 'name'],
+              },
+            ],
+          },
+        ],
+      });
       res.json(modules);
     } catch (error) {
       res.status(500).json({ error: 'Erro ao buscar módulos', details: error.message });
@@ -18,6 +32,7 @@ const moduleController = {
         include: [
           {
             model: db.Teachers,
+            as: 'Author',
             include: [
               {
                 model: db.Users,

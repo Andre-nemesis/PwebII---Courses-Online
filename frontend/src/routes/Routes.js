@@ -10,6 +10,9 @@ import CoursesList from '../components/pages/studens/coursesList.js';
 import SubscribedCourses from '../components/pages/studens/subcribetCourses.js';
 import TeachersList from '../components/pages/Admins/teachersList.js';
 import StudentsList from '../components/pages/Admins/studentsList.js';
+import AdminList from '../components/pages/Admins/adminList.js';
+import ModulesTeacherList from '../components/pages/teachers/modulesCreatedList.js';
+import ModulesList from '../components/pages/teachers/modulesList.js';
 
 const Layout = ({ setAuthenticated }) => {
   const handleLogout = () => {
@@ -55,6 +58,9 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated }) => {
             <Route path="/subscribed-courses" element={<SubscribedCourses />} />
             <Route path="/teachers" element={<TeachersList />} />
             <Route path="/students" element={<StudentsList />} />
+            <Route path="/admins" element={<AdminList />} />
+            <Route path="/module/view" element={<ModulesTeacherList />} />
+            <Route path="/module/view/all" element={<ModulesList />} />
             <Route index element={<p>Selecione uma opção no menu acima.</p>} />
           </Route>
         ) : (

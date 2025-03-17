@@ -49,11 +49,11 @@ const StudentsList = () => {
 								{students.map((student) => (
 									<TableRow key={student.id}>
 										<TableCell component='th' scope='row'>
-											{student.user && student.user.name ? student.user.name : 'Nome Indisponível'}
+											{student.User && student.User.name ? student.User.name : 'Nome Indisponível'}
 										</TableCell>
-										<TableCell align='right'>{student.user && student.user.email ? student.user.email : 'Email Indisponível'}</TableCell>
-										<TableCell align='right'> {student.user && student.user.phone_number ? student.user.phone_number : 'Número de Telefone Indisponível'}</TableCell>
-										<TableCell align='right'> {student.user && student.user.cpf ? student.user.cpf : 'CPF Indisponível'}</TableCell>
+										<TableCell align='right'>{student.User && student.User.email ? student.User.email : 'Email Indisponível'}</TableCell>
+										<TableCell align='right'> {student.User && student.User.phone_number ? student.User.phone_number : 'Número de Telefone Indisponível'}</TableCell>
+										<TableCell align='right'> {student.User && student.User.cpf ? student.User.cpf : 'CPF Indisponível'}</TableCell>
 										<TableCell align='right'>{student.city}</TableCell>
 									</TableRow>
 								))}

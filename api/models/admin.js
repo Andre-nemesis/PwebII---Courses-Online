@@ -40,7 +40,7 @@ export default (sequelize) => {
   });
 
   Admin.associate = (models) => {
-    Admin.belongsTo(models.Users, { foreignKey: 'user_id' });
+    Admin.belongsTo(models.Users, { foreignKey: 'user_id', as: 'User' });
     Admin.hasMany(models.Course, {foreignKey: 'admin_id'});
   };
 

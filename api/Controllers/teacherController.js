@@ -1,12 +1,12 @@
-import { Teachers, User, Module } from '../models/index.js';
+import db from '../models/index.js';
 
 const teacherController = {
   async getAll(req, res) {
     try {
-      const teachers = await Teachers.findAll({
+      const teachers = await db.Teachers.findAll({
         include: [
-          { model: User, attributes: ['id', 'name', 'email'] },
-          { model: Module, attributes: ['id', 'name'] }
+          { model: db.User, attributes: ['id', 'name', 'email'] },
+          { model: db.Module, attributes: ['id', 'name'] }
         ]
       });
       res.json(teachers);
@@ -18,10 +18,10 @@ const teacherController = {
   async getById(req, res) {
     try {
       const { id } = req.params;
-      const teacher = await Teachers.findByPk(id, {
+      const teacher = await db.Teachers.findByPk(id, {
         include: [
-          { model: User, attributes: ['id', 'name', 'email'] },
-          { model: Module, attributes: ['id', 'name'] }
+          { model: db.User, attributes: ['id', 'name', 'email'] },
+          { model: db.Module, attributes: ['id', 'name'] }
         ]
       });
 
@@ -37,7 +37,7 @@ const teacherController = {
     try {
       const { user_id, academic_formation, tecnic_especialization } = req.body;
 
-      const newTeacher = await Teachers.create({ user_id, academic_formation, tecnic_especialization });
+      const newTeacher = await db.Teachers.create({ user_id, academic_formation, tecnic_especialization });
 
       res.status(201).json(newTeacher);
     } catch (error) {
@@ -50,7 +50,7 @@ const teacherController = {
       const { id } = req.params;
       const { academic_formation, bio } = req.body;
 
-      const teacher = await Teacher.findByPk(id);
+      const teacher = await db.Teacher.findByPk(id);
       if (!teacher) return res.status(404).json({ error: 'Professor não encontrado' });
 
       await teacher.update({ academic_formation, bio });
@@ -64,7 +64,7 @@ const teacherController = {
   async delete(req, res) {
     try {
       const { id } = req.params;
-      const teacher = await Teacher.findByPk(id);
+      const teacher = await db.Teacher.findByPk(id);
       if (!teacher) return res.status(404).json({ error: 'Professor não encontrado' });
 
       await teacher.destroy();

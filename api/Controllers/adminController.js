@@ -4,7 +4,7 @@ const adminController = {
   async getAll(req, res) {
     try {
       const admins = await db.Admin.findAll({
-        include: [{ model: db.User, attributes: ['id', 'name', 'email'] }]
+        include: [{ model: db.Users, as: 'User' }]
       });
       res.json(admins);
     } catch (error) {
@@ -29,7 +29,11 @@ const adminController = {
 
   async viewStudent(req, res) {
     try {
-      const students = await db.Student.findAll();
+      const students = await db.Student.findAll({
+        include: [
+          { model: db.Users, as: 'User' },
+        ]
+      });
       res.status(200).json(students);
     } catch (error) {
       res.status(500).json({ error: 'Erro ao buscar estudantes', details: error.message });
@@ -38,7 +42,11 @@ const adminController = {
 
   async viewTeacher(req, res) {
     try {
-      const teachers = await db.Teacher.findAll();
+      const teachers = await db.Teachers.findAll({
+        include: [
+          { model: db.Users, as: 'User' },
+        ]
+      });
       res.status(200).json(teachers);
     } catch (error) {
       res.status(500).json({ error: 'Erro ao buscar professores', details: error.message });

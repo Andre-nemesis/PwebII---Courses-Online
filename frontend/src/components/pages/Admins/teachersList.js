@@ -55,11 +55,11 @@ const TeachersList = () => {
                 {teachers.map((teacher) => (
                   <TableRow key={teacher.id}>
                     <TableCell component='th' scope='row'>
-                      {teacher.User?.name || 'Sem nome'}
+                      {teacher.User.name || 'Sem nome'}
                     </TableCell>
-                    <TableCell align='right'>{teacher.user.email}</TableCell>
-                    <TableCell align='right'>{teacher.user.phone_number}</TableCell>
-										<TableCell align='right'>{teacher.user.cpf}</TableCell>
+                    <TableCell align='right'>{teacher.User.email}</TableCell>
+                    <TableCell align='right'>{teacher.User.phone_number}</TableCell>
+										<TableCell align='right'>{teacher.User.cpf}</TableCell>
 										<TableCell align='right'>{teacher.academic_formation}</TableCell>
 										<TableCell align='right'>{teacher.tecnic_especialization}</TableCell>
                   </TableRow>

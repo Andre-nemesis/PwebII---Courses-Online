@@ -29,18 +29,13 @@ const Menu = ({ userRole }) => {
         {userRole === 'teacher' && (
           <>
             <li>
-              <Link to="/categories" style={{ textDecoration: 'none', color: '#333' }}>
-                Categorias
+              <Link to="/module/view" style={{ textDecoration: 'none', color: '#333' }}>
+                Modulos Criados
               </Link>
             </li>
             <li>
-              <Link to="/products" style={{ textDecoration: 'none', color: '#333' }}>
-                Produtos
-              </Link>
-            </li>
-            <li>
-              <Link to="/sales" style={{ textDecoration: 'none', color: '#333' }}>
-                Vendas
+              <Link to="/module/view/all" style={{ textDecoration: 'none', color: '#333' }}>
+                Lista de Modulos
               </Link>
             </li>
           </>

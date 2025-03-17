@@ -1,5 +1,4 @@
 import express from 'express';
-import teacherController from '../Controllers/teacherController.js';
 import adminController from '../Controllers/adminController.js';
 import { authorizeRole, verifyToken } from '../middleware/authMiddleware.js';
 
@@ -11,7 +10,8 @@ router.delete('/deleteCourse/id');
 router.delete('/unregisterStudentFromCourse');
 
 router.get('/viewStudent',verifyToken,authorizeRole('admin'),adminController.viewStudent);
-router.get('/viewTeacher', adminController.viewTeacher);
+router.get('/viewTeacher', verifyToken,authorizeRole('admin'),adminController.viewTeacher);
+router.get('/viewAdmins',verifyToken,authorizeRole('admin'),adminController.getAll)
 router.get('/viewCourse');
 
 router.post('/createCourse');

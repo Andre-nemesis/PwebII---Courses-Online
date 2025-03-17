@@ -56,7 +56,7 @@ export default (sequelize) => {
     });
 
   Teachers.associate = (models) => {
-    Teachers.hasMany(models.Module, { foreignKey: 'teacher_id' });
+    Teachers.hasMany(models.Module, { foreignKey: 'teacher_id', as: 'Modules'});
     Teachers.belongsTo(models.Users, { foreignKey: 'user_id', as:'User' });
   }
 

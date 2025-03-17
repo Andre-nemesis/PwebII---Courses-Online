@@ -7,6 +7,7 @@ dotenv.config();
 
 export const login = async (req, res) => {
     const { email, password } = req.body;
+    let token = null;
 
     try {
         const user = await db.Users.findOne({ where: { email } });
@@ -21,9 +22,35 @@ export const login = async (req, res) => {
             return res.status(401).json({ message: 'Senha inválida' });
         }
 
-        const token = jwt.sign({ id: user.id, role: user.type }, process.env.JWT_SECRET, {
-            expiresIn: '8h',
-        });
+        if(user.type === 'admin'){
+            const admin = await db.Admin.findOne({
+                where: { user_id: user.id },
+                include: [{ model: db.Users, as: 'User' }]
+            });
+            token = jwt.sign({ id: admin.id, role: user.type }, process.env.JWT_SECRET, {
+                expiresIn: '8h',
+            });
+        }else if(user.type === 'teacher'){
+            const teacher = await db.Teachers.findOne({
+                where: { user_id: user.id },
+                include: [{ model: db.Users, as: 'User' }]
+            });
+            token = jwt.sign({ id: teacher.id, role: user.type }, process.env.JWT_SECRET, {
+                expiresIn: '8h',
+            });
+        }else if(user.type === 'student'){
+            const student = await db.Student.findOne({
+                where: { user_id: user.id },
+                include: [{ model: db.Users, as: 'User' }]
+            });
+            token = jwt.sign({ id: student.id, role: user.type }, process.env.JWT_SECRET, {
+                expiresIn: '8h',
+            });
+        }else{
+            return res.status(400).json({ message: "Tipo de usuário inválido" });
+        }
+
+        
 
         res.status(200).json({ success: 1, token });
 
