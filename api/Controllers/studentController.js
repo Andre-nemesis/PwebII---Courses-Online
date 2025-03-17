@@ -154,16 +154,16 @@ const studentController = {
   },
 
   async subcribeCourse(req,res){
-    const {student_id} = req.params.user;
-    const {course_id} = req.params.id;
+    const {user} = req.params;
+    const {id} = req.params;
     try{
-      const studentCourse = await db.Student_course.findOne({
-        where: {student_id, course_id}
+      const studentCourse = await db.Student_courses.findOne({
+        where: {student_id:user, course_id:id}
       });
       if(studentCourse){
         return res.status(400).json({error: 'Você já está inscrito neste curso'});
       }
-      await db.Student_course.create({student_id, course_id});
+      await db.Student_courses.create({student_id:user, course_id:id});
       res.status(201).json({message: 'Inscrição realizada com sucesso'});
     }
     catch(error){
@@ -171,11 +171,11 @@ const studentController = {
     }
   },
   async unsubcribeCourse(req,res){
-    const {student_id} = req.params.user;
-    const {course_id} = req.params.id;
+    const {user} = req.params;
+    const {id} = req.params;
     try{
-      const studentCourse = await db.Student_course.findOne({
-        where: {student_id, course_id}
+      const studentCourse = await db.Student_courses.findOne({
+        where: {student_id:user, course_id:id}
       });
       if(!studentCourse){
         return res.status(404).json({error: 'Você não está inscrito neste curso'});
