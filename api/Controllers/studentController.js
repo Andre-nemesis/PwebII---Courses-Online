@@ -151,6 +151,41 @@ const studentController = {
     } catch (error) {
       res.status(500).json({ error: 'Erro ao visualizar módulos', details: error.message });
     }
+  },
+
+  async subcribeCourse(req,res){
+    const {student_id} = req.params.user;
+    const {course_id} = req.params.id;
+    try{
+      const studentCourse = await db.Student_course.findOne({
+        where: {student_id, course_id}
+      });
+      if(studentCourse){
+        return res.status(400).json({error: 'Você já está inscrito neste curso'});
+      }
+      await db.Student_course.create({student_id, course_id});
+      res.status(201).json({message: 'Inscrição realizada com sucesso'});
+    }
+    catch(error){
+      res.status(500).json({error: 'Erro ao inscrever-se no curso', details: error.message});
+    }
+  },
+  async unsubcribeCourse(req,res){
+    const {student_id} = req.params.user;
+    const {course_id} = req.params.id;
+    try{
+      const studentCourse = await db.Student_course.findOne({
+        where: {student_id, course_id}
+      });
+      if(!studentCourse){
+        return res.status(404).json({error: 'Você não está inscrito neste curso'});
+      }
+      await studentCourse.destroy();
+      res.status(200).json({message: 'Inscrição cancelada com sucesso'});
+    }
+    catch(error){
+      res.status(500).json({error: 'Erro ao cancelar inscrição no curso', details: error.message});
+    }
   }
 };
 
