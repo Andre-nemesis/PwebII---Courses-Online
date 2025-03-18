@@ -39,12 +39,15 @@ const Login = ({ onLogin }) => {
   const navigate = useNavigate();
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Paper elevation={3} sx={{ mt: 8, p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
-          Login
+    <Container component="main" maxWidth="xs" backgroundColor="#040D33">
+      <Paper sx={{ mt: 8, p: 4, display: 'flex', flexDirection: 'column', alignItems: 'start', backgroundColor: '#1E2951'}}>
+        <Typography component="h1" variant="h5" sx={{ mb: 2, color: '#EAEFF7'}}>
+          Bem-vindo novamente!
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
+        <Typography component="p" variant="body1" sx={{ mb: 1, color: '#C8D0DA'}}>
+          Faça login para acessar sua conta ou crie uma nova na Learnify.
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%'}}>
           
           {/* Campo de Email */}
           <TextField
@@ -99,7 +102,7 @@ const Login = ({ onLogin }) => {
             fullWidth
             variant="contained"
             disabled={loading || !isEmailValid() || !password} // Desabilita o botão se estiver carregando ou os campos forem inválidos
-            sx={{ mt: 3, mb: 2, bgcolor: 'primary.main', '&:hover': { bgcolor: 'primary.dark' } }}
+            sx={{ mt: 3, mb: 2, backgroundColor:'#2176FF', '&:hover': { bgcolor: 'primary.dark' } }}
           >
             {loading ? <CircularProgress size={24} /> : 'Entrar'} {/* Ícone de carregamento */}
           </Button>
@@ -110,8 +113,9 @@ const Login = ({ onLogin }) => {
             fullWidth
             variant="outlined"
             onClick={() => navigate('/signUp-student')}
+            backgroundColor="#2176FF"
           >
-            Cadastrar-se 
+            Criar Conta
           </Button>
         </Box>
       </Paper>
