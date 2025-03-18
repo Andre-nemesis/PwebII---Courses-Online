@@ -13,6 +13,7 @@ import StudentsList from '../components/pages/Admins/studentsList.js';
 import AdminList from '../components/pages/Admins/adminList.js';
 import ModulesTeacherList from '../components/pages/teachers/modulesCreatedList.js';
 import ModulesList from '../components/pages/teachers/modulesList.js';
+import LandingPage from '../components/pages/landing_page/landingPage.js';
 
 const Layout = ({ setAuthenticated }) => {
   const handleLogout = () => {
@@ -68,11 +69,12 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated }) => {
             <Route path="/admins" element={<AdminList />} />
             <Route path="/module/view" element={<ModulesTeacherList />} />
             <Route path="/module/view/all" element={<ModulesList />} />
-            <Route index element={<p></p>} />
           </Route>
+          
         ) : (
           <Route path="/*" element={<Navigate to="/login" />} />
         )}
+        <Route index element={<LandingPage />} />
       </Routes>
     </BrowserRouter>
   );
