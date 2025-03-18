@@ -13,7 +13,7 @@ import StudentsList from '../components/pages/Admins/studentsList.js';
 import AdminList from '../components/pages/Admins/adminList.js';
 import ModulesTeacherList from '../components/pages/teachers/modulesCreatedList.js';
 import ModulesList from '../components/pages/teachers/modulesList.js';
-import LandingPage from '../components/pages/landing_page/landingPage.js';
+import LearnifyPage from '../components/landingPage/page.js';
 
 const Layout = ({ setAuthenticated }) => {
   const handleLogout = () => {
@@ -74,7 +74,7 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated }) => {
         ) : (
           <Route path="/*" element={<Navigate to="/login" />} />
         )}
-        <Route index element={<LandingPage />} />
+        <Route index element={<LearnifyPage />} />
       </Routes>
     </BrowserRouter>
   );
