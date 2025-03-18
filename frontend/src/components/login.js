@@ -39,9 +39,12 @@ const Login = ({ onLogin }) => {
   const navigate = useNavigate();
 
   return (
-    <Container component="main" maxWidth="xs" backgroundColor="#040D33">
+    <Container component="main" maxWidth="xs">
       <Paper sx={{ mt: 8, p: 4, display: 'flex', flexDirection: 'column', alignItems: 'start', backgroundColor: '#1E2951'}}>
-        <Typography component="h1" variant="h5" sx={{ mb: 2, color: '#EAEFF7'}}>
+        <Typography component="h1" variant="h5" sx={{ mb: 2, color: '#EAEFF7', fontWeight: 'bold' }}>
+          Learnify
+        </Typography>
+        <Typography component="h2" variant="h5" sx={{ mb: 2, color: '#EAEFF7'}}>
           Bem-vindo novamente!
         </Typography>
         <Typography component="p" variant="body1" sx={{ mb: 1, color: '#C8D0DA'}}>
@@ -61,7 +64,12 @@ const Login = ({ onLogin }) => {
             error={!!email && !isEmailValid()} 
             helperText={!!email && !isEmailValid() ? 'Email ou senha inválida' : ''}
             InputProps={{
-              startAdornment: <Email sx={{ color: 'action.active', mr: 1 }} />, // Ícone de email
+              startAdornment: <Email sx={{ color: '#C8D0DA', mr: 1 }} />, // Ícone de email
+              sx: { backgroundColor: '#040D33', color: '#C8D0DA' }, 
+            }}
+
+            InputLabelProps={{
+              sx: { color: '#C8D0DA' }, // Cor do label para melhorar contraste
             }}
           />
 
@@ -75,17 +83,23 @@ const Login = ({ onLogin }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             InputProps={{
-              startAdornment: <Lock sx={{ color: 'action.active', mr: 1 }} />,
+              startAdornment: <Lock sx={{ color: '#C8D0DA', mr: 1 }} />,
+              sx: { backgroundColor: '#040D33', color: '#C8D0DA' },
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
                     onClick={passwordVisibility}
                     edge="end"
+                    sx={{ color: '#C8D0DA' }}
                   >
                     {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               )
+            }}
+
+            InputLabelProps={{
+              sx: { color: '#C8D0DA' }, // Cor do label para melhorar contraste
             }}
           />
 
@@ -102,7 +116,16 @@ const Login = ({ onLogin }) => {
             fullWidth
             variant="contained"
             disabled={loading || !isEmailValid() || !password} // Desabilita o botão se estiver carregando ou os campos forem inválidos
-            sx={{ mt: 3, mb: 2, backgroundColor:'#2176FF', '&:hover': { bgcolor: 'primary.dark' } }}
+            sx={{
+              mt: 3,
+              mb: 2,
+              backgroundColor: '#2176FF',
+              '&:hover': { bgcolor: '#185BDB' },
+              '&.Mui-disabled': {
+                backgroundColor: '#D2EAFF', // Cor de fundo quando desabilitado
+                color: '#C8D0DA', // Cor do texto para melhor contraste
+              }
+            }}
           >
             {loading ? <CircularProgress size={24} /> : 'Entrar'} {/* Ícone de carregamento */}
           </Button>
@@ -113,7 +136,14 @@ const Login = ({ onLogin }) => {
             fullWidth
             variant="outlined"
             onClick={() => navigate('/signUp-student')}
-            backgroundColor="#2176FF"
+            sx={{
+              borderColor: '#2176FF', // Cor da borda
+              color: '#2176FF', // Cor da fonte
+              '&:hover': {
+                borderColor: '#185BDB', // Cor da borda no hover (ligeiramente mais escura)
+                backgroundColor: '#1043B7', // Efeito leve de hover
+              }
+            }}
           >
             Criar Conta
           </Button>
