@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { AppBar, Toolbar, Button, Container, Typography, Box, Grid, Card, CardContent, IconButton, TextField } from "@mui/material";
+import { AppBar, Toolbar, Button, Container, Typography, Box, Grid, Card, CardContent, IconButton, TextField, Link } from "@mui/material";
 import LaptopIcon from "@mui/icons-material/Laptop";
 import CodeIcon from "@mui/icons-material/Code";
 import StorageIcon from "@mui/icons-material/Storage";
@@ -11,20 +11,75 @@ import img2 from '../../assets/images/heroSection.jpg';
 
 const Header = () => {
   const navigate = useNavigate();
+
+  const scrollToCourses = () => {
+    const cursosSection = document.getElementById('cursos');
+    if (cursosSection) {
+      cursosSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToCommunity = () => {
+    const communitySection = document.getElementById('community');
+    if (communitySection) {
+      communitySection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToPlans = () => {
+    const plansSection = document.getElementById('plans');
+    if (plansSection) {
+      plansSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToAbout = () => {
+    const aboutSection = document.getElementById('about');
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <AppBar position="static" color="primary">
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h6">Learnify</Typography>
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between", backgroundColor: "#040D33", height: "65px" }}>
+        <Typography variant="h5"><strong>Learnify</strong></Typography>
         <Box>
-          <Button color="inherit">Cursos</Button>
-          <Button color="inherit">Comunidade</Button>
-          <Button color="inherit">Sobre</Button>
-          <Button color="inherit">Planos</Button>
-          <Button color="inherit">Contato</Button>
+          <Link onClick={scrollToCourses}>
+            <Button>Cursos</Button>  
+          </Link>
+          <Link onClick={scrollToCommunity}>
+            <Button>Comunidade</Button>  
+          </Link>
+          <Link onClick={scrollToAbout}>
+            <Button>Sobre</Button>  
+          </Link>
+          <Link onClick={scrollToPlans}>
+            <Button>Planos</Button>  
+          </Link>
+          <Link onClick={scrollToContact}>
+            <Button>Contato</Button>  
+          </Link>
         </Box>
         <Box>
-          <Button onClick={() => navigate('/login')} color="inherit">Login</Button>
-          <Button onClick={() => navigate('/signUp-student')} variant="contained" color="secondary">Cadastre-se</Button>
+          <Button onClick={() => navigate('/login')} 
+            sx={{ border: '1px solid #1976d2', padding: '5px 15px', marginRight: "12px" }}
+          >
+            Login
+          </Button>
+          <Button onClick={() => navigate('/signUp-student')} variant="contained" 
+            color="secondary"
+            sx={{ backgroundColor: '#2176FF', color: '#000', '&:hover': { backgroundColor: '' }}}
+          >
+            Cadastre-se
+          </Button>
         </Box>
       </Toolbar>
     </AppBar>
@@ -33,40 +88,75 @@ const Header = () => {
 
 const HomeSection = () => {
   return (
-    <Container sx={{ textAlign: "center", py: 8, backgroundImage: { img2 } }}>
-      <Typography variant="h6" color="secondary">Evolua sua carreira</Typography>
-      <Typography variant="h3" fontWeight={600} mt={2}>
-        Domine a tecnologia e transforme seu futuro com a Learnify
+    <Container maxWidth={false} position="fixed"
+      sx={{ 
+        position: "relative",
+        height: "90vh",
+        width: "100vw",
+        paddingTop: "10px",
+        margin: 0,
+        textAlign: "left", 
+        py: 20, 
+        backgroundRepeat: "no-repeat", 
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        color: "white",
+        paddingTop: "65px",
+        backgroundImage: `linear-gradient(270deg, rgba(4,13,51,0) 0%, rgba(4,13,51,0.9136029411764706) 85%), url(${img2})`
+        }}>
+      <Typography variant="h6" color="#2176FF"><strong>EVOLUA SUA CARREIRA</strong></Typography>
+      <Typography variant="h3" fontWeight={550} mt={2}>
+        Domine a tecnologia e transforme seu <br />futuro com a Learnify
       </Typography>
-      <Typography variant="body1" mt={2} color="text.secondary">
-        Na Learnify, você encontra cursos online de alta qualidade para impulsionar sua carreira.
-        Aprenda com especialistas do mercado e domine as habilidades mais demandadas!
+      <Typography variant="body1" mt={2}>
+        Na Learnify, você encontra cursos online de alta qualidade para impulsionar 
+        <br />sua carreira na tecnologia. Aprenda com especialistas do mercado, 
+        domine as <br />habilidades mais demandadas e conquiste novas oportunidades.<br />   
+        Comece agora e transforme seu futuro!
       </Typography>
       <Box mt={3}>
-        <Button variant="contained" color="primary" sx={{ mr: 2 }}>Decolar na tecnologia</Button>
-        <Button variant="outlined" color="primary">Sobre a Learnify</Button>
+        <Button variant="contained" color="primary" sx={{ color: "#000", mr: 2 }}>Decolar na tecnologia</Button>
+        <Button variant="outlined" color="primary" sx={{ border: "2px solid" }}>Sobre a Learnify</Button>
       </Box>
     </Container>
   );
 };
 
 const courses = [
-  { icon: <LaptopIcon fontSize="large" />, title: "Front-end", description: "Aprenda a criar interfaces modernas com React e Vue.js." },
-  { icon: <CodeIcon fontSize="large" />, title: "Back-end", description: "Desenvolva sistemas robustos com Node.js, Django e APIs." },
-  { icon: <StorageIcon fontSize="large" />, title: "Data Science", description: "Analise e visualize dados com Python, Pandas e SQL." },
-  { icon: <BarChartIcon fontSize="large" />, title: "Marketing Digital", description: "Domine SEO, tráfego pago e redes sociais." }
+  { icon: <LaptopIcon fontSize="large" sx={{ color: "#fff"}} />, title: "Front-end", description: "Aprenda a criar interfaces modernas e responsivas com HTML, CSS e JavaScript. Domine frameworks como React e Vue.js para desenvolver experiências incríveis" },
+  { icon: <CodeIcon fontSize="large" sx={{ color: "#fff"}}/>, title: "Back-end", description: "Construa sistemas robustos e escaláveis com Node.js, Python, Django e bancos de dados. Torne-se um especialista em desenvolvimento de servidores e APIs." },
+  { icon: <StorageIcon fontSize="large" sx={{ color: "#fff"}}/>, title: "Data Science", description: "Descubra o poder dos dados! Aprenda análise, visualização e machine learning com Python, Pandas e SQL para transformar informações em decisões estratégicas." },
+  { icon: <BarChartIcon fontSize="large" sx={{ color: "#fff"}}/>, title: "Marketing Digital", description: "Domine estratégias de SEO, tráfego pago e redes sociais para criar campanhas eficazes. Aprenda a atrair, engajar e converter clientes no mundo digital." }
 ];
 
 const CoursesSection = () => {
   return (
-    <Container sx={{ py: 8 }}>
-      <Typography variant="h6" color="secondary">Cursos</Typography>
-      <Typography variant="h4" fontWeight={600} mt={2}>Cursos que impulsionam o seu futuro</Typography>
-      <Typography variant="body1" mt={2} color="text.secondary">Explore nossos cursos e mergulhe no universo da tecnologia!</Typography>
+    <Container id="cursos" maxWidth={false} 
+      sx={{ 
+        textAlign: "center", 
+        backgroundColor: "#040D33", 
+        height: "100vh", padding: "180px", 
+        margin: 0, 
+        width:"100vw",
+      }}>
+      <Typography variant="h5" sx={{ color: "#2176FF" }}>CURSOS</Typography>
+      <Typography variant="h4" fontWeight={600} mt={2} sx={{ color: "#fff"}}>Cursos que impulsionam o seu futuro</Typography>
+      <Typography variant="body1" mt={2} sx={{ color: "#fff" }}>Explore nossos cursos e mergulhe no universo da tecnologia!</Typography>
       <Grid container spacing={4} mt={3}>
         {courses.map((course, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
-            <Card sx={{ textAlign: "center", p: 2 }}>
+            <Card 
+              sx={{ 
+                textAlign: "left", 
+                p: 2, 
+                backgroundColor: "transparent", 
+                border: "1px solid #2176FF",
+                height: "300px", 
+                display: "flex", 
+                flexDirection: "column", 
+                justifyContent: "space-between", 
+              }}
+            >
               <IconButton color="primary">{course.icon}</IconButton>
               <CardContent>
                 <Typography variant="h6" fontWeight={600}>{course.title}</Typography>
@@ -80,9 +170,10 @@ const CoursesSection = () => {
     </Container>
   );
 };
+
 const CommunitySection = () => {
   return (
-    <Container sx={{ py: 8, textAlign: "center" }}>
+    <Container id="community" maxWidth={false} sx={{ py: 8, textAlign: "center", backgroundColor: "#040D33", height: "100vh" }}>
       <Typography variant="h6" color="secondary">Comunidade</Typography>
       <Typography variant="h4" fontWeight={600} mt={2}>
         Aprenda, compartilhe e evolua com a comunidade Learnify
@@ -101,7 +192,18 @@ const CommunitySection = () => {
 
 const AboutSection = () => {
   return (
-    <Container sx={{ py: 8, textAlign: "center" }}>
+    <Container id="about" maxWidth={false}
+      sx={{ 
+        position: "relative",
+        height: "50vh",
+        textAlign: "left", 
+        py: 20, 
+        backgroundRepeat: "no-repeat", 
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        color: "white",
+        backgroundImage: `linear-gradient(270deg, rgba(4,13,51,0) 0%, rgba(4,13,51,0.9136029411764706) 85%), url(${img2})`
+       }}>
       <Typography variant="h6" color="secondary">Sobre</Typography>
       <Typography variant="h4" fontWeight={600} mt={2}>Seu futuro começa agora</Typography>
       <Typography variant="body1" mt={2} color="text.secondary">
@@ -121,9 +223,9 @@ const plans = [
   { title: "Premium", price: "R$99/mês", features: ["100GB Armazenamento", "Suporte VIP", "Recursos exclusivos"] },
 ];
 
-const PlanosSection = () => {
+const PlansSection = () => {
   return (
-    <Container sx={{ py: 5 }}>
+    <Container id="plans" maxWidth={false} sx={{ py: 5, backgroundColor: "#040D33", height: "100vh" }}>
       <Typography variant="h4" align="center" gutterBottom>
         Escolha seu plano
       </Typography>
@@ -186,7 +288,7 @@ const testimonials = [
 
 const TestimonialsSection = () => {
   return (
-    <Container sx={{ my: 5 }}>
+    <Container maxWidth={false} sx={{ backgroundColor: "#040D33", height: "100vh" }}>
       <Typography variant="h6" color="primary">Comentários</Typography>
       <Typography variant="h4" fontWeight={600} gutterBottom>
         O que nossos alunos acham da Learnify
@@ -217,7 +319,7 @@ const TestimonialsSection = () => {
 
 const ContactSection = () => {
   return (
-    <Container sx={{ my: 5 }}>
+    <Container id="contact" maxWidth={false} sx={{ backgroundColor: "#040D33", height: "100vh" }}>
       <Typography variant="h6" color="primary">Contato</Typography>
       <Typography variant="h4" fontWeight={600} gutterBottom>
         Entre em contato com a Learnify
@@ -284,7 +386,7 @@ const LearnifyPage = () => {
         <CoursesSection />
         <CommunitySection />
         <AboutSection />
-        <PlanosSection />
+        <PlansSection />
         <TestimonialsSection />
         <ContactSection />
       </main>
