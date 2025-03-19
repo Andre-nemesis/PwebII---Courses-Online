@@ -232,8 +232,8 @@ export const SignUpStudent = () => {
 				backgroundColor: '#2176FF',
 				'&:hover': { bgcolor: '#185BDB' },
 				'&.Mui-disabled': {
-				  backgroundColor: '#D2EAFF',
-				  color: '#C8D0DA',
+				  backgroundColor: '#283C84',
+				  color: '#566FC1',
 				},
 			  }}
 			>
