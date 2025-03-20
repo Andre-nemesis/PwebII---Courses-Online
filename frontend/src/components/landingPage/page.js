@@ -8,7 +8,15 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import { Star, FlashOn, Rocket, Check } from '@mui/icons-material';
 import img1 from '../../assets/images/comunidadeSection.jpg';
 import img2 from '../../assets/images/heroSection.jpg';
+import Footer from "../footer"; 
 
+
+const scrollToAbout = () => {
+  const aboutSection = document.getElementById('about');
+  if (aboutSection) {
+    aboutSection.scrollIntoView({ behavior: 'smooth' });
+  }
+};
 
 const Header = () => {
   const navigate = useNavigate();
@@ -34,13 +42,6 @@ const Header = () => {
     }
   };
 
-  const scrollToAbout = () => {
-    const aboutSection = document.getElementById('about');
-    if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   const scrollToContact = () => {
     const contactSection = document.getElementById('contact');
     if (contactSection) {
@@ -49,7 +50,7 @@ const Header = () => {
   };
 
   return (
-    <AppBar position="static" color="primary">
+    <AppBar position="fixed" color="primary">
       <Toolbar sx={{ display: "flex", justifyContent: "space-between", backgroundColor: "#040D33", height: "65px" }}>
         <Typography variant="h5"><strong>Learnify</strong></Typography>
         <Box>
@@ -88,21 +89,22 @@ const Header = () => {
 };
 
 const HomeSection = () => {
+  const navigate = useNavigate();
+
   return (
     <Container maxWidth="1g" position="fixed"
       sx={{ 
         position: "relative",
         height: "90vh",
         width: "100vw",
-        //paddingTop: "10px",
-        margin: 0,
+        paddingTop: "10px",
+        marginTop: "65px",
         textAlign: "left", 
         py: 20, 
         backgroundRepeat: "no-repeat", 
         backgroundSize: "cover",
         backgroundPosition: "center",
         color: "white",
-        paddingTop: "65px",
         backgroundImage: `linear-gradient(270deg, rgba(4,13,51,0) 0%, rgba(4,13,51,0.9136029411764706) 85%), url(${img2})`,
         }}>
       <Typography variant="h6" color="#2176FF"><strong>EVOLUA SUA CARREIRA</strong></Typography>
@@ -116,8 +118,10 @@ const HomeSection = () => {
         Comece agora e transforme seu futuro!
       </Typography>
       <Box mt={3}>
-        <Button variant="contained" color="primary" sx={{ color: "#000", mr: 2 }}>Decolar na tecnologia</Button>
-        <Button variant="outlined" color="primary" sx={{ border: "2px solid" }}>Sobre a Learnify</Button>
+        <Button onClick={() => navigate('/signUp-student')} variant="contained" color="primary" sx={{ color: "#000", mr: 2 }}>
+          Decolar na tecnologia
+        </Button>
+        <Button onClick={scrollToAbout} variant="outlined" color="primary" sx={{ border: "2px solid" }}>Sobre a Learnify</Button>
       </Box>
     </Container>
   );
@@ -283,12 +287,13 @@ const PlansSection = () => {
       sx={{
         py: 5,
         backgroundColor: "#040D33",
-        width: '100vw',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: '10px',
+        width: "100vw",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "10px",
+        paddingTop: "75px"
       }}
     >
       <Typography variant="h6" color="#2176FF">PLANOS</Typography>
@@ -299,7 +304,7 @@ const PlansSection = () => {
         Na Learnify, temos um plano para cada fase do seu crescimento.
       </Typography>
 
-      <Grid container spacing={1} justifyContent="center" paddingTop="30px">
+      <Grid container justifyContent="center" paddingTop="30px">
         {plans.map((plan, index) => (
           <Grid item key={index} xs={12} sm={6} md={4}>
             <Card
@@ -311,8 +316,8 @@ const PlansSection = () => {
                 backgroundColor: plan.gradient ? 'transparent' : '#040D33',
                 border: "1px solid #2176FF",
                 maxWidth: "300px",
-                //height: index === 0 ? "380px" : index === 1 ? "400px" : "450px",
                 marginTop: index === 0 ? "8px" : index === 1 ? "3px" : 0,
+                justifyContent: 'space-between',
                 flexDirection: "column"
               }}
             >
@@ -428,7 +433,7 @@ const ContactSection = () => {
         display: "flex",
         alignItems: "center", 
         textAlign: "center", 
-        paddingTop: "160px",
+        paddingTop: "135px",
         flexDirection: "column",
         justifyContent: "center"
       }}>
@@ -449,7 +454,8 @@ const ContactSection = () => {
           backgroundColor: "transparent",
           marginTop: "20px"
         }}  
-      >
+      > 
+        {/* campos */}
         <TextField fullWidth label="Nome" margin="normal" required 
           sx={{
             '& .MuiInputLabel-root': { color: '#fff' },
@@ -474,11 +480,11 @@ const ContactSection = () => {
         />
         <TextField fullWidth label="Mensagem" multiline rows={4} margin="normal" required
           sx={{
-            '& .MuiInputLabel-root': { color: '#fff' }, // Cor do label
+            '& .MuiInputLabel-root': { color: '#fff' },
             '& .MuiOutlinedInput-root': {
-              '& fieldset': { borderColor: '#2176FF' }, // Cor da borda do campo
-              '&:hover fieldset': { borderColor: '#2176FF' }, // Cor da borda ao passar o mouse
-              '&.Mui-focused fieldset': { borderColor: '#2176FF' }, // Cor da borda quando focado
+              '& fieldset': { borderColor: '#2176FF' },
+              '&:hover fieldset': { borderColor: '#2176FF' },
+              '&.Mui-focused fieldset': { borderColor: '#2176FF' },
             },
             '& .MuiInputBase-input': { color: '#fff' }
           }}
@@ -500,33 +506,18 @@ const ContactSection = () => {
   );
 };
 
-const Footer = () => {
-  return (
-    <Box
-      sx={{
-        backgroundColor: '#1E2951',
-        color: 'white',
-        textAlign: 'center',
-        padding: '20px',
-        bottom: 0,
-        width: '100%'
-      }}
-    >
-      <Typography variant="body2" component="p">
-        Desenvolvido por &copy; InfinityCode
-      </Typography>
-      <Typography variant="body2" component="p">
-        Alguns direitos reservados
-      </Typography>
-    </Box>
-  );
-};
-
 const LearnifyPage = () => {
   return (
-    <>
-      <Header />
-      <main>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        backgroundColor: '#040D33',
+      }}
+    >
+      <Header /> 
+      <main style={{ flex: 1, paddingBottom: '80px' }}>
         <HomeSection />
         <CoursesSection />
         <CommunitySection />
@@ -534,9 +525,9 @@ const LearnifyPage = () => {
         <PlansSection />
         <TestimonialsSection />
         <ContactSection />
-        <Footer />
       </main>
-    </>
+      <Footer />
+    </div>
   );
 };
 
