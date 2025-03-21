@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import api from '../../../service/api.js';
 import { jwtDecode } from 'jwt-decode';
-
+import Menu from '../Menu.js';
 
 const SubscribedCourses = () => {
     const [courses, setCourses] = useState([]);
@@ -49,48 +49,54 @@ const SubscribedCourses = () => {
     }, []);
 
     return (
-        <Container component='main' maxWidth='md'>
-            <Paper elevation={3} sx={{ mt: 2, p: 3 }}>
-                <Typography component='h1' variant='h5' sx={{ mb: 2 }}>
-                    Lista de Cursos
-                </Typography>
+        <Box sx={{ display: 'flex' }}> {/* Container principal com flexbox */}
+            {/* Menu lateral */}
+            <Menu userRole="student" /> {/* Substitua "student" pelo papel do usuário logado */}
 
-                {loading ? (
-                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <CircularProgress />
-                    </Box>
-                ) : error ? (
-                    <Typography color='error'>{error}</Typography>
-                ) : noCourses ? ( 
-                    <Typography sx={{ textAlign: 'center', color: 'gray' }}>
-                        Não há inscrições feitas.
+            {/* Conteúdo principal */}
+            <Container component='main' maxWidth='md' sx={{ flexGrow: 1, p: 3 }}>
+                <Paper elevation={3} sx={{ mt: 2, p: 3 }}>
+                    <Typography component='h1' variant='h5' sx={{ mb: 2 }}>
+                        Lista de Cursos Inscritos
                     </Typography>
-                ) : (
-                    <TableContainer>
-                        <Table sx={{ minWidth: 650 }} aria-label='Tabela de Cursos'>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Nome do Curso</TableCell>
-                                    <TableCell align='right'>Carga Horária</TableCell>
-                                    <TableCell align='right'>Progresso (%)</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {courses.map((course) => (
-                                    <TableRow key={course.id}>
-                                        <TableCell component='th' scope='row'>
-                                            {course.name}
-                                        </TableCell>
-                                        <TableCell align='right'>{course.qtd_hours}</TableCell>
-                                        <TableCell align='right'>{course.percent_complet}%</TableCell>
+
+                    {loading ? (
+                        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                            <CircularProgress />
+                        </Box>
+                    ) : error ? (
+                        <Typography color='error'>{error}</Typography>
+                    ) : noCourses ? (
+                        <Typography sx={{ textAlign: 'center', color: 'gray' }}>
+                            Não há inscrições feitas.
+                        </Typography>
+                    ) : (
+                        <TableContainer>
+                            <Table sx={{ minWidth: 650 }} aria-label='Tabela de Cursos'>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Nome do Curso</TableCell>
+                                        <TableCell align='right'>Carga Horária</TableCell>
+                                        <TableCell align='right'>Progresso (%)</TableCell>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                )}
-            </Paper>
-        </Container>
+                                </TableHead>
+                                <TableBody>
+                                    {courses.map((course) => (
+                                        <TableRow key={course.id}>
+                                            <TableCell component='th' scope='row'>
+                                                {course.name}
+                                            </TableCell>
+                                            <TableCell align='right'>{course.qtd_hours}</TableCell>
+                                            <TableCell align='right'>{course.percent_complet}%</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    )}
+                </Paper>
+            </Container>
+        </Box>
     );
 };
 

@@ -15,33 +15,6 @@ import ModulesTeacherList from '../components/pages/teachers/modulesCreatedList.
 import ModulesList from '../components/pages/teachers/modulesList.js';
 import LearnifyPage from '../components/landingPage/page.js';
 
-const Layout = ({ setAuthenticated }) => {
-  const handleLogout = () => {
-    localStorage.removeItem('token'); // Remove o token
-    setAuthenticated(false);
-  };
-
-  return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }} >
-      <header 
-        style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          padding: '10px', 
-          backgroundColor: 'rgba(181, 178, 240, 0.41)', 
-        }}>
-        <h1>Bem-vindo(a) à Learnify!</h1>
-        <button onClick={handleLogout} style={{ borderRadius: '5px', border: 'none', backgroundColor: '#FF7B5A', color: '#fff', padding: '10px 20px' }}>
-          Sair
-        </button>
-      </header>
-      <main style={{ padding: '20px' }}>
-        <Outlet /> {/* Isso garante que o conteúdo das rotas seja renderizado aqui */}
-      </main>
-    </div>
-  );
-};
 
 const AppRoutes = ({ isAuthenticated, setAuthenticated }) => {
   const handleLogin = () => {
@@ -58,9 +31,9 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated }) => {
         <Route path="/login" element={!isAuthenticated ? <Login onLogin={handleLogin} /> : <Navigate to="/mainScreen" />} />
         <Route path="/Hello" element={<Hello />} />
 
-        {/* Rotas Protegidas dentro do Layout */}
+        {/* Rotas Protegidas */}
         {isAuthenticated ? (
-          <Route element={<Layout setAuthenticated={setAuthenticated} />}>
+          <Route>
             <Route path="/mainScreen" element={<MainScreen setAuthenticated={setAuthenticated} />} />
             <Route path="/courses" element={<CoursesList />} />
             <Route path="/subscribed-courses" element={<SubscribedCourses />} />
