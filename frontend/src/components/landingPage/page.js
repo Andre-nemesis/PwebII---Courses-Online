@@ -54,19 +54,19 @@ const Header = () => {
       <Toolbar sx={{ display: "flex", justifyContent: "space-between", backgroundColor: "#040D33", height: "65px" }}>
         <Typography variant="h5"><strong>Learnify</strong></Typography>
         <Box>
-          <Link onClick={scrollToCourses}>
+          <Link onClick={scrollToCourses} variant="h6">
             <Button>Cursos</Button>  
           </Link>
-          <Link onClick={scrollToCommunity}>
+          <Link onClick={scrollToCommunity} variant="h6">
             <Button>Comunidade</Button>  
           </Link>
-          <Link onClick={scrollToAbout}>
+          <Link onClick={scrollToAbout} variant="h6">
             <Button>Sobre</Button>  
           </Link>
-          <Link onClick={scrollToPlans}>
+          <Link onClick={scrollToPlans} variant="h6">
             <Button>Planos</Button>  
           </Link>
-          <Link onClick={scrollToContact}>
+          <Link onClick={scrollToContact} variant="h6">
             <Button>Contato</Button>  
           </Link>
         </Box>

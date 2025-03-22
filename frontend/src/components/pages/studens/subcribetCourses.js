@@ -49,11 +49,9 @@ const SubscribedCourses = () => {
     }, []);
 
     return (
-        <Box sx={{ display: 'flex' }}> {/* Container principal com flexbox */}
-            {/* Menu lateral */}
-            <Menu userRole="student" /> {/* Substitua "student" pelo papel do usuário logado */}
+        <Box sx={{ display: 'flex' }}>
+            <Menu userRole="student" />
 
-            {/* Conteúdo principal */}
             <Container component='main' maxWidth='md' sx={{ flexGrow: 1, p: 3 }}>
                 <Paper elevation={3} sx={{ mt: 2, p: 3 }}>
                     <Typography component='h1' variant='h5' sx={{ mb: 2 }}>

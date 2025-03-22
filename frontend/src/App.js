@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import AppRoutes from './routes/Routes';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './theme';
 // import './styles/button.css';
 // import './styles/div.css';
 // import './styles/elements.css';
@@ -14,7 +16,11 @@ import AppRoutes from './routes/Routes';
 function App() {
   const [isAuthenticated, setAuthenticated] = useState(!!localStorage.getItem('token'));
 
-  return <AppRoutes isAuthenticated={isAuthenticated} setAuthenticated={setAuthenticated} />;
+  return (
+    <ThemeProvider theme={theme}>
+      <AppRoutes isAuthenticated={isAuthenticated} setAuthenticated={setAuthenticated} />
+    </ThemeProvider>
+  );
 }
 
 export default App;
