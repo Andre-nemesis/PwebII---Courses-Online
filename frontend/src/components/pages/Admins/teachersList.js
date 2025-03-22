@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Box } from '@mui/material';
 import api from '../../../service/api';
+import Menu from '../Menu';
 
 const TeachersList = () => {
   const [teachers, setTeachers] = useState([]);
@@ -27,7 +28,10 @@ const TeachersList = () => {
   }, []);
 
   return (
-    <Container component='main' maxWidth='md'>
+    <Box sx={{ display: "flex" }}>
+      <Menu userRole="admin"/>
+
+      <Container component='main' maxWidth='md'>
       <Paper elevation={3} sx={{ mt: 2, p: 3 }}>
         <Typography component='h1' variant='h5' sx={{ mb: 2 }}>
           Lista de Professores
@@ -70,6 +74,7 @@ const TeachersList = () => {
         )}
       </Paper>
     </Container>
+    </Box>
   );
 };
 

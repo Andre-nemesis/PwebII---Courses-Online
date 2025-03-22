@@ -49,13 +49,13 @@ export const SignUpTeacher = () => {
 			display: 'flex',
 			justifyContent: 'center',
 			alignItems: 'center',
-			backgroundColor: '#040D33', // Fundo azul escuro aplicado
+			backgroundColor: '#040D33',
 		  }}
 		>
 		  <Container component="main" maxWidth="sm">
 			<Paper elevation={3} sx={{ mt: 1, p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: '#040D33' }}>
 			  <Typography component="h1" variant="h5" sx={{ mb: 2, color: '#EAEFF7' }}>
-				Cadastrar-se
+					Cadastrar professor
 			  </Typography>
 			  <Box component="form" onSubmit={handleSignUp} sx={{ width: '100%' }}>
 				<TextField
@@ -68,9 +68,12 @@ export const SignUpTeacher = () => {
 				  onChange={(e) => setName(e.target.value)}
 				  sx={{
 					backgroundColor: '#1E2951',
-					color: '#EAEFF7',
+					color: '#2176FF',
 					border: '1px solid rgba(200, 208, 218, 0.25)',
 					mt: 2,
+					'& .MuiInputBase-input': { 
+						color: '#C8D0DA', 
+					},
 				  }}
 				  InputLabelProps={{ sx: { color: '#C8D0DA' }}}
 				/>
@@ -104,6 +107,9 @@ export const SignUpTeacher = () => {
 					color: '#EAEFF7',
 					border: '1px solid rgba(200, 208, 218, 0.25)',
 					mt: 2,
+					'& .MuiInputBase-input': { 
+						color: '#C8D0DA', 
+					},
 				  }}
 				  InputLabelProps={{ sx: { color: '#C8D0DA' }}}
 				/>
@@ -119,7 +125,10 @@ export const SignUpTeacher = () => {
 					backgroundColor: '#1E2951',
 					color: '#EAEFF7',
 					border: '1px solid rgba(200, 208, 218, 0.25)',
-					mt: 2 
+					mt: 2,
+					'& .MuiInputBase-input': { 
+						color: '#C8D0DA', 
+					},
 					}}
 					InputLabelProps={{ sx: { color: '#C8D0DA' }}}
 				/>
@@ -137,6 +146,9 @@ export const SignUpTeacher = () => {
 					color: '#EAEFF7',
 					border: '1px solid rgba(200, 208, 218, 0.25)',
 					mt: 2,
+					'& .MuiInputBase-input': { 
+						color: '#C8D0DA', 
+					},
 				  }}
 				  InputLabelProps={{ sx: { color: '#C8D0DA' }}}
 				/>
@@ -154,6 +166,9 @@ export const SignUpTeacher = () => {
 					color: '#EAEFF7',
 					border: '1px solid rgba(200, 208, 218, 0.25)',
 					mt: 2,
+					'& .MuiInputBase-input': { 
+						color: '#C8D0DA', 
+					},
 				  }}
 				  InputLabelProps={{ sx: { color: '#C8D0DA' }}}
 				/>
@@ -168,7 +183,7 @@ export const SignUpTeacher = () => {
 				  value={password}
 				  onChange={(e) => setPassword(e.target.value)}
 				  InputProps={{
-					startAdornment: <Lock sx={{ color: 'action.active', mr: 1 }} />,
+					startAdornment: <Lock sx={{ color: '#C8D0DA', mr: 1 }} />,
 					sx: { backgroundColor: '#1E2951', color: '#C8D0DA', border: '1px solid rgba(200, 208, 218, 0.25)' },
 					endAdornment: (
 					  <InputAdornment position="end">
@@ -205,7 +220,7 @@ export const SignUpTeacher = () => {
 					}
 				  }}
 				>
-				  {loading ? <CircularProgress size={24} /> : 'Cadastrar-se'}
+				  {loading ? <CircularProgress size={24} /> : 'Cadastrar'}
 				</Button>
 	  
 				{/* Botão de ir para o login */}

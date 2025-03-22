@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Box } from '@mui/material';
 import api from '../../../service/api.js';
+import Menu from '../Menu.js';
 
 const ModulesList = () => {
     const [modules, setModules] = useState([]);
@@ -22,7 +23,10 @@ const ModulesList = () => {
     }, []);
 
     return (
-        <Container component='main' maxWidth='md'>
+        <Box sx={{ display: "flex"}}>
+            <Menu userRole={"admin"} />
+
+            <Container component='main' maxWidth='md'>
             <Paper elevation={3} sx={{ mt: 2, p: 3 }}>
                 <Typography component='h1' variant='h5' sx={{ mb: 2 }}>
                     Lista de Modulos Cadastrados
@@ -59,6 +63,7 @@ const ModulesList = () => {
                 )}
             </Paper>
         </Container>
+        </Box>
     );
 };
 

@@ -79,6 +79,19 @@ const Menu = ({ setAuthenticated, userRole }) => {
       {/* Opções para admin */}
       {userRole === 'admin' && (
         <>
+          <ListItemButton component={Link} to="/module/view/all" 
+            sx={{ 
+              color: "white", 
+              "&:hover": { 
+                backgroundColor: "#05134E"
+              },
+              ...selectedOption('/module/view/all')
+            }}>
+            <ListItemIcon sx={{ color: "white" }}>
+              <ModulesIcon />
+            </ListItemIcon>
+            <ListItemText primary="Módulos" />
+          </ListItemButton>
           <ListItemButton component={Link} to="/teachers" 
             sx={{ 
               color: "white", 
@@ -124,20 +137,8 @@ const Menu = ({ setAuthenticated, userRole }) => {
       {/* Opções para professor */}
       {userRole === 'teacher' && (
         <>
+          
           <ListItemButton component={Link} to="/module/view" 
-            sx={{ 
-              color: "white", 
-              "&:hover": { 
-                backgroundColor: "#05134E"
-              },
-              ...selectedOption('/module/view')
-            }}>
-            <ListItemIcon sx={{ color: "white" }}>
-              <ModulesIcon />
-            </ListItemIcon>
-            <ListItemText primary="Módulos Criados" />
-          </ListItemButton>
-          <ListItemButton component={Link} to="/module/view/all" 
             sx={{ 
               color: "white", 
               "&:hover": { 
@@ -148,7 +149,7 @@ const Menu = ({ setAuthenticated, userRole }) => {
             <ListItemIcon sx={{ color: "white" }}>
               <ModulesIcon />
             </ListItemIcon>
-            <ListItemText primary="Lista de Módulos" />
+            <ListItemText primary="Módulos" />
           </ListItemButton>
         </>
       )}
