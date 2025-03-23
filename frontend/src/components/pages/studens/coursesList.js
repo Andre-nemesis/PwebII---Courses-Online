@@ -11,7 +11,7 @@ const CoursesList = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await api.get('/students/courses/view');
+        const response = await api.get('/courses/');
         setCourses(response.data);
       } catch (err) {
         setError('Erro ao buscar cursos');

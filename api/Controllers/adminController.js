@@ -16,7 +16,7 @@ const adminController = {
     try {
       const { id } = req.params;
       const admin = await db.Admin.findByPk(id, {
-        include: [{ model: db.User, attributes: ['id', 'name', 'email'] }]
+        include: [{ model: db.Users, as:'User' }]
       });
 
       if (!admin) return res.status(404).json({ error: 'Administrador não encontrado' });

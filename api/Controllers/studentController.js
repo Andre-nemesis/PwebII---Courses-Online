@@ -21,9 +21,7 @@ const studentController = {
       const { id } = req.params;
       const student = await db.Student.findByPk(id, {
         include: [
-          { model: User, attributes: ['id', 'name', 'email'] },
-          { model: Course, through: Student_course, attributes: ['id', 'name'] },
-          { model: Certificate, attributes: ['id', 'certificate_code', 'status'] }
+          { model: User, as:'User'},
         ]
       });
 

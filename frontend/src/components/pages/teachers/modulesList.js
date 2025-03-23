@@ -11,7 +11,7 @@ const ModulesList = () => {
     useEffect(() => {
         const fetchModules = async () => {
             try {
-                const response = await api.get('/teachers/module/view');
+                const response = await api.get('/modules/');
                 setModules(response.data);
             } catch (err) {
                 setError('Erro ao buscar os modulos' + err);

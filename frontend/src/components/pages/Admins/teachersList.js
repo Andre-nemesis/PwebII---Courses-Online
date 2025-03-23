@@ -14,7 +14,6 @@ const TeachersList = () => {
       setLoading(true);
       try {
         const response = await api.get('/admin/viewTeacher');
-        console.log(response.data);
 				setTeachers(response.data);
     
       } catch (err) {

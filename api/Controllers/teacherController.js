@@ -20,8 +20,7 @@ const teacherController = {
       const { id } = req.params;
       const teacher = await db.Teachers.findByPk(id, {
         include: [
-          { model: db.User, attributes: ['id', 'name', 'email'] },
-          { model: db.Module, attributes: ['id', 'name'] }
+          { model: db.User, as:'User'},
         ]
       });
 

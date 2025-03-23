@@ -1,19 +1,19 @@
 import express from 'express';
-import moduleController from '../Controllers/moduleController.js';
+import teacherController from '../Controllers/teacherController.js';
 import { authorizeRole, verifyToken } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 //get
-router.get('/module/view',verifyToken,authorizeRole('teacher'),moduleController.getAll);
-router.get('/module/view/teacher/:id',verifyToken,authorizeRole('teacher'),moduleController.getAllModuleForTeacherId);
+router.get('/',verifyToken,authorizeRole('admin'),teacherController.getAll);
+router.get('/:id',verifyToken,authorizeRole('admin'),teacherController.getById);
 
 //post
-router.post('/module/create',verifyToken,authorizeRole('teacher'),moduleController.create);
+router.post('/',verifyToken,authorizeRole('admin'),teacherController.create);
 
 //put
-router.put('/module/edit/:id',verifyToken,authorizeRole('teacher'),moduleController.update);
+router.put('/:id',verifyToken,authorizeRole('admin'),teacherController.update);
 
 //delete
-router.delete('/module/delete/:id',verifyToken,authorizeRole('teacher'),moduleController.delete);
+router.delete('/:id',verifyToken,authorizeRole('admin'),teacherController.delete);
 
 export default router;
