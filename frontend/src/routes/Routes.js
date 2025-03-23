@@ -1,19 +1,19 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import { SignUpAdmin } from '../components/signUp/signUpAdmin.js';
+import { SignUpAdmin } from '../pages/signUp/signUpAdmin.js';
 import { Hello } from '../components/HelloReact';
 import MainScreen from '../components/mainScreen.js';
 import Login from '../components/login.js';
-import { SignUpStudent } from '../components/signUp/signUpStudent.js';
-import SignUpTeacher from '../components/signUp/SignUpTeacher.js';
-import CoursesList from '../components/pages/studens/coursesList.js';
-import SubscribedCourses from '../components/pages/studens/subcribetCourses.js';
-import TeachersList from '../components/pages/Admins/teachersList.js';
-import StudentsList from '../components/pages/Admins/studentsList.js';
-import AdminList from '../components/pages/Admins/adminList.js';
-import ModulesTeacherList from '../components/pages/teachers/modulesCreatedList.js';
-import ModulesList from '../components/pages/teachers/modulesList.js';
-import LearnifyPage from '../components/landingPage/page.js';
+import { SignUpStudent } from '../pages/signUp/signUpStudent.js';
+import SignUpTeacher from '../pages/signUp/SignUpTeacher.js';
+import CoursesList from '../pages/studens/coursesList.js';
+import SubscribedCourses from '../pages/studens/subcribetCourses.js';
+import TeachersList from '../pages/Admins/teachersList.js';
+import StudentsList from '../pages/Admins/studentsList.js';
+import AdminList from '../pages/Admins/adminList.js';
+import ModulesTeacherList from '../pages/teachers/modulesCreatedList.js';
+import ModulesList from '../pages/teachers/modulesList.js';
+import LearnifyPage from '../pages/landingPage/page.js';
 
 const AppRoutes = ({ isAuthenticated, setAuthenticated, type }) => {
   const handleLogin = () => {

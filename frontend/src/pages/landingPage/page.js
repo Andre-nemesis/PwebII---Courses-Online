@@ -8,7 +8,7 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import { Star, FlashOn, Rocket, Check } from '@mui/icons-material';
 import img1 from '../../assets/images/comunidadeSection.jpg';
 import img2 from '../../assets/images/heroSection.jpg';
-import Footer from "../footer"; 
+import Footer from "../../components/footer"; 
 
 
 const scrollToAbout = () => {

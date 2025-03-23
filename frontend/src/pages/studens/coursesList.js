@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Box } from '@mui/material';
-import api from '../../../service/api.js';
-import Menu from '../Menu.js';
+import api from '../../service/api.js';
+import Menu from '../../components/Menu.js';
 
 const CoursesList = () => {
   const [courses, setCourses] = useState([]);

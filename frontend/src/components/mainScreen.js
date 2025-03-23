@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import Menu from '../components/pages/Menu.js';
+import Menu from './Menu.js';
 
 const MainScreen = () => {
   const [userRole, setUserRole] = useState(null);

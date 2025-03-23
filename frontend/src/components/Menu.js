@@ -1,6 +1,6 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Drawer, List, ListItemIcon, ListItemText, Divider, ListItemButton, Typography, IconButton, AppBar, Toolbar, Dialog, DialogContent, DialogActions, Button } from '@mui/material';
+import { Drawer, List, ListItemIcon, ListItemText, Divider, ListItemButton, Typography, IconButton, AppBar, Toolbar, Dialog, DialogContent, DialogActions, Button,Box } from '@mui/material';
 import {
   Home as HomeIcon,
   School as CoursesIcon,
@@ -14,14 +14,14 @@ import {
   ViewList as ModulesIcon,
   Menu as MenuIcon
 } from '@mui/icons-material';
-import { useMediaQuery,CircularProgress } from '@mui/material';
+import { useMediaQuery, CircularProgress } from '@mui/material';
 import { jwtDecode } from 'jwt-decode';
-import api from '../../service/api';
+import api from '../service/api';
 
 const Menu = ({ setAuthenticated, userRole }) => {
   const location = useLocation();
   const token = localStorage.getItem('token');
-  const [user,setUser] = useState(null);
+  const [user, setUser] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
 
@@ -55,7 +55,7 @@ const Menu = ({ setAuthenticated, userRole }) => {
     if (token) {
       const decoded = jwtDecode(token);
       const type = decoded.role;
-      
+
       const fetchUserData = async () => {
         try {
           let userData;
@@ -66,8 +66,8 @@ const Menu = ({ setAuthenticated, userRole }) => {
           } else if (type === 'teacher') {
             userData = await api.get('/teacher/' + decoded.id);
           }
-          
-          setUser(userData.data); 
+
+          setUser(userData.data);
 
         } catch (error) {
           console.error("Erro ao carregar dados do usuário", error);
@@ -75,12 +75,12 @@ const Menu = ({ setAuthenticated, userRole }) => {
         }
       };
 
-      fetchUserData(); 
+      fetchUserData();
     }
   }, [token]);
 
   if (!user) {
-    return <CircularProgress size={24} />; 
+    return <CircularProgress size={24} />;
   }
 
 
@@ -305,7 +305,7 @@ const Menu = ({ setAuthenticated, userRole }) => {
     <>
       {isMobile ? (
         <>
-          <AppBar position='fixed' sx={{ backgroundColor: "#040D33" }}>
+          <AppBar position='fixed' sx={{ backgroundColor: "#040D33", zIndex: (theme) => theme.zIndex.drawer + 1 }}>
             <Toolbar>
               <IconButton
                 color="inherit"
@@ -331,6 +331,16 @@ const Menu = ({ setAuthenticated, userRole }) => {
           >
             {drawerContent}
           </Drawer>
+          <Box
+            sx={{
+              marginLeft: mobileOpen ? '240px' : '0', // Adiciona a margem ao conteúdo quando o Drawer está aberto
+              transition: 'margin-left 0.3s ease',  // Suaviza a transição do conteúdo
+              padding: '20px',
+              flexGrow: 1,
+            }}
+          >
+            {/* O restante do conteúdo */}
+          </Box>
         </>
       ) : (
         <Drawer variant='permanent'

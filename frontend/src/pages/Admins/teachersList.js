@@ -1,8 +1,8 @@
 // components/TeachersList.js
 import React, { useState, useEffect } from 'react';
 import { Container, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Box } from '@mui/material';
-import api from '../../../service/api';
-import Menu from '../Menu';
+import api from '../../service/api.js';
+import Menu from '../../components/Menu.js';
 
 const TeachersList = () => {
   const [teachers, setTeachers] = useState([]);

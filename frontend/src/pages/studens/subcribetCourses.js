@@ -4,9 +4,9 @@ import {
     TableCell, TableContainer, TableHead, TableRow,
     CircularProgress, Box
 } from '@mui/material';
-import api from '../../../service/api.js';
+import api from '../../service/api.js';
 import { jwtDecode } from 'jwt-decode';
-import Menu from '../Menu.js';
+import Menu from '../../components/Menu.js';
 
 const SubscribedCourses = () => {
     const [courses, setCourses] = useState([]);

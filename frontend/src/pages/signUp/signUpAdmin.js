@@ -4,7 +4,7 @@ import { TextField, Container, Button, Typography, Paper, Box, FormControl, Form
 import { Email, Lock } from '@mui/icons-material';
 import { signUp } from '../../service/auth';
 import PhoneIcon from '@mui/icons-material/Phone';
-import MaskedTextField from './maskTextField';
+import MaskedTextField from '../../components/maskTextField';
 
 export const SignUpAdmin = () => {
     const navigate = useNavigate();
