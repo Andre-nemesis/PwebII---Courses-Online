@@ -19,6 +19,7 @@ const StudentsList = () => {
 	const [searchValue, setSearchValue] = useState('');
 	const [studentToDelete, setStudentToDelete] = useState(null);
 	const [openEditModal, setOpenEditModal] = useState(false);
+	const [openStoreModal, setOpenStoreModal] = useState(false);
 	const [studentToEdit, setStudentToEdit] = useState(null);
 
 	useEffect(() => {
@@ -110,6 +111,10 @@ const StudentsList = () => {
 		setStudentToEdit(null);
 	};
 
+	const handleCloseStoreModal = () => {
+		setOpenStoreModal(false);
+	}
+
 	const handleUpdateStudent = (updatedStudent) => {
 		setStudents((prevStudents) =>
 			prevStudents.map((student) =>
@@ -132,7 +137,7 @@ const StudentsList = () => {
 					display: 'flex',
 					flexDirection: { xs: 'column', sm: 'row' },
 					gap: 2,
-					alignItems: 'center'
+					//alignItems: 'center',
 				}}
 			>
 				<SearchBar
@@ -163,7 +168,7 @@ const StudentsList = () => {
 						color: '#040D33',
 					}}
 					endIcon={<Add sx={{ color: '#040D33' }} />}
-					onClick={() => navigate('/signUp-student')}
+					onClick={() => setOpenStoreModal(true)}
 				>
 					Cadastrar Aluno
 				</Button>
@@ -276,6 +281,13 @@ const StudentsList = () => {
 					onUpdate={handleUpdateStudent}
 				/>
 			)}
+
+			<EditStudentModal
+				open={openStoreModal}
+				onClose={handleCloseStoreModal}
+				studentToEdit={null}
+				onUpdate={handleUpdateStudent}
+			/>
 		</Box>
 	);
 };

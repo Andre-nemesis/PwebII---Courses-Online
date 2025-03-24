@@ -2,13 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { Container, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Box } from '@mui/material';
 import api from '../../service/api.js';
 import Menu from '../../components/Menu.js';
+import {jwtDecode} from "jwt-decode";
 
 const CoursesList = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    const decoded = jwtDecode(token);
+    setRole(decoded.role);
+
     const fetchCourses = async () => {
       try {
         const response = await api.get('/courses/');
@@ -24,7 +30,7 @@ const CoursesList = () => {
 
   return (
     <Box sx={{ display: 'flex' }}> 
-      <Menu userRole="student" /> 
+      <Menu userRole={role} />
 
       <Container component='main' maxWidth='md' sx={{ flexGrow: 1, p: 3 }}>
         <Paper elevation={3} sx={{ mt: 2, p: 3 }}>

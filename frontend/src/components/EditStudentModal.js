@@ -33,7 +33,11 @@ const EditStudentModal = ({ open, onClose, studentToEdit, onUpdate }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await api.put(`/admin/updateStudent/${studentToEdit.id}`, student);
+      if(studentToEdit) {
+        await api.put(`/students/${studentToEdit.id}`, student);
+      } else {
+        await api.post(`/students`, student);
+      }
       onUpdate(student); 
       onClose(); 
     } catch (err) {

@@ -54,40 +54,9 @@ const Menu = ({ userRole }) => {
   });
 
   useEffect(() => {
-    if (hasFetchedData.current) return;
-
-    if (token) {
-      const decoded = jwtDecode(token);
-      const type = decoded.role;
-
-      const fetchUserData = async () => {
-        try {
-          let userData;
-          if (type === 'admin') {
-            userData = await api.get('/admin/view/' + decoded.id);
-          } else if (type === 'student') {
-            userData = await api.get('/student/' + decoded.id);
-          } else if (type === 'teacher') {
-            userData = await api.get('/teacher/' + decoded.id);
-          }
-
-          setUser(userData.data);
-          hasFetchedData.current = true;
-
-        } catch (error) {
-          console.error("Erro ao carregar dados do usuário", error);
-          console.log(token);
-          localStorage.removeItem('token');
-          navigate('/login');
-        }
-      };
-
-      fetchUserData();
-
-    } else {
-      navigate('/login');
-    }
-  }, [token, navigate]);
+    const username = localStorage.getItem('username');
+    setUser(username);
+  }, []);
 
   if (!user) {
     return ;
@@ -100,7 +69,7 @@ const Menu = ({ userRole }) => {
         Learnify
       </Typography>
       <Typography variant="subtitle1" sx={{ color: "white", marginTop: "28px", textAlign: "center" }}>
-        Bem vindo(a), {user.User.name}!
+        Bem vindo(a), {user}!
       </Typography>
 
       <Divider sx={{ backgroundColor: "white", marginTop: "15px" }} /> {/* Linha divisória */}
