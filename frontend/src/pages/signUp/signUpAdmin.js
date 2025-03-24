@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Container, Button, Typography, Paper, Box, FormControl, FormHelperText, Select, MenuItem, CircularProgress } from '@mui/material';
-import { Email, Lock } from '@mui/icons-material';
+import { TextField, Container, Button, Typography, Paper, Box, FormControl, FormHelperText, Select, MenuItem, CircularProgress, InputAdornment, IconButton } from '@mui/material';
+import { Email, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import { signUp } from '../../service/auth';
 import PhoneIcon from '@mui/icons-material/Phone';
 import MaskedTextField from '../../components/maskTextField';
@@ -16,6 +16,7 @@ export const SignUpAdmin = () => {
     const [role, setRole] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null); // Adicionado para evitar erro
+    const [showPassword, setShowPassword] = useState(true);
 
     const type = 'admin';
 
@@ -36,12 +37,49 @@ export const SignUpAdmin = () => {
 
     const isEmailValid = () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
+    const passwordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+    
     return (
-        <Container component='main' maxWidth='sm'>
-            <Paper elevation={3} sx={{ mt: 1, p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
-                    Cadastrar Administrador
+        <Box 
+            sx={{
+                minHeight: '100vh',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#040D33',
+            }}
+        >
+            <Container component='main' maxWidth='sm'>
+            <Paper elevation={3} 
+                sx={{ 
+                    p: 4,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'start',
+                    backgroundColor: '#040D33',
+                    border: '1px solid rgba(200, 208, 218, 0.25)',
+                    width: '100%', 
+                }}>
+                <Typography
+                    variant="h4"
+                    sx={{ mb: 2, color: '#EAEFF7', fontWeight: 'bold' }}
+                >
+                    Learnify
                 </Typography>
+                <Typography component="h1" variant="h5" sx={{ mb: 2, color: '#EAEFF7', fontWeight: 'bold' }}>
+                    Criar Conta
+                </Typography>
+
+                <Typography
+                    component="p"
+                    variant="body1"
+                    sx={{ mb: 1, color: '#EAEFF7' }}
+                >
+                    Crie sua conta na Learnify! Caso já possua uma, faça login.
+                </Typography>
+
                 <Box component="form" onSubmit={handleSignUp} sx={{ width: '100%' }}>
                     <TextField
                         fullWidth
@@ -51,6 +89,16 @@ export const SignUpAdmin = () => {
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
+                        InputProps={{
+                            sx: {
+                              backgroundColor: '#1E2951',
+                              color: '#EAEFF7',
+                              border: '1px solid rgba(200, 208, 218, 0.25)',
+                            },
+                          }}
+                        InputLabelProps={{
+                            sx: { color: '#C8D0DA' },
+                        }}
                     />
                     {/* Campo de Email */}
                     <TextField
@@ -64,8 +112,14 @@ export const SignUpAdmin = () => {
                         error={!!email && !isEmailValid()}
                         helperText={!!email && !isEmailValid() ? 'Email inválido' : ''}
                         InputProps={{
-                            startAdornment: <Email sx={{ color: 'action.active', mr: 1 }} />,
+                            startAdornment: <Email sx={{ color: '#C8D0DA', mr: 1 }} />,
+                            sx: {
+                                backgroundColor: '#1E2951',
+                                color: '#EAEFF7',
+                                border: '1px solid rgba(200, 208, 218, 0.25)',
+                            },
                         }}
+                        InputLabelProps={{ sx: { color: '#C8D0DA' } }}
                     />
                     <MaskedTextField
                         id="cpf"
@@ -73,6 +127,18 @@ export const SignUpAdmin = () => {
                         onChange={setCpf}
                         mask="999.999.999-99"
                         label="CPF"
+                        sx={{
+                            backgroundColor: '#1E2951',
+                            color: '#EAEFF7',
+                            border: '1px solid rgba(200, 208, 218, 0.25)',
+                            mt: 2,
+                            '& .MuiInputBase-input': { 
+                                color: '#C8D0DA', 
+                            },
+                        }}
+                        InputLabelProps={{
+                            sx: { color: '#C8D0DA' },
+                        }}
                     />
                     <MaskedTextField
                         id="phone_number"
@@ -80,8 +146,28 @@ export const SignUpAdmin = () => {
                         onChange={setPhoneNumber}
                         mask="(99) 99999-9999"
                         label="Número de Telefone"
-                        icon={<PhoneIcon sx={{ color: 'action.active', mr: 1 }} />}
-                        sx={{ mt: 2 }} 
+                        icon={<PhoneIcon sx={{ color: '#EAEFF7', mr: 1 }} />}
+                        InputProps={{
+                            sx: {
+                              backgroundColor: '#1E2951',
+                              border: '1px solid rgba(200, 208, 218, 0.25)',
+                              '& input': { 
+                                color: '#EAEFF7'
+                              },
+                              '& fieldset': {
+                                borderColor: 'rgba(200, 208, 218, 0.25)',
+                              },
+                              '&:hover fieldset': {
+                                borderColor: '#EAEFF7',
+                              },
+                              '& .MuiOutlinedInput-notchedOutline': { // Altera a cor da borda padrão
+                                borderColor: 'rgba(200, 208, 218, 0.25)',
+                              },
+                            },
+                        }}
+                        InputLabelProps={{
+                            sx: { color: '#C8D0DA' },
+                        }}
                     />
 
                     <FormControl fullWidth margin="normal">
@@ -106,8 +192,21 @@ export const SignUpAdmin = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         InputProps={{
-                            startAdornment: <Lock sx={{ color: 'action.active', mr: 1 }} />,
+                            startAdornment: <Lock sx={{ color: '#C8D0DA', mr: 1 }} />,
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton onClick={passwordVisibility} edge="end" sx={{ color: '#C8D0DA' }}>
+                                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                            sx: {
+                              backgroundColor: '#1E2951',
+                              color: '#EAEFF7',
+                              border: '1px solid rgba(200, 208, 218, 0.25)',
+                            },
                         }}
+                          InputLabelProps={{ sx: { color: '#C8D0DA' } }}
                     />
                     {/* Exibição de Erro */}
                     {error && (
@@ -121,7 +220,16 @@ export const SignUpAdmin = () => {
                         fullWidth
                         variant="contained"
                         disabled={loading || !isEmailValid() || !password}
-                        sx={{ mt: 3, mb: 2, bgcolor: 'primary.main', '&:hover': { bgcolor: 'primary.dark' } }}
+                        sx={{
+                            mt: 3,
+                            mb: 2,
+                            backgroundColor: '#2176FF',
+                            '&:hover': { bgcolor: '#185BDB' },
+                            '&.Mui-disabled': {
+                              backgroundColor: '#283C84',
+                              color: '#566FC1',
+                            },
+                        }}
                     >
                         {loading ? <CircularProgress size={24} /> : 'Cadastrar'}
                     </Button>
@@ -129,12 +237,15 @@ export const SignUpAdmin = () => {
                         type="button"
                         fullWidth
                         variant="outlined"
+                        onClick={() => navigate('/login')}
+				        sx={{ color: '#2176FF', '&:hover': { color: '#185BDB' } }}
                     >
-                        Voltar 
+                        Fazer Login 
                     </Button>
                 </Box>
             </Paper>
-        </Container>
+            </Container>
+        </Box>
     );
 }
 

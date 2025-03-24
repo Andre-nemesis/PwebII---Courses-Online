@@ -48,7 +48,7 @@ export const SignUpStudent = () => {
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: '#040D33', // Fundo azul escuro aplicado corretamente
+		backgroundColor: '#040D33',
 	  }}
 	>
 	  <Container component="main" maxWidth="sm">
@@ -64,6 +64,12 @@ export const SignUpStudent = () => {
 			width: '100%',
 		  }}
 		>
+			<Typography
+			variant="h4"
+			sx={{ mb: 2, color: '#EAEFF7', fontWeight: 'bold' }}
+		  >
+			Learnify
+		  </Typography>
 		  <Typography
 			component="h1"
 			variant="h5"
@@ -121,9 +127,7 @@ export const SignUpStudent = () => {
 				  border: '1px solid rgba(200, 208, 218, 0.25)',
 				},
 			  }}
-			  InputLabelProps={{
-				sx: { color: '#C8D0DA' },
-			  }}
+			  InputLabelProps={{ sx: { color: '#C8D0DA' } }}
 			/>
   
 			{/* Campo CPF */}
@@ -138,6 +142,9 @@ export const SignUpStudent = () => {
 				color: '#EAEFF7',
 				border: '1px solid rgba(200, 208, 218, 0.25)',
 				mt: 2,
+				'& .MuiInputBase-input': { 
+					color: '#C8D0DA', 
+				},
 			  }}
 			  InputLabelProps={{
 				sx: { color: '#C8D0DA' },
@@ -178,10 +185,11 @@ export const SignUpStudent = () => {
 				backgroundColor: '#1E2951',
 				color: '#EAEFF7',
 				border: '1px solid rgba(200, 208, 218, 0.25)',
+				'& .MuiInputBase-input': { 
+					color: '#C8D0DA', 
+				},
 			  }}
-			  InputLabelProps={{
-				sx: { color: '#C8D0DA' },
-			  }}
+			  InputLabelProps={{ sx: { color: '#C8D0DA' } }}
 			/>
   
 			{/* Campo Senha */}
@@ -208,9 +216,7 @@ export const SignUpStudent = () => {
 				  border: '1px solid rgba(200, 208, 218, 0.25)',
 				},
 			  }}
-			  InputLabelProps={{
-				sx: { color: '#C8D0DA' },
-			  }}
+			  InputLabelProps={{ sx: { color: '#C8D0DA' } }}
 			/>
   
 			{/* Exibição de Erro */}
@@ -257,8 +263,6 @@ export const SignUpStudent = () => {
 	  </Container>
 	</Box>
   );
-  
-  
 }
 
 export default SignUpStudent;

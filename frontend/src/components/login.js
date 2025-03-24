@@ -151,6 +151,17 @@ const Login = ({ onLogin }) => {
             >
               Criar Conta
             </Button>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '18px' }}>
+              <Typography sx={{ color: '#C8D0DA', fontSize: '14px' }}>Esqueceu a senha?</Typography>
+              <Button
+              type="button"
+              variant="text"
+              onClick={() => navigate('/')}
+              sx={{ color: '#2176FF', '&:hover': { color: '#185BDB', fontSize: '14px' } }}
+              >
+              Recuperar Senha
+              </Button>
+            </Box>
           </Box>
         </Paper>
       </Container>

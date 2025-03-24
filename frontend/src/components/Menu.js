@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Drawer, List, ListItemIcon, ListItemText, Divider, ListItemButton, Typography, IconButton, AppBar, Toolbar, Dialog, DialogContent, DialogActions, Button,Box } from '@mui/material';
 import {
   Home as HomeIcon,
@@ -24,6 +24,7 @@ const Menu = ({ setAuthenticated, userRole }) => {
   const [user, setUser] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const navigate = useNavigate();
 
   const isMobile = useMediaQuery('(max-width:900px)');
 
@@ -72,12 +73,17 @@ const Menu = ({ setAuthenticated, userRole }) => {
         } catch (error) {
           console.error("Erro ao carregar dados do usuário", error);
           console.log(token);
+          localStorage.removeItem('token');
+          navigate('/login');
         }
       };
 
       fetchUserData();
+
+    } else {
+      navigate('/login');
     }
-  }, [token]);
+  }, [token, navigate]);
 
   if (!user) {
     return <CircularProgress size={24} />;
@@ -90,7 +96,7 @@ const Menu = ({ setAuthenticated, userRole }) => {
         Learnify
       </Typography>
       <Typography variant="subtitle1" sx={{ color: "white", marginTop: "28px", textAlign: "center" }}>
-        Bem vindo(a), {user.User.name} !
+        Bem vindo(a), {user.User.name}!
       </Typography>
 
       <Divider sx={{ backgroundColor: "white", marginTop: "15px" }} /> {/* Linha divisória */}
