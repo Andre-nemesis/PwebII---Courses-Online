@@ -60,11 +60,15 @@ const studentController = {
 
   async create(req, res) {
     try {
-      const { user_id, phone_number, city } = req.body;
-      const user = await db.User.findByPk(user_id);
-      if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
+      const { name, email, city, cpf, phone_number } = req.body;
 
-      const newStudent = await Student.create({ user_id, phone_number, city });
+      const password = "12345678";
+      const type = "student";
+
+      const newUser = await db.Users.create({ name, email, password, type, cpf, phone_number });
+      const user_id = newUser.id;
+
+      const newStudent = await db.Student.create({ user_id, city });
 
       res.status(201).json(newStudent);
     } catch (error) {

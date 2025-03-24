@@ -27,7 +27,7 @@ export const login = async (req, res) => {
                 where: { user_id: user.id },
                 include: [{ model: db.Users, as: 'User' }]
             });
-            token = jwt.sign({ id: admin.id, role: user.type }, process.env.JWT_SECRET, {
+            token = jwt.sign({ id: admin.id, name: user.name, role: user.type }, process.env.JWT_SECRET, {
                 expiresIn: '8h',
             });
         }else if(user.type === 'teacher'){
@@ -35,7 +35,7 @@ export const login = async (req, res) => {
                 where: { user_id: user.id },
                 include: [{ model: db.Users, as: 'User' }]
             });
-            token = jwt.sign({ id: teacher.id, role: user.type }, process.env.JWT_SECRET, {
+            token = jwt.sign({ id: teacher.id, name: user.name, role: user.type }, process.env.JWT_SECRET, {
                 expiresIn: '8h',
             });
         }else if(user.type === 'student'){
@@ -43,16 +43,17 @@ export const login = async (req, res) => {
                 where: { user_id: user.id },
                 include: [{ model: db.Users, as: 'User' }]
             });
-            token = jwt.sign({ id: student.id, role: user.type }, process.env.JWT_SECRET, {
+            token = jwt.sign({ id: student.id, name: user.name, role: user.type }, process.env.JWT_SECRET, {
                 expiresIn: '8h',
             });
         }else{
             return res.status(400).json({ message: "Tipo de usuário inválido" });
         }
-
+        
+        const username = user.name;
         
 
-        res.status(200).json({ success: 1, token });
+        res.status(200).json({ success: 1, token, username});
 
     } catch (error) {
         console.error('Erro ao fazer login: ', error);
