@@ -16,7 +16,7 @@ const adminController = {
     try {
       const { id } = req.params;
       const admin = await db.Admin.findByPk(id, {
-        include: [{ model: db.Users, as:'User' }]
+        include: [{ model: db.Users, as: 'User' }]
       });
 
       if (!admin) return res.status(404).json({ error: 'Administrador não encontrado' });
@@ -24,6 +24,31 @@ const adminController = {
       res.json(admin);
     } catch (error) {
       res.status(500).json({ error: 'Erro ao buscar administrador', details: error.message });
+    }
+  },
+
+  async searchByTerm(req, res) {
+    try {
+      const { term } = req.params;
+      const admins = await db.Admin.findAll({
+        where: {
+          [db.Sequelize.Op.or]: [
+            {role: {[db.Sequelize.Op.like]: `%${term}%` }},
+            {user_id: {
+              [db.Sequelize.Op.in]: db.Sequelize.literal(
+                `(SELECT id FROM users WHERE name LIKE '%${term}%')`
+              )
+            }}
+          ]
+        },
+        include: [{ model: db.Users, as: 'User' }]
+      });
+      if (admins.length == 0) {
+        return res.status(404).json({ error: 'Nenhum administrador encontrado com esse termo' });
+      }
+      res.status(200).json(admins);
+    } catch (err) {
+      res.status(500).json({ error: 'Erro ao pesquisar administradores', details: err.message });
     }
   },
 
@@ -167,12 +192,12 @@ const adminController = {
     try {
       const { id } = req.params;
       const course = await db.Course.findByPk(id);
-      
+
       if (!course) return res.status(404).json({ error: 'Curso não encontrado' });
       await course.destroy();
 
       res.json({ message: 'Curso deletado com sucesso' });
-    
+
     } catch (error) {
       res.status(500).json({ error: 'Erro ao deletar curso', details: error.message });
     }

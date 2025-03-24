@@ -33,6 +33,31 @@ const studentController = {
     }
   },
 
+  async searchByTerm(req, res) {
+    try {
+      const { term } = req.params;
+      const students = await db.Student.findAll({
+        where: {
+          [db.Sequelize.Op.or]: [
+            {city: {[db.Sequelize.Op.like]: `%${term}%` }},
+            {user_id: {
+              [db.Sequelize.Op.in]: db.Sequelize.literal(
+                `(SELECT id FROM users WHERE name LIKE '%${term}%')`
+              )
+            }}
+          ]
+        },
+        include: [{ model: db.Users, as: 'User' }]
+      });
+      if (students.length == 0) {
+        return res.status(404).json({ error: 'Nenhum administrador encontrado com esse termo' });
+      }
+      res.status(200).json(students);
+    } catch (err) {
+      res.status(500).json({ error: 'Erro ao pesquisar administradores', details: err.message });
+    }
+  },
+
   async create(req, res) {
     try {
       const { user_id, phone_number, city } = req.body;

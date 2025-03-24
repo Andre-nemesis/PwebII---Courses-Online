@@ -5,6 +5,7 @@ import { authorizeRole, verifyToken } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 router.get('/view/:id',verifyToken,authorizeRole('admin'),adminController.getById);
+router.get('/search/:term',verifyToken,authorizeRole('admin'),adminController.searchByTerm);
 
 router.delete('/deleteAccount/:id', verifyToken, authorizeRole('admin'), adminController.deleteAccount);
 router.delete('/deleteTeacher/:id', verifyToken, authorizeRole('admin'), adminController.deleteTeacher);

@@ -12,6 +12,7 @@ router.post('/course/desubscribe/:id/user/:user', verifyToken, authorizeRole('st
 router.get('/viewCompleteCourse', verifyToken, authorizeRole('student'), studentController.viewCompletedCourses);
 router.get('/searchCourse/:id', verifyToken, authorizeRole('student'), studentController.searchCourse);
 router.get('/:id',verifyToken,authorizeRole('admin'),studentController.getById);
+router.get('/search/:term',verifyToken,authorizeRole('admin'),studentController.searchByTerm);
 
 // put
 router.put('/:id',verifyToken,authorizeRoles(['admin','student']),studentController.update);

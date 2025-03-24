@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef  } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Drawer, List, ListItemIcon, ListItemText, Divider, ListItemButton, Typography, IconButton, AppBar, Toolbar, Dialog, DialogContent, DialogActions, Button,Box } from '@mui/material';
 import {
@@ -14,38 +14,39 @@ import {
   ViewList as ModulesIcon,
   Menu as MenuIcon
 } from '@mui/icons-material';
-import { useMediaQuery, CircularProgress } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
 import { jwtDecode } from 'jwt-decode';
 import api from '../service/api';
 
-const Menu = ({ setAuthenticated, userRole }) => {
+const Menu = ({ userRole }) => {
   const location = useLocation();
   const token = localStorage.getItem('token');
   const [user, setUser] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const navigate = useNavigate();
+  const hasFetchedData = useRef(false);
 
   const isMobile = useMediaQuery('(max-width:900px)');
 
   const handleDrawerToggle = () => {
-    // Controlando quando o drawer será aberto ou fechado
+
     setMobileOpen((prevState) => !prevState);
   };
 
   const handleOpenConfirmDialog = () => {
-    // Abrindo o dialog de confirmação de logout
+
     setOpenConfirmDialog(true);
   };
 
   const handleCloseConfirmDialog = () => {
-    // Fechando o dialog de confirmação de logout
+
     setOpenConfirmDialog(false);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Remove o token
-    window.location.href = '/login';
+    localStorage.removeItem('token'); 
+    navigate('/login');
   };
 
   const selectedOption = (path) => ({
@@ -53,6 +54,8 @@ const Menu = ({ setAuthenticated, userRole }) => {
   });
 
   useEffect(() => {
+    if (hasFetchedData.current) return;
+
     if (token) {
       const decoded = jwtDecode(token);
       const type = decoded.role;
@@ -69,6 +72,7 @@ const Menu = ({ setAuthenticated, userRole }) => {
           }
 
           setUser(userData.data);
+          hasFetchedData.current = true;
 
         } catch (error) {
           console.error("Erro ao carregar dados do usuário", error);
@@ -86,7 +90,7 @@ const Menu = ({ setAuthenticated, userRole }) => {
   }, [token, navigate]);
 
   if (!user) {
-    return <CircularProgress size={24} />;
+    return ;
   }
 
 
