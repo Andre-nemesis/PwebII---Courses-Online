@@ -122,7 +122,7 @@ const TeachersList = () => {
     <Box sx={{ display: "flex", flexDirection:'column', alignItems: 'center' }}>
       <Menu userRole="admin"/>
 
-      <Container component='section' maxWidth='md'>
+      <Container component='section' maxWidth='md' sx={{ ml: {md: '240px', lg: '240px' } }}>
         <Typography component='h1' variant='h5' sx={{ mb: 2, mt: 5, color: '#FFFFFF' }}>
           Pesquisar Professor
         </Typography>
@@ -132,6 +132,7 @@ const TeachersList = () => {
 				sx={{
 					display: 'flex',
 					flexDirection: { xs: 'column', sm: 'row' },
+          ml: { md: '240px' },
 					gap: 4,
 				}}
 			>
@@ -151,8 +152,8 @@ const TeachersList = () => {
 				<Button
 					variant="contained"
 					sx={{
-						bgcolor: '#155F90',
-						'&:hover': { bgcolor: '#0A4E7B' },
+						bgcolor: '#60BFBF',
+						'&:hover': { bgcolor: '#48A3A3' },
 						width: { xs: '100%', sm: 'auto' },
 						px: 2,
 						height: '40px',
@@ -160,16 +161,26 @@ const TeachersList = () => {
 						textTransform: 'none',
 						display: 'flex',
 						alignItems: 'center',
-						color: '#eaeff7',
+						color: '#040D33',
 					}}
-					endIcon={<Add sx={{ color: '#fff' }} />}
+					endIcon={<Add sx={{ color: '#040D33' }} />}
 					onClick={() => setOpenStoreModal(true)}
 				>
 					Cadastrar Professor
 				</Button>
 			</Container>
 
-      <Container component="main" maxWidth="md" >
+      <Container component="main"
+        sx={{
+          width: {
+            xs: "100%",
+            sm: "100%",
+            md: "calc(100% - 240px)", 
+            lg: "calc(100% - 240px)" 
+          },
+          ml: { lg: "240px", md: "240px" }
+        }}
+      >
         <Paper elevation={3} sx={{ mt: 2, p: 3, bgcolor: '#1E2951' }}>
           <Typography component="h1" variant="h5" sx={{ mb: 2, color: "#F8F9FA" }}>
             Lista de Professores
@@ -191,13 +202,13 @@ const TeachersList = () => {
                 <Table sx={{ minWidth: 750, maxWidth: '100%' }} aria-label="Tabela de Professores">
                   <TableHead>
                     <TableRow>
-                      <TableCell>Nome</TableCell>
-                      <TableCell align="right">E-mail</TableCell>
-                      <TableCell align="right">Telefone</TableCell>
-                      <TableCell align="right">CPF</TableCell>
-                      <TableCell align="right">Formação</TableCell>
-                      <TableCell align="right">Especialização</TableCell>
-                      <TableCell align="right">Ações</TableCell>
+                      <TableCell sx={{ whiteSpace: 'nowrap', minWidth: '150px', padding: '8px' }}>Nome</TableCell>
+                      <TableCell sx={{ whiteSpace: 'nowrap', minWidth: '150px', padding: '8px' }}>E-mail</TableCell>
+                      <TableCell sx={{ whiteSpace: 'nowrap', minWidth: '150px', padding: '8px' }}>Telefone</TableCell>
+                      <TableCell sx={{ whiteSpace: 'nowrap', minWidth: '150px', padding: '8px' }}>CPF</TableCell>
+                      <TableCell sx={{ whiteSpace: 'nowrap', minWidth: '150px', padding: '8px' }}>Formação</TableCell>
+                      <TableCell sx={{ whiteSpace: 'nowrap', minWidth: '150px', padding: '8px' }}>Especialização</TableCell>
+                      <TableCell sx={{ whiteSpace: 'nowrap', minWidth: '150px', padding: '8px' }}>Ações</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -212,12 +223,12 @@ const TeachersList = () => {
                         <TableCell component="th" scope="row">
                           {teacher.User && teacher.User.name ? teacher.User.name : 'Nome Indisponível'}
                         </TableCell>
-                        <TableCell align="right">{teacher.User && teacher.User.email ? teacher.User.email : 'Email Indisponível'}</TableCell>
-                        <TableCell align="right">{teacher.User && teacher.User.phone_number ? teacher.User.phone_number : 'Número de Telefone Indisponível'}</TableCell>
-                        <TableCell align="right">{teacher.User && teacher.User.cpf ? teacher.User.cpf : 'CPF Indisponível'}</TableCell>
-                        <TableCell align="right">{teacher.academic_formation ? teacher.academic_formation : 'Formação Indisponível'}</TableCell>
-                        <TableCell align="right">{teacher.tecnic_especialization ? teacher.tecnic_especialization : 'Especialização Indisponível'}</TableCell>
-                        <TableCell align="right">
+                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{teacher.User && teacher.User.email ? teacher.User.email : 'Email Indisponível'}</TableCell>
+                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{teacher.User && teacher.User.phone_number ? teacher.User.phone_number : 'Número de Telefone Indisponível'}</TableCell>
+                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{teacher.User && teacher.User.cpf ? teacher.User.cpf : 'CPF Indisponível'}</TableCell>
+                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{teacher.academic_formation ? teacher.academic_formation : 'Formação Indisponível'}</TableCell>
+                        <TableCell sx={{ whiteSpace: 'nowrap' }}>{teacher.tecnic_especialization ? teacher.tecnic_especialization : 'Especialização Indisponível'}</TableCell>
+                        <TableCell sx={{ whiteSpace: 'nowrap' }}>
                           <IconButton onClick={() => handleOpenEditModal(teacher)}>
                             <Edit />
                           </IconButton>

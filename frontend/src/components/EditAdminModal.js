@@ -55,7 +55,7 @@ const EditAdminModal = ({ open, onClose, adminToEdit, onUpdate }) => {
                 ) : (
                     <form onSubmit={handleSubmit}>
                         {error && <Box sx={{ color: 'red', marginBottom: 2 }}>{error}</Box>}
-                        <TextField
+                        <TextField className='custom-textfield'
                             label="Nome"
                             name="name"
                             variant="outlined"
@@ -65,7 +65,7 @@ const EditAdminModal = ({ open, onClose, adminToEdit, onUpdate }) => {
                             onChange={handleInputChange}
                             required
                         />
-                        <TextField
+                        <TextField className='custom-textfield'
                             label="E-mail"
                             name="email"
                             variant="outlined"
@@ -75,7 +75,7 @@ const EditAdminModal = ({ open, onClose, adminToEdit, onUpdate }) => {
                             onChange={handleInputChange}
                             required
                         />
-                        <TextField
+                        <TextField className='custom-textfield'
                             label="Telefone"
                             name="phone_number"
                             variant="outlined"
@@ -85,7 +85,7 @@ const EditAdminModal = ({ open, onClose, adminToEdit, onUpdate }) => {
                             onChange={handleInputChange}
                             required
                         />
-                        <TextField
+                        <TextField className='custom-textfield'
                             label="CPF"
                             name="cpf"
                             variant="outlined"

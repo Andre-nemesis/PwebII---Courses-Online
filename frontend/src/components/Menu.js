@@ -30,17 +30,14 @@ const Menu = ({ userRole }) => {
   const isMobile = useMediaQuery('(max-width:900px)');
 
   const handleDrawerToggle = () => {
-
     setMobileOpen((prevState) => !prevState);
   };
 
   const handleOpenConfirmDialog = () => {
-
     setOpenConfirmDialog(true);
   };
 
   const handleCloseConfirmDialog = () => {
-
     setOpenConfirmDialog(false);
   };
 
@@ -312,13 +309,12 @@ const Menu = ({ userRole }) => {
           </Drawer>
           <Box
             sx={{
-              marginLeft: mobileOpen ? '240px' : '0', // Adiciona a margem ao conteúdo quando o Drawer está aberto
-              transition: 'margin-left 0.3s ease',  // Suaviza a transição do conteúdo
+              marginLeft: mobileOpen ? '240px' : '0',
+              transition: 'margin-left 0.3s ease',
               padding: '20px',
               flexGrow: 1,
             }}
           >
-            {/* O restante do conteúdo */}
           </Box>
         </>
       ) : (
@@ -338,7 +334,7 @@ const Menu = ({ userRole }) => {
       )}
 
       <Dialog open={openConfirmDialog} onClose={handleCloseConfirmDialog} color="#EAEFF7">
-        <DialogContent sx={{ textAlign: "center" }}>
+        <DialogContent sx={{ textAlign: "center", width: "390px" }}>
           <Typography sx={{ fontSize: "1.3rem", fontWeight: "bold", paddingTop: "5px" }}>
             Logout
           </Typography>
@@ -370,7 +366,6 @@ const Menu = ({ userRole }) => {
           </Button>
         </DialogActions>
       </Dialog>
-
     </>
   );
 };

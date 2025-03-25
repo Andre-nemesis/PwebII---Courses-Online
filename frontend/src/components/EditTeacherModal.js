@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, Typography, DialogActions, DialogContent, DialogTitle, TextField, Button, CircularProgress, Box } from '@mui/material';
+import { Dialog, Typography, DialogActions, DialogContent, DialogTitle, TextField, Button, CircularProgress, Box, InputAdornment } from '@mui/material';
+import { Person, Email, Phone, Description, Draw, TrackChanges } from "@mui/icons-material";
 import api from '../service/api';
 
 const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
@@ -52,18 +53,12 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 
 	return (
 		<Dialog open={open} onClose={onClose}>
-			<DialogTitle
-				sx={{
-					textAlign: 'center',
-					backgroundColor: '#F8F9FA',
-					p: '2'
-				}}
-			>
-				Editar Professor
+			<DialogTitle>
+				{teacherToEdit ? "Editar Professor" : "Cadastrar Professor"}
 			</DialogTitle>
-			<DialogContent sx={{ backgroundColor: '#F8F9FA', px: 3, pt: 1 }}>
+			<DialogContent>
 				{loading ? (
-					<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+					<Box>
 						<CircularProgress />
 					</Box>
 				) : (
@@ -72,7 +67,7 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 						<Typography variant="subtitle1" sx={{  color: '#000'  }}>
 							Nome:
 						</Typography>
-						<TextField
+						<TextField className="custom-textfield"
 							name="name"
 							variant="outlined"
 							fullWidth
@@ -82,21 +77,23 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 							required
 							sx={{ mb: 1.5, marginTop: '-1px' }}
 							InputProps={{
+								startAdornment: (
+									<InputAdornment position="start">
+										<Person style={{ color: "#F8F9FA" }} />
+									</InputAdornment>
+								),
 								sx: {
 									backgroundColor: '#1E2951',
 									color: '#EAEFF7',
 									border: '1px solid rgba(200, 208, 218, 0.25)',
 								},
 							}}
-							InputLabelProps={{
-								sx: { color: '#2176FF' },
-							}}
 						/>
 
 						<Typography variant="subtitle1" sx={{  color: '#000'  }}>
 							E-mail:
 						</Typography>
-						<TextField
+						<TextField className="custom-textfield"
 							name="email"
 							variant="outlined"
 							fullWidth
@@ -106,21 +103,23 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 							required
 							sx={{ mb: 1.5, marginTop: '-1px' }}
 							InputProps={{
+								startAdornment: (
+									<InputAdornment position="start">
+										<Email style={{ color: "#F8F9FA" }} />
+									</InputAdornment>
+								),
 								sx: {
 									backgroundColor: '#1E2951',
 									color: '#EAEFF7',
 									border: '1px solid rgba(200, 208, 218, 0.25)',
 								},
 							}}
-							InputLabelProps={{
-								sx: { color: '#2176FF' },
-							}}
 						/>
 
 						<Typography variant="subtitle1" sx={{  color: '#000'  }}>
 							Telefone:
 						</Typography>
-						<TextField
+						<TextField className="custom-textfield"
 							name="phone_number"
 							variant="outlined"
 							fullWidth
@@ -130,21 +129,23 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 							required
 							sx={{ mb: 1.5, marginTop: '-1px' }}
 							InputProps={{
+								startAdornment: (
+									<InputAdornment position="start">
+										<Phone style={{ color: "#F8F9FA" }} />
+									</InputAdornment>
+								),
 								sx: {
 									backgroundColor: '#1E2951',
 									color: '#EAEFF7',
 									border: '1px solid rgba(200, 208, 218, 0.25)',
 								},
 							}}
-							InputLabelProps={{
-								sx: { color: '#2176FF' },
-							}}
 						/>
 
 						<Typography variant="subtitle1" sx={{  color: '#000'  }}>
 							CPF:
 						</Typography>
-						<TextField
+						<TextField className="custom-textfield"
 							name="cpf"
 							variant="outlined"
 							fullWidth
@@ -154,21 +155,23 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 							required
 							sx={{ mb: 1.5, marginTop: '-1px' }}
 							InputProps={{
+								startAdornment: (
+									<InputAdornment position="start">
+										<Description style={{ color: "#F8F9FA" }} />
+									</InputAdornment>
+								),
 								sx: {
 									backgroundColor: '#1E2951',
 									color: '#EAEFF7',
 									border: '1px solid rgba(200, 208, 218, 0.25)',
 								},
 							}}
-							InputLabelProps={{
-								sx: { color: '#2176FF' },
-							}}
 						/>
 
 						<Typography variant="subtitle1" sx={{  color: '#000'  }}>
 							Formação Acadêmica:
 						</Typography>
-						<TextField
+						<TextField className="custom-textfield"
 							name="academic_formation"
 							variant="outlined"
 							fullWidth
@@ -178,21 +181,23 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 							required
 							sx={{ mb: 1.5, marginTop: '-1px' }}
 							InputProps={{
+								startAdornment: (
+									<InputAdornment position="start">
+										<Draw style={{ color: "#F8F9FA" }} />
+									</InputAdornment>
+								),
 								sx: {
 									backgroundColor: '#1E2951',
 									color: '#EAEFF7',
 									border: '1px solid rgba(200, 208, 218, 0.25)',
 								},
 							}}
-							InputLabelProps={{
-								sx: { color: '#2176FF' },
-							}}
 						/>
 
 						<Typography variant="subtitle1" sx={{  color: '#000'  }}>
 							Especialização Técnica:
 						</Typography>
-						<TextField
+						<TextField className="custom-textfield"
 							name="tecnic_especialization"
 							variant="outlined"
 							fullWidth
@@ -202,14 +207,16 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 							required
 							sx={{ mb: 1.5, marginTop: '-1px' }}
 							InputProps={{
+								startAdornment: (
+									<InputAdornment position="start">
+										<TrackChanges style={{ color: "#F8F9FA" }} />
+									</InputAdornment>
+								),
 								sx: {
 									backgroundColor: '#1E2951',
 									color: '#EAEFF7',
 									border: '1px solid rgba(200, 208, 218, 0.25)',
 								},
-							}}
-							InputLabelProps={{
-								sx: { color: '#2176FF' },
 							}}
 						/>
 						<DialogActions
@@ -225,7 +232,7 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 									backgroundColor: '#FF342D',
 									color: '#fff',
 									'&:hover': {
-										backgroundColor: '#b71c1c',
+										backgroundColor: '#FF2018',
 									},
 									padding: '6px 30px'
 								}}
@@ -234,7 +241,7 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 							</Button>
 							<Button type="submit" color="primary" variant="contained" 
 								sx={{
-									padding: '6px 30px'
+									padding: '6px 35px'
 								}}
 							>
 								Salvar

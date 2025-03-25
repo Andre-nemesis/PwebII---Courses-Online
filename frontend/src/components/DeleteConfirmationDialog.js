@@ -5,12 +5,12 @@ const DeleteConfirmationDialog = ({ open, onClose, title, message, onConfirm, us
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
+      <DialogContent sx={{ width: '385px'}}>
         <Typography>
           {message} <strong>{userName}</strong>?
         </Typography>
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ marginTop: '-1px'}}>
         <Button onClick={onClose} color="primary">
           Cancelar
         </Button>
