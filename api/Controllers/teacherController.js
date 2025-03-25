@@ -34,11 +34,18 @@ const teacherController = {
 
   async create(req, res) {
     try {
-      const { user_id, academic_formation, tecnic_especialization } = req.body;
+      const { name, email, cpf, phone_number, academic_formation, tecnic_especialization } = req.body;
 
-      const newTeacher = await db.Teachers.create({ user_id, academic_formation, tecnic_especialization });
+      const password = "12345678";
+      const type = "tecaher";
+
+      const newUser = await db.Users.create({ name, email, password, type, cpf, phone_number });
+      const user_id = newUser.id;
+
+      const newTeacher = await db.Teacher.create({ user_id, academic_formation, tecnic_especialization });
 
       res.status(201).json(newTeacher);
+      
     } catch (error) {
       res.status(500).json({ error: 'Erro ao criar professor', details: error.message });
     }

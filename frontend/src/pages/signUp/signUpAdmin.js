@@ -147,41 +147,62 @@ export const SignUpAdmin = () => {
                         mask="(99) 99999-9999"
                         label="Número de Telefone"
                         icon={<PhoneIcon sx={{ color: '#EAEFF7', mr: 1 }} />}
-                        InputProps={{
-                            sx: {
-                              backgroundColor: '#1E2951',
-                              border: '1px solid rgba(200, 208, 218, 0.25)',
-                              '& input': { 
-                                color: '#EAEFF7'
-                              },
-                              '& fieldset': {
-                                borderColor: 'rgba(200, 208, 218, 0.25)',
-                              },
-                              '&:hover fieldset': {
-                                borderColor: '#EAEFF7',
-                              },
-                              '& .MuiOutlinedInput-notchedOutline': { // Altera a cor da borda padrão
-                                borderColor: 'rgba(200, 208, 218, 0.25)',
-                              },
+                        sx={{
+                            mt: 3,
+                            backgroundColor: '#1E2951',
+                            color: '#EAEFF7',
+                            '& .MuiInputBase-input': {
+                              color: '#C8D0DA',
                             },
-                        }}
-                        InputLabelProps={{
-                            sx: { color: '#C8D0DA' },
-                        }}
+                          }}
+                          InputProps={{
+                            style: { 
+                              border: '1px solid rgba(200, 208, 218, 0.25)', 
+                              borderRadius: '4px', 
+                              padding: '5px'
+                            }
+                          }}
+                          InputLabelProps={{ sx: { color: '#C8D0DA' } }}
                     />
 
+                    {/* Campo de tipo de administrador */}
                     <FormControl fullWidth margin="normal">
-                        <FormHelperText id="role">Tipo de Administrador</FormHelperText>
+                        <FormHelperText id="role" sx={{ color: '#C8D0DA' }}>Tipo de Administrador</FormHelperText>
                         <Select
                             labelId="role"
                             id="role"
                             value={role}
                             onChange={(e) => setRole(e.target.value)}
+                            sx={{
+                                color: '#C8D0DA',
+                                backgroundColor: '#1E2951',
+                                '.MuiOutlinedInput-notchedOutline': {
+                                  borderColor: 'rgba(200, 208, 218, 0.25)',
+                                },
+                                '&:hover .MuiOutlinedInput-notchedOutline': {
+                                  borderColor: 'rgba(200, 208, 218, 0.5)',
+                                },
+                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                  borderColor: 'rgba(200, 208, 218, 0.75)',
+                                },
+                                '.MuiSelect-icon': {
+                                    color: '#C8D0DA',
+                                }
+                              }}
+                              MenuProps={{
+                                PaperProps: {
+                                  sx: {
+                                    backgroundColor: '#1E2951',
+                                    color: '#C8D0DA',
+                                  },
+                                },
+                              }}
                         >
                             <MenuItem value={'Admin'}>Admin</MenuItem>
                             <MenuItem value={'content_manager'}>Content Manager</MenuItem>
                         </Select>
                     </FormControl>
+
                     {/* Campo de Senha */}
                     <TextField
                         fullWidth

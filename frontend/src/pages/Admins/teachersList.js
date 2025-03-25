@@ -1,20 +1,32 @@
 // components/TeachersList.js
 import React, { useState, useEffect } from 'react';
-import { Container, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Box } from '@mui/material';
+import { Container, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Box, Button, IconButton } from '@mui/material';
 import api from '../../service/api.js';
 import Menu from '../../components/Menu.js';
+import SearchBar from '../../components/SearchBar.js';
+import { Delete, Edit, Add } from "@mui/icons-material";
+import EditTeacherModal from '../../components/EditTeacherModal.js';
+import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
 
 const TeachersList = () => {
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [isSearch, setSearch] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [teacherToDelete, setTeacherToDelete] = useState(null);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openStoreModal, setOpenStoreModal] = useState(false);
+  const [teacherToEdit, setTeacherToEdit] = useState(null);
 
   useEffect(() => {
     const fetchTeachers = async () => {
-      setLoading(true);
       try {
         const response = await api.get('/admin/viewTeacher');
 				setTeachers(response.data);
+        setFilteredUsers(response.data);
     
       } catch (err) {
         setError('Erro ao buscar professores'+err);
@@ -26,53 +38,267 @@ const TeachersList = () => {
     fetchTeachers();
   }, []);
 
+  const fetchUsersByTermo = async (termo) => {
+		try {
+			const response = await api.get(`/teachers/search/${encodeURI(termo)}`);
+			if (!response.data) {
+				throw new Error('Erro ao buscar professor.');
+			}
+			return response.data;
+
+		} catch (error) {
+			console.error('Erro ao buscar por termo:', error);
+			return null;
+		}
+	};
+
+  const handleSearchChange = async (e) => {
+    const value = e.target.value.trim();
+    setSearchValue(value);
+    console.log(searchValue);
+
+    if (!value) {
+      setFilteredUsers(teachers);
+      setSearch(false);
+      return;
+    }
+
+    const usersByTermo = await fetchUsersByTermo(value);
+    if (usersByTermo && usersByTermo.length > 0) {
+      setFilteredUsers(usersByTermo);
+      setSearch(true);
+      return;
+    } else {
+      setFilteredUsers([]);
+      setSearch(true);
+    }
+  };
+  
+  const handleOpenDialog = (teacher) => {
+    setTeacherToDelete(teacher);
+    setOpenDialog(true);
+  };
+  
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setTeacherToDelete(null);
+  };
+  
+  const handleDelete = async () => {
+    if (teacherToDelete) {
+      try {
+        await api.delete(`/admin/deleteTeacher/${teacherToDelete.id}`);
+        setTeachers(teachers.filter(teacher => teacher.id !== teacherToDelete.id)); // exclui professor
+        handleCloseDialog();
+      } catch (err) {
+        setError('Erro ao excluir professor' + err);
+      }
+    }
+  };
+  
+  const handleOpenEditModal = (tecaher) => {
+    setTeacherToEdit(tecaher);
+    setOpenEditModal(true);
+  }
+  
+  const handleCloseEditModal = () => {
+    setOpenEditModal(false);
+    setTeacherToEdit(null);
+  };
+
+  const handleCloseStoreModal = () => {
+    setOpenStoreModal(false);
+  }
+  
+  const handleUpdateTeacher = (updatedTeacher) => {
+    setTeachers((prevTeachers) =>
+      prevTeachers.map((teacher) =>
+        teacher.id === updatedTeacher.id ? updatedTeacher : teacher
+      )
+    );
+  };
+
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", flexDirection:'column', alignItems: 'center' }}>
       <Menu userRole="admin"/>
 
-      <Container component='main' maxWidth='md'>
-      <Paper elevation={3} sx={{ mt: 2, p: 3 }}>
-        <Typography component='h1' variant='h5' sx={{ mb: 2 }}>
-          Lista de Professores
+      <Container component='section' maxWidth='md'>
+        <Typography component='h1' variant='h5' sx={{ mb: 2, mt: 5, color: '#FFFFFF' }}>
+          Pesquisar Professor
         </Typography>
-        {loading ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <CircularProgress />
-          </Box>
-        ) : error ? (
-          <Typography color='error'>{error}</Typography>
-        ) : (
-          <TableContainer>
-            <Table sx={{ minWidth: 650 }} aria-label='Tabela de Professores'>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Nome</TableCell>
-                  <TableCell align='right'>E-mail</TableCell>
-									<TableCell align='right'>Telefone</TableCell>
-									<TableCell align='right'>CPF</TableCell>
-                  <TableCell align='right'>Formação Acadêmica</TableCell>
-									<TableCell align='right'>Especialização Técnica</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {teachers.map((teacher) => (
-                  <TableRow key={teacher.id}>
-                    <TableCell component='th' scope='row'>
-                      {teacher.User.name || 'Sem nome'}
-                    </TableCell>
-                    <TableCell align='right'>{teacher.User.email}</TableCell>
-                    <TableCell align='right'>{teacher.User.phone_number}</TableCell>
-										<TableCell align='right'>{teacher.User.cpf}</TableCell>
-										<TableCell align='right'>{teacher.academic_formation}</TableCell>
-										<TableCell align='right'>{teacher.tecnic_especialization}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-      </Paper>
-    </Container>
+      </Container>
+
+      <Container component="div" maxWidth="md"
+				sx={{
+					display: 'flex',
+					flexDirection: { xs: 'column', sm: 'row' },
+					gap: 4,
+				}}
+			>
+				<SearchBar
+					value={searchValue}
+					onChange={handleSearchChange}
+					sx={{
+						flexGrow: 1,
+						width: { xs: '100%', sm: '60%' },
+						'& .MuiInputBase-root': {
+							height: '40px',
+							fontSize: '0.875rem',
+						},
+					}}
+				/>
+
+				<Button
+					variant="contained"
+					sx={{
+						bgcolor: '#155F90',
+						'&:hover': { bgcolor: '#0A4E7B' },
+						width: { xs: '100%', sm: 'auto' },
+						px: 2,
+						height: '40px',
+						fontSize: '0.875rem',
+						textTransform: 'none',
+						display: 'flex',
+						alignItems: 'center',
+						color: '#eaeff7',
+					}}
+					endIcon={<Add sx={{ color: '#fff' }} />}
+					onClick={() => setOpenStoreModal(true)}
+				>
+					Cadastrar Professor
+				</Button>
+			</Container>
+
+      <Container component="main" maxWidth="md" >
+        <Paper elevation={3} sx={{ mt: 2, p: 3, bgcolor: '#1E2951' }}>
+          <Typography component="h1" variant="h5" sx={{ mb: 2, color: "#F8F9FA" }}>
+            Lista de Professores
+          </Typography>
+          {loading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <CircularProgress />
+            </Box>
+          ) : error ? (
+            <Typography color="error">{error}</Typography>
+          ) : (
+            isSearch ? (
+              <TableContainer 
+                sx={{
+                  overflowX: "auto",
+                  maxWidth: "100%",
+                }}
+              >
+                <Table sx={{ minWidth: 750, maxWidth: '100%' }} aria-label="Tabela de Professores">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Nome</TableCell>
+                      <TableCell align="right">E-mail</TableCell>
+                      <TableCell align="right">Telefone</TableCell>
+                      <TableCell align="right">CPF</TableCell>
+                      <TableCell align="right">Formação</TableCell>
+                      <TableCell align="right">Especialização</TableCell>
+                      <TableCell align="right">Ações</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {filteredUsers.map((teacher) => (
+                      <TableRow key={teacher.id} 
+                        sx={{
+                          '&:hover': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.08)'  // Cor de hover
+                          }
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {teacher.User && teacher.User.name ? teacher.User.name : 'Nome Indisponível'}
+                        </TableCell>
+                        <TableCell align="right">{teacher.User && teacher.User.email ? teacher.User.email : 'Email Indisponível'}</TableCell>
+                        <TableCell align="right">{teacher.User && teacher.User.phone_number ? teacher.User.phone_number : 'Número de Telefone Indisponível'}</TableCell>
+                        <TableCell align="right">{teacher.User && teacher.User.cpf ? teacher.User.cpf : 'CPF Indisponível'}</TableCell>
+                        <TableCell align="right">{teacher.academic_formation ? teacher.academic_formation : 'Formação Indisponível'}</TableCell>
+                        <TableCell align="right">{teacher.tecnic_especialization ? teacher.tecnic_especialization : 'Especialização Indisponível'}</TableCell>
+                        <TableCell align="right">
+                          <IconButton onClick={() => handleOpenEditModal(teacher)}>
+                            <Edit />
+                          </IconButton>
+                          <IconButton color="error" onClick={() => handleOpenDialog(teacher)}>
+                            <Delete />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            ) : (
+              <TableContainer>
+                <Table sx={{ minWidth: 650 }} aria-label="Tabela de Professores">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Nome</TableCell>
+                      <TableCell align="right">E-mail</TableCell>
+                      <TableCell align="right">Telefone</TableCell>
+                      <TableCell align="right">CPF</TableCell>
+                      <TableCell align="right">Formação</TableCell>
+                      <TableCell align="right">Especialização</TableCell>
+                      <TableCell align="right">Ações</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {teachers.map((teacher) => (
+                      <TableRow key={teacher.id}>
+                        <TableCell component="th" scope="row">
+                          {teacher.User && teacher.User.name ? teacher.User.name : 'Nome Indisponível'}
+                        </TableCell>
+                        <TableCell align="right">{teacher.User && teacher.User.email ? teacher.User.email : 'Email Indisponível'}</TableCell>
+                        <TableCell align="right">{teacher.User && teacher.User.phone_number ? teacher.User.phone_number : 'Número de Telefone Indisponível'}</TableCell>
+                        <TableCell align="right">{teacher.User && teacher.User.cpf ? teacher.User.cpf : 'CPF Indisponível'}</TableCell>
+                        <TableCell align="right">{teacher.academic_formation ? teacher.academic_formation : 'Formaçao Indisponível'}</TableCell>
+                        <TableCell align="right">{teacher.tecnic_especialization ? teacher.tecnic_especialization : 'Especialização Indisponível'}</TableCell>
+                        <TableCell align="right">
+                          <IconButton color="primary" onClick={() => handleOpenEditModal(teacher)}>
+                            <Edit />
+                          </IconButton>
+                          <IconButton color="error" onClick={() => handleOpenDialog(teacher)}>
+                            <Delete />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )
+          )}
+        </Paper>
+      </Container>
+      
+      {/* Confirmar exclusão do professor */}
+      <DeleteConfirmationDialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        title={'Excluir Professor'}
+        message={'Realmente deseja excluir o professor'}
+        onConfirm={handleDelete}
+        teacherName={teacherToDelete ? teacherToDelete.User.name : ''}
+      />
+
+      {/* Modal de edição */}
+      {teacherToEdit && (
+        <EditTeacherModal
+          open={openEditModal}
+          onClose={handleCloseEditModal}
+          teacherToEdit={teacherToEdit}
+          onUpdate={handleUpdateTeacher}
+        />
+      )}
+
+      <EditTeacherModal
+ 				open={openStoreModal}
+ 				onClose={handleCloseStoreModal}
+ 				teacherToEdit={null}
+ 				onUpdate={handleUpdateTeacher}
+ 			/>
     </Box>
   );
 };

@@ -8,6 +8,21 @@ const theme = createTheme({
       'sans-serif',
     ].join(','),
   },
+
+  components: {
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          color: '#F8F9FA',
+          borderColor: '#2176FF',
+          '&.MuiTableCell-head': {
+            fontWeight: 'bold',
+            backgroundColor: '#155F90'
+          }
+        }
+      }
+    }
+  }
 });
 
 export default theme;
