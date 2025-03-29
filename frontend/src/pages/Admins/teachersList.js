@@ -68,6 +68,7 @@ const TeachersList = () => {
       setFilteredUsers(usersByTermo);
       setSearch(true);
       return;
+      
     } else {
       setFilteredUsers([]);
       setSearch(true);

@@ -6,6 +6,7 @@ const router = express.Router();
 //get
 router.get('/',verifyToken,authorizeRole('admin'),teacherController.getAll);
 router.get('/:id',verifyToken,authorizeRole('admin'),teacherController.getById);
+router.get('/search/:term', verifyToken, authorizeRole('admin'), teacherController.searchByTerm);
 
 //post
 router.post('/',verifyToken,authorizeRole('admin'),teacherController.create);
