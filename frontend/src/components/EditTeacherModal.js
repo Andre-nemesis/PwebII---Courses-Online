@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, Typography, DialogActions, DialogContent, DialogTitle, TextField, Button, CircularProgress, Box, InputAdornment } from '@mui/material';
 import { Person, Email, Phone, Description, Draw, TrackChanges } from "@mui/icons-material";
 import api from '../service/api';
+import MaskedTextField from './maskTextField';
 
 const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 	const [teacher, setTeacher] = useState({
@@ -16,16 +17,16 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 	const [error, setError] = useState(null);
 
 	useEffect(() => {
-		if (teacherToEdit) {
+    if (teacherToEdit) {
 			setTeacher({
 				name: teacherToEdit.User.name || '',
 				email: teacherToEdit.User.email || '',
 				phone_number: teacherToEdit.User.phone_number || '',
 				cpf: teacherToEdit.User.cpf || '',
 				academic_formation: teacherToEdit.academic_formation || '',
-				tecnic_especialization: teacherToEdit.tecnic_especialization || ''
+				tecnic_especialization: teacherToEdit.tecnic_especialization || '',
 			});
-		}
+    }
 	}, [teacherToEdit]);
 
 	const handleInputChange = (e) => {
@@ -33,23 +34,39 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 	};
 
 	const handleSubmit = async (e) => {
-		e.preventDefault();
-		setLoading(true);
-		try {
-			if(teacherToEdit) {
-				await api.put(`/tecahers/${teacherToEdit.id}`, teacher);
-			} else {
-				await api.post(`/teachers`, teacher);
-			} 
-			onUpdate(teacher); 
-      onClose();
+    e.preventDefault();
+    setLoading(true);
 
-		} catch (err) {
-			setError('Erro ao atualizar professor');
-		} finally {
-			setLoading(false);
-		}
+    try {
+			let response;
+			const payload = {
+				academic_formation: teacher.academic_formation,
+				tecnic_especialization: teacher.tecnic_especialization,
+				user_data: {
+					name: teacher.name,
+					email: teacher.email,
+					phone_number: teacher.phone_number,
+					cpf: teacher.cpf,
+					type: 'teacher'
+				}
+			};
+
+			if (teacherToEdit) {
+					response = await api.put(`/teachers/${teacherToEdit.id}`, payload);
+			} else {
+					response = await api.post(`/teachers`, payload);
+			}
+
+			onUpdate(response.data);
+			onClose();
+
+    } catch (err) {
+        setError(err.response?.data?.message || 'Erro ao salvar professor: ' + err.message);
+    } finally {
+        setLoading(false);
+    }
 	};
+
 
 	return (
 		<Dialog open={open} onClose={onClose}>
@@ -126,6 +143,7 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 							margin="normal"
 							value={teacher.phone_number}
 							onChange={handleInputChange}
+							//mask="(99) 99999-9999" 
 							required
 							sx={{ mb: 1.5, marginTop: '-1px' }}
 							InputProps={{
@@ -152,6 +170,7 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 							margin="normal"
 							value={teacher.cpf}
 							onChange={handleInputChange}
+							//mask="999.999.999-99"
 							required
 							sx={{ mb: 1.5, marginTop: '-1px' }}
 							InputProps={{
@@ -244,7 +263,7 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 									padding: '6px 35px'
 								}}
 							>
-								Salvar
+								{teacherToEdit ? "Salvar" : "Cadastrar"}
 							</Button>
 						</DialogActions>
 					</form>

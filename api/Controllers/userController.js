@@ -61,7 +61,7 @@ const userController = {
     }
   },
 
-  async delete(req, res) {
+  async deleteUser(req, res) {
     try {
       const { id } = req.params;
       const user = await User.findByPk(id);

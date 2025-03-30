@@ -88,9 +88,10 @@ const TeachersList = () => {
   const handleDelete = async () => {
     if (teacherToDelete) {
       try {
-        await api.delete(`/admin/deleteTeacher/${teacherToDelete.id}`);
-        setTeachers(teachers.filter(teacher => teacher.id !== teacherToDelete.id)); // exclui professor
+        await api.delete(`/teachers/${teacherToDelete.id}`);
+        setTeachers(teachers.filter(teacher => teacher.id !== teacherToDelete.id));
         handleCloseDialog();
+      
       } catch (err) {
         setError('Erro ao excluir professor' + err);
       }
@@ -217,7 +218,7 @@ const TeachersList = () => {
                       <TableRow key={teacher.id} 
                         sx={{
                           '&:hover': {
-                            backgroundColor: 'rgba(255, 255, 255, 0.08)'  // Cor de hover
+                            backgroundColor: 'rgba(255, 255, 255, 0.08)'
                           }
                         }}
                       >
@@ -290,7 +291,7 @@ const TeachersList = () => {
         open={openDialog}
         onClose={handleCloseDialog}
         title={'Excluir Professor'}
-        message={'Realmente deseja excluir o professor'}
+        message={'Realmente deseja excluir o professor? Essa ação não poderá ser dedsfeita.'}
         onConfirm={handleDelete}
         teacherName={teacherToDelete ? teacherToDelete.User.name : ''}
       />
