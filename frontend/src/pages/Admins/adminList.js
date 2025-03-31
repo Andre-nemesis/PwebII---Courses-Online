@@ -169,9 +169,17 @@ const AdminList = () => {
 
 
             {/* Container da lista de administradores */}
-            <Container component='main' maxWidth='md'>
-                <Paper elevation={3} sx={{ mt: 2, p: 3 }}>
-                    <Typography component='h1' variant='h5' sx={{ mb: 2 }}>
+            <Container component='main' maxWidth='md' sx={{
+                width: {
+                    xs: "100%",
+                    sm: "100%",
+                    md: "calc(100% - 240px)",
+                    lg: "calc(100% - 240px)"
+                },
+                ml: { lg: "240px", md: "240px" }
+            }}>
+                <Paper elevation={3} sx={{ mt: 2, p: 3, bgcolor: '#1E2951' }}>
+                    <Typography component='h1' variant='h5' sx={{ mb: 2, color: "#F8F9FA" }}>
                         Lista de Administradores
                     </Typography>
                     {loading ? (

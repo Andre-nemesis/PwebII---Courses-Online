@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Drawer, List, ListItemIcon, ListItemText, Divider, ListItemButton, Typography, IconButton, AppBar, Toolbar, Dialog, DialogContent, DialogActions, Button, Box } from '@mui/material';
 import {
@@ -15,19 +15,20 @@ import {
   Menu as MenuIcon
 } from '@mui/icons-material';
 import { useMediaQuery } from '@mui/material';
-import { jwtDecode } from 'jwt-decode';
-import api from '../service/api';
 
 const Menu = ({ userRole }) => {
   const location = useLocation();
-  const token = localStorage.getItem('token');
   const [user, setUser] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const navigate = useNavigate();
-  const hasFetchedData = useRef(false);
 
   const isMobile = useMediaQuery('(max-width:900px)');
+
+  const handleCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
+  };
+
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -35,10 +36,6 @@ const Menu = ({ userRole }) => {
 
   const handleOpenConfirmDialog = () => {
     setOpenConfirmDialog(true);
-  };
-
-  const handleCloseConfirmDialog = () => {
-    setOpenConfirmDialog(false);
   };
 
   const handleLogout = () => {

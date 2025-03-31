@@ -174,8 +174,8 @@ const StudentsList = () => {
 				</Button>
 			</Container>
 			<Container component="main" maxWidth="md">
-				<Paper elevation={3} sx={{ mt: 2, p: 3 }}>
-					<Typography component="h1" variant="h5" sx={{ mb: 2 }}>
+				<Paper elevation={3} sx={{ mt: 2, p: 3, bgcolor: '#1E2951' }}>
+					<Typography component="h1" variant="h5" sx={{ mb: 2, color:'#FFFFFF' }}>
 						Lista de Estudantes
 					</Typography>
 					{loading ? (

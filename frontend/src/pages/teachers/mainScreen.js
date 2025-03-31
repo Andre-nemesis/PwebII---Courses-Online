@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import Menu from "../../components/Menu";
 import { Box, Typography, Card, CardContent, Avatar, IconButton } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -35,6 +36,8 @@ const HomePageTeacher = ({ setAuthenticade }) => {
   ];
 
   return (
+    <>
+    <Menu setAuthenticade={setAuthenticade} userRole={userRole} />
     <Box sx={{ padding: 3, backgroundColor: "#0f172a", minHeight: "100vh", color: "white" }}>
       <Typography variant="h5" fontWeight="bold">Página Inicial</Typography>
 
@@ -78,7 +81,9 @@ const HomePageTeacher = ({ setAuthenticade }) => {
         </IconButton>
       </Box>
     </Box>
+    </>
   );
+  
 };
 
 export default HomePageTeacher;
