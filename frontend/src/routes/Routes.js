@@ -14,7 +14,7 @@ import AdminList from '../pages/Admins/adminList.js';
 import ModulesTeacherList from '../pages/teachers/modulesCreatedList.js';
 import ModulesList from '../pages/teachers/modulesList.js';
 import LearnifyPage from '../pages/landingPage/page.js';
-//import HomePageTeacher from '../components/HomePageTeacher';
+import HomePageTeacher from '../pages/teachers/mainScreen.js';
 
 const AppRoutes = ({ isAuthenticated, setAuthenticated, type }) => {
   const handleLogin = () => {
@@ -53,7 +53,7 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type }) => {
             {/* Rotas para Teacher */}
             {type === 'teacher' && (
               <>
-                {/* <Route path="teacher/mainScreen" element={<HomePageTeacher setAuthenticated={setAuthenticated} />} /> */}
+                <Route path="teacher/mainScreen" element={<HomePageTeacher setAuthenticated={setAuthenticated} />} />
                 <Route path="teacher/module/view" element={<ModulesTeacherList />} />
                 {/* <Router path="teacher/home-page-teacher" element={< />} /> */}
               </>

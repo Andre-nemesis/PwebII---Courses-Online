@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 import { Box, Typography, Card, CardContent, Avatar, IconButton } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-const HomePageTeacher = () => {
+const HomePageTeacher = ({ setAuthenticade }) => {
 
-    const [userRole, setUserRole] = useState(null);
+  const [userRole,setUserRole] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
