@@ -4,7 +4,6 @@ import { jwtDecode } from 'jwt-decode';
 import Menu from './Menu.js';
 
 const MainScreen = ({userRole}) => {
-  
 
   return (
     <div>

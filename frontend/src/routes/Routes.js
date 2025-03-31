@@ -41,14 +41,14 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type }) => {
             {/* Rotas para Admin */}
             {type === 'admin' && (
               <>
-                <Route path="admin/mainScreen" element={<MainScreen setAuthenticated={setAuthenticated} />} />
+                <Route path="admin/mainScreen" element={<MainScreen userRole={type} />} />
                 <Route path="admin/courses" element={<CoursesList />} />
                 <Route path="admin/teachers" element={<TeachersList />} />
                 <Route path="admin/students" element={<StudentsList />} />
                 <Route path="admin/admins" element={<AdminList />} />
                 <Route path="admin/module/view" element={<ModulesTeacherList />} />
                 <Route path="admin/module/view/all" element={<ModulesList />} />
-                <Route path="admin/settings" element={<ProfileSettings />} />
+                <Route path="admin/settings" element={<ProfileSettings userRole={type} />} />
               </>
             )}
 

@@ -1,6 +1,6 @@
-import React, { useState, useEffect,useRef  } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Drawer, List, ListItemIcon, ListItemText, Divider, ListItemButton, Typography, IconButton, AppBar, Toolbar, Dialog, DialogContent, DialogActions, Button,Box } from '@mui/material';
+import { Drawer, List, ListItemIcon, ListItemText, Divider, ListItemButton, Typography, IconButton, AppBar, Toolbar, Dialog, DialogContent, DialogActions, Button, Box } from '@mui/material';
 import {
   Home as HomeIcon,
   School as CoursesIcon,
@@ -42,7 +42,7 @@ const Menu = ({ userRole }) => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); 
+    localStorage.removeItem('token');
     navigate('/login');
   };
 
@@ -56,7 +56,7 @@ const Menu = ({ userRole }) => {
   }, []);
 
   if (!user) {
-    return ;
+    return;
   }
 
 
@@ -153,6 +153,19 @@ const Menu = ({ userRole }) => {
               <AdminsIcon />
             </ListItemIcon>
             <ListItemText primary="Outros Administradores" />
+          </ListItemButton>
+          <ListItemButton component={Link} to="/admin/settings"
+            sx={{
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#05134E"
+              },
+              ...selectedOption('/admin/settings')
+            }}>
+            <ListItemIcon sx={{ color: "white" }}>
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Configurações" />
           </ListItemButton>
         </>
       )}
@@ -251,19 +264,6 @@ const Menu = ({ userRole }) => {
       )}
 
       {/* Configurações e Sair */}
-      <ListItemButton component={Link} to="/settings"
-        sx={{
-          color: "white",
-          "&:hover": {
-            backgroundColor: "#05134E"
-          },
-          ...selectedOption('/settings')
-        }}>
-        <ListItemIcon sx={{ color: "white" }}>
-          <SettingsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Configurações" />
-      </ListItemButton>
       <ListItemButton onClick={handleOpenConfirmDialog}
         sx={{
           color: "white",
