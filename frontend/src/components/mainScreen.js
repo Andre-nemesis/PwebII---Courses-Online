@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import Menu from './Menu.js';
 
-const MainScreen = () => {
+const MainScreen = ({userRole}) => {
   
 
   return (
