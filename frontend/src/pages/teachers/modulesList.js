@@ -67,13 +67,14 @@ const ModulesList = () => {
           }}
         >
           <InputBase
-            sx={{ ml: 2, flex: 1, color: "white" }}
-            placeholder="Pesquisar módulo"
+            sx={{ ml: 2, flex: 1, color: "#C8D0DA", backgroundColor: "#1E2951", border: "1px solid #C8D0DA" }}
+            placeholder="Pesquisar módulo..."
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <IconButton sx={{ color: "white" }}>
+          <IconButton sx={{ color: "#C8D0DA" }}>
             <Search />
           </IconButton>
+
           <Button
             startIcon={<Tune />}
             sx={{
