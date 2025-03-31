@@ -19,7 +19,7 @@ const ProfileSettings = ({userRole}) => {
               <Button variant="contained" color="success" fullWidth sx={{ mt: 2 }}>
                 7 Cursos Criados
               </Button>
-              <Button variant="contained" color="inherit" fullWidth sx={{ mt: 2 }}>
+              <Button variant="contained" color="error" fullWidth sx={{ mt: 2 }}>
                 Top 3 Cursos mais vistos
               </Button>
             </Paper>
