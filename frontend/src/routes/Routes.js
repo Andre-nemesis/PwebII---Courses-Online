@@ -14,6 +14,7 @@ import AdminList from '../pages/Admins/adminList.js';
 import ModulesTeacherList from '../pages/teachers/modulesCreatedList.js';
 import ModulesList from '../pages/teachers/modulesList.js';
 import LearnifyPage from '../pages/landingPage/page.js';
+import ProfileSettings from '../pages/Admins/profileSettings.js';
 
 const AppRoutes = ({ isAuthenticated, setAuthenticated, type }) => {
   const handleLogin = () => {
@@ -46,6 +47,7 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type }) => {
                 <Route path="admin/admins" element={<AdminList />} />
                 <Route path="admin/module/view" element={<ModulesTeacherList />} />
                 <Route path="admin/module/view/all" element={<ModulesList />} />
+                <Route path="admin/settings" element={<ProfileSettings />} />
               </>
             )}
 
