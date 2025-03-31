@@ -78,15 +78,16 @@ const ModulesList = () => {
           <Button
             startIcon={<Tune />}
             sx={{
-              color: "white",
+              color: "#2176FF",
               borderRadius: 2,
-              backgroundColor: "#2E4A7B",
-              "&:hover": { backgroundColor: "#375A91" },
+              backgroundColor: "#040D33",
+              border: "1px solid #2176FF",
+              "&:hover": { backgroundColor: "#2176FF", color: "#EAEFF7" },
               ml: 1,
               p: 1,
             }}
           >
-            Filtros
+            Filtrar
           </Button>
         </Paper>
 
