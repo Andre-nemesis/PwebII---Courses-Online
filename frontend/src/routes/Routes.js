@@ -55,8 +55,8 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type }) => {
             {/* Rotas para Teacher */}
             {type === 'teacher' && (
               <>
-                <Route path="teachers/mainScreen" element={<HomePageTeacher setAuthenticated={setAuthenticated} />} />
-                <Route path="teachers/module/view" element={<ModulesTeacherList />} />
+                <Route path="teacher/mainScreen" element={<HomePageTeacher setAuthenticated={setAuthenticated} />} />
+                <Route path="teacher/module/view" element={<ModulesTeacherList />} />
                 {/* <Router path="teacher/home-page-teacher" element={< />} /> */}
               </>
             )}
