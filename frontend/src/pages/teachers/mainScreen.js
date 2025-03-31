@@ -3,9 +3,7 @@ import { Box, Typography, Card, CardContent, Avatar, IconButton } from "@mui/mat
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-const HomePageTeacher = () => {
-
-    const [userRole, setUserRole] = useState(null);
+const HomePageTeacher = ({ userRole }) => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
