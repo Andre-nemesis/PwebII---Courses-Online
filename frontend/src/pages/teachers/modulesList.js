@@ -48,7 +48,7 @@ const ModulesList = () => {
 
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", backgroundColor: "#1E2951" }}>
-      <Menu userRole={"admin"} />
+      <Menu userRole={"teacher"} />
 
       <Container sx={{ flexGrow: 1, p: 3 }}>
         <Typography variant="h4" sx={{ color: "white", mb: 3 }}>

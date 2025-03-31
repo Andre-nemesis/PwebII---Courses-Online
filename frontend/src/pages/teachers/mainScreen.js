@@ -36,9 +36,8 @@ const HomePageTeacher = ({ setAuthenticade }) => {
   ];
 
   return (
-    <>
-      <Menu setAuthenticade={setAuthenticade} userRole={userRole} />
-      <Box sx={{ padding: 3, backgroundColor: "#0f172a", minHeight: "100vh", color: "white" }}>
+    <Box sx={{ padding: 3, backgroundColor: "#0f172a", minHeight: "100vh", color: "white" }}>
+        <Menu setAuthenticade={setAuthenticade} userRole={userRole} />
         <Typography variant="h5" fontWeight="bold">Página Inicial</Typography>
 
         {/* Módulos Criados */}
@@ -80,8 +79,7 @@ const HomePageTeacher = ({ setAuthenticade }) => {
             <ArrowForwardIosIcon />
           </IconButton>
         </Box>
-      </Box>
-    </>
+    </Box>
   );
 
 };
