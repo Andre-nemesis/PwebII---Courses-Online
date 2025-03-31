@@ -42,6 +42,8 @@ const SearchBar = ({ value, onChange }) => {
                 },
                 '& .MuiInputBase-input::placeholder': {
                     fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                    color: '#040D33',
+                    opacity: 0.8,
                 },
             }}
         />
