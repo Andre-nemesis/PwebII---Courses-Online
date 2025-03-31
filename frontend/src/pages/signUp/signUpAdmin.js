@@ -124,7 +124,7 @@ export const SignUpAdmin = () => {
                     <MaskedTextField
                         id="cpf"
                         value={cpf}
-                        onChange={setCpf}
+                        onChange={(e) => setCpf(e.target.value)}
                         mask="999.999.999-99"
                         label="CPF"
                         sx={{
@@ -143,7 +143,7 @@ export const SignUpAdmin = () => {
                     <MaskedTextField
                         id="phone_number"
                         value={phone_number}
-                        onChange={setPhoneNumber}
+                        onChange={(e) => setCpf(e.target.value)}
                         mask="(99) 99999-9999"
                         label="Número de Telefone"
                         icon={<PhoneIcon sx={{ color: '#EAEFF7', mr: 1 }} />}
@@ -209,7 +209,7 @@ export const SignUpAdmin = () => {
                         margin="normal"
                         id="password"
                         label="Senha"
-                        type="password"
+                        type={showPassword ? 'password' : 'text' }
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         InputProps={{

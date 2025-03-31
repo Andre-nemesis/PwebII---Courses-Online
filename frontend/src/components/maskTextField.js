@@ -20,10 +20,17 @@ const applyMask = (value, mask) => {
   return maskedValue;
 };
 
-export const MaskedTextField = ({ id, value, onChange, mask, label, icon, ...props }) => {
+export const MaskedTextField = ({ id, name, value, onChange, mask, label, icon, InputProps, ...props }) => {
   const handleChange = (event) => {
     const rawValue = event.target.value.replace(/\D/g, '');
-    onChange(applyMask(rawValue, mask));
+    const maskedValue = applyMask(rawValue, mask);
+
+    onChange({
+      target: {
+        name,
+        value: maskedValue
+      }
+    });
   };
 
   return (
@@ -37,6 +44,7 @@ export const MaskedTextField = ({ id, value, onChange, mask, label, icon, ...pro
       fullWidth
       InputProps={{
         startAdornment: icon, 
+        ...InputProps,
       }}
     />
   );

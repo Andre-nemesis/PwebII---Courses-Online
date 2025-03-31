@@ -4,20 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import Menu from './Menu.js';
 
 const MainScreen = () => {
-  const [userRole, setUserRole] = useState(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        setUserRole(decoded.role);
-      } catch (error) {
-        console.error('Erro ao decodificar token:', error);
-        localStorage.removeItem('token');
-      }
-    }
-  }, []);
+  
 
   return (
     <div>

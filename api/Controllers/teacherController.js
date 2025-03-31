@@ -104,7 +104,9 @@ const teacherController = {
         );
       }
 
-      const updatedTeacher = await db.Teachers.findByPk(id, { include: db.Users });
+      const updatedTeacher = await db.Teachers.findByPk(id, { 
+        include: { model: db.Users, as: 'User' } 
+      });
 
       res.json(updatedTeacher);
 

@@ -20,6 +20,7 @@ const TeachersList = () => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openStoreModal, setOpenStoreModal] = useState(false);
   const [teacherToEdit, setTeacherToEdit] = useState(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     const fetchTeachers = async () => {
@@ -36,7 +37,7 @@ const TeachersList = () => {
     };
 
     fetchTeachers();
-  }, []);
+  }, [refreshKey]);
 
   const fetchUsersByTermo = async (termo) => {
 		try {
@@ -113,12 +114,18 @@ const TeachersList = () => {
   }
   
   const handleUpdateTeacher = (updatedTeacher) => {
-    setTeachers((prevTeachers) =>
-      prevTeachers.map((teacher) =>
-        teacher.id === updatedTeacher.id ? updatedTeacher : teacher
-      )
-    );
+    if (updatedTeacher.id) {
+      setTeachers(prevTeachers =>
+        prevTeachers.map(teacher => 
+          teacher.id === updatedTeacher.id ? updatedTeacher : teacher
+        )
+      );
+      
+    } else {
+      setRefreshKey(prev => prev + 1);
+    }
   };
+  
 
   return (
     <Box sx={{ display: "flex", flexDirection:'column', alignItems: 'center' }}>
@@ -218,7 +225,7 @@ const TeachersList = () => {
                       <TableRow key={teacher.id} 
                         sx={{
                           '&:hover': {
-                            backgroundColor: 'rgba(255, 255, 255, 0.08)'
+                            backgroundColor: 'rgba(255, 255, 255, 0.06)'
                           }
                         }}
                       >
@@ -231,7 +238,7 @@ const TeachersList = () => {
                         <TableCell sx={{ whiteSpace: 'nowrap' }}>{teacher.academic_formation ? teacher.academic_formation : 'Formação Indisponível'}</TableCell>
                         <TableCell sx={{ whiteSpace: 'nowrap' }}>{teacher.tecnic_especialization ? teacher.tecnic_especialization : 'Especialização Indisponível'}</TableCell>
                         <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                          <IconButton onClick={() => handleOpenEditModal(teacher)}>
+                          <IconButton onClick={() => handleOpenEditModal(teacher)} sx={{ color: '#60BFBF'}}>
                             <Edit />
                           </IconButton>
                           <IconButton color="error" onClick={() => handleOpenDialog(teacher)}>
@@ -248,13 +255,13 @@ const TeachersList = () => {
                 <Table sx={{ minWidth: 650 }} aria-label="Tabela de Professores">
                   <TableHead>
                     <TableRow>
-                      <TableCell>Nome</TableCell>
-                      <TableCell align="right">E-mail</TableCell>
-                      <TableCell align="right">Telefone</TableCell>
-                      <TableCell align="right">CPF</TableCell>
-                      <TableCell align="right">Formação</TableCell>
-                      <TableCell align="right">Especialização</TableCell>
-                      <TableCell align="right">Ações</TableCell>
+                      <TableCell sx={{ whiteSpace: 'nowrap', minWidth: '100px', padding: '8px' }}>Nome</TableCell>
+                      <TableCell align="right" sx={{ whiteSpace: 'nowrap', minWidth: '150px', padding: '8px' }}>E-mail</TableCell>
+                      <TableCell align="right" sx={{ whiteSpace: 'nowrap', minWidth: '150px', padding: '8px' }}>Telefone</TableCell>
+                      <TableCell align="right" sx={{ whiteSpace: 'nowrap', minWidth: '150px', padding: '8px' }}>CPF</TableCell>
+                      <TableCell align="right" sx={{ whiteSpace: 'nowrap', minWidth: '150px', padding: '8px' }}>Formação</TableCell>
+                      <TableCell align="right" sx={{ whiteSpace: 'nowrap', minWidth: '150px', padding: '8px' }}>Especialização</TableCell>
+                      <TableCell align="right" sx={{ whiteSpace: 'nowrap', minWidth: '120px', padding: '8px' }}>Ações</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -263,13 +270,13 @@ const TeachersList = () => {
                         <TableCell component="th" scope="row">
                           {teacher.User && teacher.User.name ? teacher.User.name : 'Nome Indisponível'}
                         </TableCell>
-                        <TableCell align="right">{teacher.User && teacher.User.email ? teacher.User.email : 'Email Indisponível'}</TableCell>
-                        <TableCell align="right">{teacher.User && teacher.User.phone_number ? teacher.User.phone_number : 'Número de Telefone Indisponível'}</TableCell>
-                        <TableCell align="right">{teacher.User && teacher.User.cpf ? teacher.User.cpf : 'CPF Indisponível'}</TableCell>
+                        <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>{teacher.User && teacher.User.email ? teacher.User.email : 'Email Indisponível'}</TableCell>
+                        <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>{teacher.User && teacher.User.phone_number ? teacher.User.phone_number : 'Número de Telefone Indisponível'}</TableCell>
+                        <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>{teacher.User && teacher.User.cpf ? teacher.User.cpf : 'CPF Indisponível'}</TableCell>
                         <TableCell align="right">{teacher.academic_formation ? teacher.academic_formation : 'Formaçao Indisponível'}</TableCell>
                         <TableCell align="right">{teacher.tecnic_especialization ? teacher.tecnic_especialization : 'Especialização Indisponível'}</TableCell>
                         <TableCell align="right">
-                          <IconButton color="primary" onClick={() => handleOpenEditModal(teacher)}>
+                          <IconButton onClick={() => handleOpenEditModal(teacher)} sx={{ color: '#60BFBF' }}>
                             <Edit />
                           </IconButton>
                           <IconButton color="error" onClick={() => handleOpenDialog(teacher)}>

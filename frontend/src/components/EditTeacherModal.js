@@ -26,8 +26,17 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 				academic_formation: teacherToEdit.academic_formation || '',
 				tecnic_especialization: teacherToEdit.tecnic_especialization || '',
 			});
-    }
-	}, [teacherToEdit]);
+    } else {
+			setTeacher({
+				name: '',
+				email: '',
+				phone_number: '',
+				cpf: '',
+				academic_formation: '',
+				tecnic_especialization: ''
+			});
+		}
+	}, [teacherToEdit, open]);
 
 	const handleInputChange = (e) => {
 		setTeacher({ ...teacher, [e.target.name]: e.target.value });
@@ -40,16 +49,15 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
     try {
 			let response;
 			const payload = {
+				name: teacher.name,
+				email: teacher.email,
+				phone_number: teacher.phone_number,
+				cpf: teacher.cpf,
+				type: 'teacher',
 				academic_formation: teacher.academic_formation,
-				tecnic_especialization: teacher.tecnic_especialization,
-				user_data: {
-					name: teacher.name,
-					email: teacher.email,
-					phone_number: teacher.phone_number,
-					cpf: teacher.cpf,
-					type: 'teacher'
-				}
+				tecnic_especialization: teacher.tecnic_especialization
 			};
+			
 
 			if (teacherToEdit) {
 					response = await api.put(`/teachers/${teacherToEdit.id}`, payload);
@@ -136,14 +144,14 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 						<Typography variant="subtitle1" sx={{  color: '#000'  }}>
 							Telefone:
 						</Typography>
-						<TextField className="custom-textfield"
+						<MaskedTextField className="custom-textfield"
 							name="phone_number"
 							variant="outlined"
 							fullWidth
 							margin="normal"
 							value={teacher.phone_number}
 							onChange={handleInputChange}
-							//mask="(99) 99999-9999" 
+							mask="(99) 99999-9999" 
 							required
 							sx={{ mb: 1.5, marginTop: '-1px' }}
 							InputProps={{
@@ -163,14 +171,14 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 						<Typography variant="subtitle1" sx={{  color: '#000'  }}>
 							CPF:
 						</Typography>
-						<TextField className="custom-textfield"
+						<MaskedTextField className="custom-textfield"
 							name="cpf"
 							variant="outlined"
 							fullWidth
 							margin="normal"
 							value={teacher.cpf}
 							onChange={handleInputChange}
-							//mask="999.999.999-99"
+							mask="999.999.999-99"
 							required
 							sx={{ mb: 1.5, marginTop: '-1px' }}
 							InputProps={{
