@@ -9,6 +9,9 @@ import {
   IconButton,
   Grid,
   Button,
+  List,
+  ListItem,
+  ListItemText,
 } from "@mui/material";
 import { Search, Tune, ArrowForwardIos, ArrowBackIos } from "@mui/icons-material";
 import api from "../../service/api.js";
@@ -24,7 +27,12 @@ const ModulesList = () => {
     const fetchModules = async () => {
       try {
         const response = await api.get("/modules/");
-        setModules(response.data);
+        let fetchedModules = response.data;
+
+        while (fetchedModules.length < 12) {
+          fetchedModules = [...fetchedModules, ...response.data];
+        }
+        setModules(fetchedModules.slice(0, 12));
       } catch (err) {
         setError("Erro ao buscar os módulos: " + err);
       } finally {
@@ -89,8 +97,8 @@ const ModulesList = () => {
           <Typography color="error">{error}</Typography>
         ) : (
           <Grid container spacing={2}>
-            {filteredModules.map((mod) => (
-              <Grid item xs={12} sm={6} md={4} key={mod.id}>
+            {filteredModules.map((mod, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
                 <Paper
                   sx={{
                     p: 2,
@@ -100,10 +108,18 @@ const ModulesList = () => {
                   }}
                 >
                   <Typography variant="h6">{mod.name || "Nome Indisponível"}</Typography>
-                  <Typography variant="body2">{mod.qtd_hours || "Horas Indisponíveis"}</Typography>
-                  <Typography variant="body2">
-                    {mod.Author?.User?.name || "Autor Indisponível"}
-                  </Typography>
+                  <Typography variant="body2">{mod.qtd_hours ? `${mod.qtd_hours} h` : "Horas Indisponíveis"}</Typography>
+
+                  {mod.topics && mod.topics.length > 0 && (
+                    <List dense sx={{ mt: 1 }}>
+                      {mod.topics.map((topic, idx) => (
+                        <ListItem key={idx} sx={{ py: 0 }}>
+                          <ListItemText primary={`• ${topic}`} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  )}
+
                   <Button
                     sx={{
                       mt: 1,
