@@ -115,18 +115,20 @@ const StudentsList = () => {
 		setOpenStoreModal(false);
 	}
 
-	const handleUpdateStudent = (updatedStudent) => {
-		setStudents((prevStudents) =>
-			prevStudents.map((student) =>
-				student.id === updatedStudent.id ? updatedStudent : student
-			)
-		);
+	const handleUpdateStudent = async (updatedStudent) => {
+		try {
+			const response = await api.get('/admin/viewStudent');
+			setStudents(response.data);
+			setFilteredUsers(response.data);
+		} catch (err) {
+			setError('Erro ao atualizar lista de estudantes' + err);
+		}
 	};
 
 	return (
-		<Box sx={{ display: 'flex',flexDirection:'column' }}>
-			<Menu userRole="admin" />
-			<Container component='section' maxWidth='md'>
+		<Box sx={{ display: 'flex', flexDirection: 'column' }}>
+			<Menu userRole="admin" roleAdmin={"admin"} />
+			<Container component='section' maxWidth='md' sx={{ ml: { md: '240px', lg: '240px' } }}>
 				<Typography component='h1' variant='h5' sx={{ color: '#FFFFFF', mb: 2, mt: 5 }}>
 					Pesquisar Aluno
 				</Typography>
@@ -136,8 +138,8 @@ const StudentsList = () => {
 				sx={{
 					display: 'flex',
 					flexDirection: { xs: 'column', sm: 'row' },
-					gap: 2,
-					//alignItems: 'center',
+					gap: 4,
+					ml: { md: '240px' },
 				}}
 			>
 				<SearchBar
@@ -173,9 +175,17 @@ const StudentsList = () => {
 					Cadastrar Aluno
 				</Button>
 			</Container>
-			<Container component="main" maxWidth="md">
+			<Container component="main" sx={{
+				width: {
+					xs: "100%",
+					sm: "100%",
+					md: "calc(100% - 240px)",
+					lg: "calc(100% - 240px)"
+				},
+				ml: { lg: "240px", md: "240px" }
+			}}>
 				<Paper elevation={3} sx={{ mt: 2, p: 3, bgcolor: '#1E2951' }}>
-					<Typography component="h1" variant="h5" sx={{ mb: 2, color:'#FFFFFF' }}>
+					<Typography component="h1" variant="h5" sx={{ mb: 2, color: '#FFFFFF' }}>
 						Lista de Estudantes
 					</Typography>
 					{loading ? (

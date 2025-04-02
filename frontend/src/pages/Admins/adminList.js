@@ -73,7 +73,6 @@ const AdminList = () => {
 
     };
 
-
     const handleOpenDialog = (admin) => {
         setAdminToDelete(admin);
         setOpenDialog(true);
@@ -106,20 +105,24 @@ const AdminList = () => {
         setAdminToEdit(null);
     };
 
-    const handleUpdateAdmin = (updatedAdmin) => {
-        setAdmins((prevAdmins) =>
-            prevAdmins.map((admin) =>
-                admin.id === updatedAdmin.id ? updatedAdmin : admin
-            )
-        );
+    const handleUpdateAdmin = async (updatedAdmin) => {
+        try {
+            const response = await api.get('/admin/viewAdmins');
+            setAdmins(response.data);
+            setFilteredUsers(response.data);
+        } catch (err) {
+            setError('Erro ao buscar os administradores' + err);
+        } finally {
+            setLoading(false);
+        }
     };
 
 
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Menu userRole="admin" />
-            <Container component='section' maxWidth='md'>
+            <Menu userRole="admin" roleAdmin={"admin"} />
+            <Container component='section' maxWidth='md' sx={{ ml: { md: '240px', lg: '240px' } }}>
                 <Typography component='h1' variant='h5' sx={{ color: '#FFFFFF', mb: 2, mt: 5 }}>
                     Pesquisar Administrador
                 </Typography>
@@ -129,8 +132,8 @@ const AdminList = () => {
                 sx={{
                     display: 'flex',
                     flexDirection: { xs: 'column', sm: 'row' },
-                    gap: 2,
-                    alignItems: 'center'
+                    gap: 4,
+                    ml: { md: '240px' }
                 }}
             >
                 <SearchBar
@@ -161,7 +164,7 @@ const AdminList = () => {
                         color: '#040D33',
                     }}
                     endIcon={<Add sx={{ color: '#040D33' }} />}
-                    onClick={() => navigate('/signUp')}
+                    onClick={() => setOpenEditModal(true)}
                 >
                     Cadastrar Administrador
                 </Button>
@@ -169,7 +172,7 @@ const AdminList = () => {
 
 
             {/* Container da lista de administradores */}
-            <Container component='main' maxWidth='md' sx={{
+            <Container component='main' sx={{
                 width: {
                     xs: "100%",
                     sm: "100%",
@@ -277,14 +280,23 @@ const AdminList = () => {
             />
 
             {/* Modal de edição */}
-            {adminToEdit && (
+            {adminToEdit ? (
                 <EditAdminModal
                     open={openEditModal}
                     onClose={handleCloseEditModal}
                     adminToEdit={adminToEdit}
                     onUpdate={handleUpdateAdmin}
                 />
+            ) : (
+                <EditAdminModal
+                    open={openEditModal}
+                    onClose={handleCloseEditModal}
+                    adminToEdit={null}
+                    onUpdate={handleUpdateAdmin}
+                />
             )}
+
+
         </Box>
     );
 

@@ -17,9 +17,16 @@ import LearnifyPage from '../pages/landingPage/page.js';
 import ProfileSettings from '../pages/Admins/profileSettings.js';
 import HomePageTeacher from '../pages/teachers/mainScreen.js';
 
-const AppRoutes = ({ isAuthenticated, setAuthenticated, type }) => {
+const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
   const handleLogin = () => {
     setAuthenticated(true);
+  };
+
+  const getBasePath = () => {
+    if (type === 'admin' && role === 'content_manager') {
+      return 'manager';
+    }
+    return type; 
   };
 
   return (
@@ -29,19 +36,19 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type }) => {
         <Route path="/signUp" element={<SignUpAdmin />} />
         <Route path="/signUp-student" element={<SignUpStudent />} />
         <Route path="/signUp-teacher" element={<SignUpTeacher />} />
-        <Route path="/login" element={!isAuthenticated ? <Login onLogin={handleLogin} /> : <Navigate to={`/${type}/mainScreen`} />} />
+        <Route path="/login" element={!isAuthenticated ? <Login onLogin={handleLogin} /> : <Navigate to={`/${getBasePath()}/mainScreen`} />} />
         <Route path="/Hello" element={<Hello />} />
 
         {/* Rotas Protegidas */}
         {isAuthenticated ? (
           <>
             {/* Rota base para o tipo de usuário */}
-            <Route path={`/${type}`} element={<Navigate to={`/${type}/mainScreen`} />} />
+            <Route path={`/${getBasePath()}`} element={<Navigate to={`/${getBasePath()}/mainScreen`} />} />
 
             {/* Rotas para Admin */}
-            {type === 'admin' && (
+            {type === 'admin' && role === 'admin' && (
               <>
-                <Route path="admin/mainScreen" element={<MainScreen userRole={type} />} />
+                <Route path="admin/mainScreen" element={<MainScreen userRole={type} roleAdm={type} setAuthenticated={setAuthenticated} />} />
                 <Route path="admin/courses" element={<CoursesList />} />
                 <Route path="admin/teachers" element={<TeachersList />} />
                 <Route path="admin/students" element={<StudentsList />} />
@@ -52,19 +59,28 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type }) => {
               </>
             )}
 
+            {/* Rotas para Content Manager */}
+            {type === 'admin' && role === 'content_manager' && (
+              <>
+                <Route path="manager/mainScreen" element={<MainScreen userRole={type} roleAdm={role} setAuthenticated={setAuthenticated} />} />
+                <Route path="manager/courses" element={<CoursesList />} />
+                <Route path="manager/module/view" element={<ModulesTeacherList />} />
+                <Route path="manager/settings" element={<ProfileSettings userRole={type} role={role} />} />
+              </>
+            )}
+
             {/* Rotas para Teacher */}
             {type === 'teacher' && (
               <>
                 <Route path="teacher/mainScreen" element={<HomePageTeacher setAuthenticated={setAuthenticated} />} />
                 <Route path="teacher/module/view" element={<ModulesTeacherList />} />
-                {/* <Router path="teacher/home-page-teacher" element={< />} /> */}
               </>
             )}
 
             {/* Rotas para Student */}
             {type === 'student' && (
               <>
-                <Route path="student/mainScreen" element={<MainScreen setAuthenticated={setAuthenticated} />} />
+                <Route path="student/mainScreen" element={<MainScreen setAuthenticated={setAuthenticated} userRole={type} />} />
                 <Route path="student/courses" element={<CoursesList />} />
                 <Route path="student/subscribed-courses" element={<SubscribedCourses />} />
               </>

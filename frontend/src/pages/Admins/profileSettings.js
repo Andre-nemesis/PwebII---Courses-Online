@@ -3,10 +3,15 @@ import { Box, Button, Container, Grid, Paper, TextField, Typography, Avatar } fr
 import { Email, Phone, Assignment, Work, Lock } from "@mui/icons-material";
 import Menu from "../../components/Menu";
 
-const ProfileSettings = ({userRole}) => {
+const ProfileSettings = ({userRole,roleAdmin}) => {
   return (
     <Box display="flex" height="100vh" bgcolor="#1d2951" color="white">
-      <Menu userRole={userRole} />
+      {roleAdmin != null ? (
+        <Menu userRole={userRole} />
+      ):(
+        <Menu userRole={userRole} roleAdmin={roleAdmin} />
+      )}
+      
       <Container sx={{ flex: 1, py: 5 }}>
         <Grid container spacing={4}>
           {/* Seção de perfil */}

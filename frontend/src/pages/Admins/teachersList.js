@@ -129,7 +129,7 @@ const TeachersList = () => {
 
   return (
     <Box sx={{ display: "flex", flexDirection:'column', alignItems: 'center' }}>
-      <Menu userRole="admin"/>
+      <Menu userRole="admin" roleAdmin={"admin"}/>
 
       <Container component='section' maxWidth='md' sx={{ ml: {md: '240px', lg: '240px' } }}>
         <Typography component='h1' variant='h5' sx={{ mb: 2, mt: 5, color: '#FFFFFF' }}>

@@ -16,7 +16,7 @@ import {
 } from '@mui/icons-material';
 import { useMediaQuery } from '@mui/material';
 
-const Menu = ({ userRole }) => {
+const Menu = ({ userRole, roleAdmin, setAuthenticated }) => {
   const location = useLocation();
   const [user, setUser] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -40,6 +40,7 @@ const Menu = ({ userRole }) => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    setAuthenticated(false);
     navigate('/login');
   };
 
@@ -69,7 +70,7 @@ const Menu = ({ userRole }) => {
       <Divider sx={{ backgroundColor: "white", marginTop: "15px" }} /> {/* Linha divisória */}
 
       {/* Opções para admin */}
-      {userRole === 'admin' && (
+      {userRole === 'admin' && roleAdmin === 'admin' && (
         <>
           <ListItemButton component={Link} to="/admin/mainScreen"
             sx={{
@@ -158,6 +159,68 @@ const Menu = ({ userRole }) => {
                 backgroundColor: "#05134E"
               },
               ...selectedOption('/admin/settings')
+            }}>
+            <ListItemIcon sx={{ color: "white" }}>
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Configurações" />
+          </ListItemButton>
+        </>
+      )}
+
+      {/* Outro admin */}
+      {userRole === 'admin' && roleAdmin === 'content_manager' && (
+        <>
+          <ListItemButton component={Link} to="/manager/mainScreen"
+            sx={{
+              color: "white",
+              marginTop: "15px",
+              "&:hover": {
+                backgroundColor: "#05134E"
+              },
+              ...selectedOption('/manager/mainScreen')
+            }}>
+            <ListItemIcon sx={{ color: "inherit" }}>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText primary="Página Inicial" />
+          </ListItemButton>
+
+          <ListItemButton component={Link} to="/manager/module/view"
+            sx={{
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#05134E"
+              },
+              ...selectedOption('/manager/module/view')
+            }}>
+            <ListItemIcon sx={{ color: "white" }}>
+              <ModulesIcon />
+            </ListItemIcon>
+            <ListItemText primary="Módulos" />
+          </ListItemButton>
+
+          <ListItemButton component={Link} to="/manager/courses"
+            sx={{
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#05134E"
+              },
+              ...selectedOption('/manager/courses')
+            }}>
+            <ListItemIcon sx={{ color: "white" }}>
+              <CoursesIcon />
+            </ListItemIcon>
+            <ListItemText primary="Cursos" />
+          </ListItemButton>
+
+          <ListItemButton component={Link} to="/manager/settings"
+            sx={{
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#05134E"
+              },
+              ...selectedOption('/manager/settings')
             }}>
             <ListItemIcon sx={{ color: "white" }}>
               <SettingsIcon />

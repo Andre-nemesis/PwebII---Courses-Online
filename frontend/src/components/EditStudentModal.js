@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, CircularProgress, Box } from '@mui/material';
 import api from '../service/api';
+import MaskedTextField from '../components/maskTextField';
 
 const EditStudentModal = ({ open, onClose, studentToEdit, onUpdate }) => {
   const [student, setStudent] = useState({
@@ -29,17 +30,31 @@ const EditStudentModal = ({ open, onClose, studentToEdit, onUpdate }) => {
     setStudent({ ...student, [e.target.name]: e.target.value });
   };
 
+  const resetForm = () => {
+    setStudent({
+      name: '',
+      email: '',
+      phone_number: '',
+      cpf: '',
+      city: ''
+    });
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      if(studentToEdit) {
+      if (studentToEdit) {
+        console.log(`/students/${studentToEdit.id}`, student);
         await api.put(`/students/${studentToEdit.id}`, student);
+        resetForm();
       } else {
-        await api.post(`/students`, student);
+        console.log('/students/', student);
+        await api.post(`/students/`, student);
+        resetForm();
       }
-      onUpdate(student); 
-      onClose(); 
+      onUpdate(student);
+      onClose();
     } catch (err) {
       setError('Erro ao atualizar estudante');
     } finally {
@@ -49,7 +64,12 @@ const EditStudentModal = ({ open, onClose, studentToEdit, onUpdate }) => {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Editar Estudante</DialogTitle>
+      {studentToEdit ? (
+        <DialogTitle>Editar Estudante</DialogTitle>
+      ):(
+        <DialogTitle>Cadastrar Estudante</DialogTitle>
+      )}
+      
       <DialogContent>
         {loading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -78,24 +98,26 @@ const EditStudentModal = ({ open, onClose, studentToEdit, onUpdate }) => {
               onChange={handleInputChange}
               required
             />
-            <TextField className='custom-textfield'
-              label="Telefone"
+            <MaskedTextField
+              className='custom-textfield'
+              id="phone_number"
               name="phone_number"
-              variant="outlined"
-              fullWidth
-              margin="normal"
               value={student.phone_number}
               onChange={handleInputChange}
+              mask="(99) 99999-9999"
+              label="Telefone"
+              margin="normal"
               required
             />
-            <TextField className='custom-textfield'
-              label="CPF"
+            <MaskedTextField
+              className='custom-textfield'
+              id="cpf"
               name="cpf"
-              variant="outlined"
-              fullWidth
-              margin="normal"
               value={student.cpf}
               onChange={handleInputChange}
+              mask="999.999.999-99"
+              label="CPF"
+              margin="normal"
               required
             />
             <TextField className='custom-textfield'

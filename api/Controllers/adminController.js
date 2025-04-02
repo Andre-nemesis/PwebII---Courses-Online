@@ -81,10 +81,14 @@ const adminController = {
   async update(req, res) {
     try {
       const { id } = req.params;
-      const { role } = req.body;
+      const { role, name, cpf, email, password, phone_number } = req.body;
 
       const admin = await db.Admin.findByPk(id);
       if (!admin) return res.status(404).json({ error: 'Administrador não encontrado' });
+
+      const adminUser = await db.Users.findByPk(admin.user_id);
+
+      await adminUser.update({name, cpf, email, password, phone_number});
 
       await admin.update({ role });
 
