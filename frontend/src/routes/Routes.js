@@ -17,12 +17,8 @@ import LearnifyPage from '../pages/landingPage/page.js';
 import ProfileSettings from '../pages/Admins/profileSettings.js';
 import HomePageTeacher from '../pages/teachers/mainScreen.js';
 
-<<<<<<< HEAD
 
-const AppRoutes = ({ isAuthenticated, setAuthenticated, type }) => {
-=======
 const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
->>>>>>> d41bde3610ee658dd033b0024e9039d9828c22f5
   const handleLogin = () => {
     setAuthenticated(true);
   };
