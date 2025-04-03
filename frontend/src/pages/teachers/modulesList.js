@@ -48,7 +48,7 @@ const ModulesList = () => {
 
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", backgroundColor: "#1E2951" }}>
-      <Menu userRole={"admin"} />
+      <Menu userRole={"teacher"} />
 
       <Container sx={{ flexGrow: 1, p: 3 }}>
         <Typography variant="h4" sx={{ color: "white", mb: 3 }}>
@@ -67,25 +67,27 @@ const ModulesList = () => {
           }}
         >
           <InputBase
-            sx={{ ml: 2, flex: 1, color: "white" }}
-            placeholder="Pesquisar módulo"
+            sx={{ ml: 2, flex: 1, color: "#C8D0DA", backgroundColor: "#1E2951", border: "1px solid #C8D0DA" }}
+            placeholder="Pesquisar módulo..."
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <IconButton sx={{ color: "white" }}>
+          <IconButton sx={{ color: "#C8D0DA" }}>
             <Search />
           </IconButton>
+
           <Button
             startIcon={<Tune />}
             sx={{
-              color: "white",
+              color: "#2176FF",
               borderRadius: 2,
-              backgroundColor: "#2E4A7B",
-              "&:hover": { backgroundColor: "#375A91" },
+              backgroundColor: "#040D33",
+              border: "1px solid #2176FF",
+              "&:hover": { backgroundColor: "#2176FF", color: "#EAEFF7" },
               ml: 1,
               p: 1,
             }}
           >
-            Filtros
+            Filtrar
           </Button>
         </Paper>
 

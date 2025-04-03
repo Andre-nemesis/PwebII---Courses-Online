@@ -1,6 +1,6 @@
-import React, { useState, useEffect,useRef  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Drawer, List, ListItemIcon, ListItemText, Divider, ListItemButton, Typography, IconButton, AppBar, Toolbar, Dialog, DialogContent, DialogActions, Button,Box } from '@mui/material';
+import { Drawer, List, ListItemIcon, ListItemText, Divider, ListItemButton, Typography, IconButton, AppBar, Toolbar, Dialog, DialogContent, DialogActions, Button, Box } from '@mui/material';
 import {
   Home as HomeIcon,
   School as CoursesIcon,
@@ -15,19 +15,20 @@ import {
   Menu as MenuIcon
 } from '@mui/icons-material';
 import { useMediaQuery } from '@mui/material';
-import { jwtDecode } from 'jwt-decode';
-import api from '../service/api';
 
-const Menu = ({ userRole }) => {
+const Menu = ({ userRole, roleAdmin, setAuthenticated }) => {
   const location = useLocation();
-  const token = localStorage.getItem('token');
   const [user, setUser] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const navigate = useNavigate();
-  const hasFetchedData = useRef(false);
 
   const isMobile = useMediaQuery('(max-width:900px)');
+
+  const handleCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
+  };
+
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -37,12 +38,9 @@ const Menu = ({ userRole }) => {
     setOpenConfirmDialog(true);
   };
 
-  const handleCloseConfirmDialog = () => {
-    setOpenConfirmDialog(false);
-  };
-
   const handleLogout = () => {
-    localStorage.removeItem('token'); 
+    localStorage.removeItem('token');
+    setAuthenticated(false);
     navigate('/login');
   };
 
@@ -56,7 +54,7 @@ const Menu = ({ userRole }) => {
   }, []);
 
   if (!user) {
-    return ;
+    return;
   }
 
 
@@ -72,7 +70,7 @@ const Menu = ({ userRole }) => {
       <Divider sx={{ backgroundColor: "white", marginTop: "15px" }} /> {/* Linha divisória */}
 
       {/* Opções para admin */}
-      {userRole === 'admin' && (
+      {userRole === 'admin' && roleAdmin === 'admin' && (
         <>
           <ListItemButton component={Link} to="/admin/mainScreen"
             sx={{
@@ -153,6 +151,81 @@ const Menu = ({ userRole }) => {
               <AdminsIcon />
             </ListItemIcon>
             <ListItemText primary="Outros Administradores" />
+          </ListItemButton>
+          <ListItemButton component={Link} to="/admin/settings"
+            sx={{
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#05134E"
+              },
+              ...selectedOption('/admin/settings')
+            }}>
+            <ListItemIcon sx={{ color: "white" }}>
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Configurações" />
+          </ListItemButton>
+        </>
+      )}
+
+      {/* Outro admin */}
+      {userRole === 'admin' && roleAdmin === 'content_manager' && (
+        <>
+          <ListItemButton component={Link} to="/manager/mainScreen"
+            sx={{
+              color: "white",
+              marginTop: "15px",
+              "&:hover": {
+                backgroundColor: "#05134E"
+              },
+              ...selectedOption('/manager/mainScreen')
+            }}>
+            <ListItemIcon sx={{ color: "inherit" }}>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText primary="Página Inicial" />
+          </ListItemButton>
+
+          <ListItemButton component={Link} to="/manager/module/view"
+            sx={{
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#05134E"
+              },
+              ...selectedOption('/manager/module/view')
+            }}>
+            <ListItemIcon sx={{ color: "white" }}>
+              <ModulesIcon />
+            </ListItemIcon>
+            <ListItemText primary="Módulos" />
+          </ListItemButton>
+
+          <ListItemButton component={Link} to="/manager/courses"
+            sx={{
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#05134E"
+              },
+              ...selectedOption('/manager/courses')
+            }}>
+            <ListItemIcon sx={{ color: "white" }}>
+              <CoursesIcon />
+            </ListItemIcon>
+            <ListItemText primary="Cursos" />
+          </ListItemButton>
+
+          <ListItemButton component={Link} to="/manager/settings"
+            sx={{
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#05134E"
+              },
+              ...selectedOption('/manager/settings')
+            }}>
+            <ListItemIcon sx={{ color: "white" }}>
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Configurações" />
           </ListItemButton>
         </>
       )}
@@ -251,19 +324,6 @@ const Menu = ({ userRole }) => {
       )}
 
       {/* Configurações e Sair */}
-      <ListItemButton component={Link} to="/settings"
-        sx={{
-          color: "white",
-          "&:hover": {
-            backgroundColor: "#05134E"
-          },
-          ...selectedOption('/settings')
-        }}>
-        <ListItemIcon sx={{ color: "white" }}>
-          <SettingsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Configurações" />
-      </ListItemButton>
       <ListItemButton onClick={handleOpenConfirmDialog}
         sx={{
           color: "white",

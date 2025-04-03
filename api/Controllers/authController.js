@@ -27,7 +27,7 @@ export const login = async (req, res) => {
                 where: { user_id: user.id },
                 include: [{ model: db.Users, as: 'User' }]
             });
-            token = jwt.sign({ id: admin.id, name: user.name, role: user.type }, process.env.JWT_SECRET, {
+            token = jwt.sign({ id: admin.id, name: user.name, role: user.type, role_adm:admin.role }, process.env.JWT_SECRET, {
                 expiresIn: '8h',
             });
         }else if(user.type === 'teacher'){

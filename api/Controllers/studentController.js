@@ -79,12 +79,16 @@ const studentController = {
   async update(req, res) {
     try {
       const { id } = req.params;
-      const { phone_number, city } = req.body;
+      const { phone_number, city, name, email, cpf, password } = req.body;
 
       const student = await db.Student.findByPk(id);
       if (!student) return res.status(404).json({ error: 'Estudante não encontrado' });
 
-      await student.update({ phone_number, city });
+      const studentUser = await db.Users.findByPk(student.user_id);
+
+      await studentUser.update({phone_number, email, password, name, cpf});
+
+      await student.update({ city });
 
       res.json(student);
     } catch (error) {

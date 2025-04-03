@@ -8,22 +8,37 @@ function App() {
   const token = localStorage.getItem('token');
   const [isAuthenticated, setAuthenticated] = useState(!!token);
   const [type, setType] = useState(null);
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
     if (token) {
       const decoded = jwtDecode(token);
-      setType(decoded.role);  
+      setType(decoded.role);
+      if (decoded.role_adm) {
+        setRole(decoded.role_adm);
+      }
     }
-  }, [token]); 
+  }, [token]);
 
   return (
     <ThemeProvider theme={theme}>
-      <AppRoutes
-        isAuthenticated={isAuthenticated}
-        setAuthenticated={setAuthenticated}
-        type={type}
-        setType={setType}
-      />
+      {role === null ? (
+        <AppRoutes
+          isAuthenticated={isAuthenticated}
+          setAuthenticated={setAuthenticated}
+          type={type}
+          setType={setType}
+        />
+      ) : (
+        <AppRoutes
+          isAuthenticated={isAuthenticated}
+          setAuthenticated={setAuthenticated}
+          type={type}
+          setType={setType}
+          role={role}
+        />
+      )}
+
     </ThemeProvider>
   );
 

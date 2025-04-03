@@ -17,10 +17,21 @@ import LearnifyPage from '../pages/landingPage/page.js';
 import ProfileSettings from '../pages/Admins/profileSettings.js';
 import HomePageTeacher from '../pages/teachers/mainScreen.js';
 
+<<<<<<< HEAD
 
 const AppRoutes = ({ isAuthenticated, setAuthenticated, type }) => {
+=======
+const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
+>>>>>>> d41bde3610ee658dd033b0024e9039d9828c22f5
   const handleLogin = () => {
     setAuthenticated(true);
+  };
+
+  const getBasePath = () => {
+    if (type === 'admin' && role === 'content_manager') {
+      return 'manager';
+    }
+    return type; 
   };
 
   return (
@@ -30,26 +41,36 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type }) => {
         <Route path="/signUp" element={<SignUpAdmin />} />
         <Route path="/signUp-student" element={<SignUpStudent />} />
         <Route path="/signUp-teacher" element={<SignUpTeacher />} />
-        <Route path="/login" element={!isAuthenticated ? <Login onLogin={handleLogin} /> : <Navigate to={`/${type}/mainScreen`} />} />
+        <Route path="/login" element={!isAuthenticated ? <Login onLogin={handleLogin} /> : <Navigate to={`/${getBasePath()}/mainScreen`} />} />
         <Route path="/Hello" element={<Hello />} />
 
         {/* Rotas Protegidas */}
         {isAuthenticated ? (
           <>
             {/* Rota base para o tipo de usuário */}
-            <Route path={`/${type}`} element={<Navigate to={`/${type}/mainScreen`} />} />
+            <Route path={`/${getBasePath()}`} element={<Navigate to={`/${getBasePath()}/mainScreen`} />} />
 
             {/* Rotas para Admin */}
-            {type === 'admin' && (
+            {type === 'admin' && role === 'admin' && (
               <>
-                <Route path="admin/mainScreen" element={<MainScreen setAuthenticated={setAuthenticated} />} />
+                <Route path="admin/mainScreen" element={<MainScreen userRole={type} roleAdm={type} setAuthenticated={setAuthenticated} />} />
                 <Route path="admin/courses" element={<CoursesList />} />
                 <Route path="admin/teachers" element={<TeachersList />} />
                 <Route path="admin/students" element={<StudentsList />} />
                 <Route path="admin/admins" element={<AdminList />} />
                 <Route path="admin/module/view" element={<ModulesTeacherList />} />
                 <Route path="admin/module/view/all" element={<ModulesList />} />
-                <Route path="admin/settings" element={<ProfileSettings />} />
+                <Route path="admin/settings" element={<ProfileSettings userRole={type} />} />
+              </>
+            )}
+
+            {/* Rotas para Content Manager */}
+            {type === 'admin' && role === 'content_manager' && (
+              <>
+                <Route path="manager/mainScreen" element={<MainScreen userRole={type} roleAdm={role} setAuthenticated={setAuthenticated} />} />
+                <Route path="manager/courses" element={<CoursesList />} />
+                <Route path="manager/module/view" element={<ModulesTeacherList />} />
+                <Route path="manager/settings" element={<ProfileSettings userRole={type} role={role} />} />
               </>
             )}
 
@@ -58,14 +79,13 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type }) => {
               <>
                 <Route path="teacher/mainScreen" element={<HomePageTeacher setAuthenticated={setAuthenticated} />} />
                 <Route path="teacher/module/view" element={<ModulesTeacherList />} />
-                {/* <Router path="teacher/home-page-teacher" element={< />} /> */}
               </>
             )}
 
             {/* Rotas para Student */}
             {type === 'student' && (
               <>
-                <Route path="student/mainScreen" element={<MainScreen setAuthenticated={setAuthenticated} />} />
+                <Route path="student/mainScreen" element={<MainScreen setAuthenticated={setAuthenticated} userRole={type} />} />
                 <Route path="student/courses" element={<CoursesList />} />
                 <Route path="student/subscribed-courses" element={<SubscribedCourses />} />
               </>
