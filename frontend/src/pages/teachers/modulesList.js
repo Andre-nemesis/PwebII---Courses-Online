@@ -16,14 +16,39 @@ import {
 import { Search, Tune, ArrowForwardIos, ArrowBackIos } from "@mui/icons-material";
 import api from "../../service/api.js";
 import Menu from "../../components/Menu.js";
+import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from "react-router-dom";
 
 const ModulesList = () => {
   const [modules, setModules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [role, setRole] = useState(null);
+  const [roleAdmin, setRoleAdmin] = useState(null);
+  const [authenticated, setAuthenticated] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+
+        console.log('Token decodificado:', decoded);
+
+        setRole(decoded.role);
+        setRoleAdmin(decoded.role_adm || null);
+
+      } catch (err) {
+        console.error('Erro ao decodificar o token:', err);
+        setError('Token inválido');
+        setAuthenticated(false);
+      }
+    } else {
+      setAuthenticated(false);
+    }
+
     const fetchModules = async () => {
       try {
         const response = await api.get("/modules/");
@@ -42,13 +67,18 @@ const ModulesList = () => {
     fetchModules();
   }, []);
 
+  if (!authenticated) {
+    navigate('/login');
+    return null;
+  }
+
   const filteredModules = modules.filter((mod) =>
     mod.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", backgroundColor: "#1E2951" }}>
-      <Menu userRole={"teacher"} />
+      <Menu userRole={role} roleAdmin={roleAdmin} setAuthenticated={setAuthenticated} />
 
       <Container sx={{ flexGrow: 1, p: 3 }}>
         <Typography variant="h4" sx={{ color: "white", mb: 3 }}>

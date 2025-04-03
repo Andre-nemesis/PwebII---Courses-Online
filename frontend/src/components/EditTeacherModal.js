@@ -3,6 +3,8 @@ import { Dialog, Typography, DialogActions, DialogContent, DialogTitle, TextFiel
 import { Person, Email, Phone, Description, Draw, TrackChanges } from "@mui/icons-material";
 import api from '../service/api';
 import MaskedTextField from './maskTextField';
+import SuccessMessageModal from './SuccessMessageModal.js';
+import ErrorMessageModal from './ErrorMessageModal.js';
 
 const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 	const [teacher, setTeacher] = useState({
@@ -15,9 +17,11 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 	});
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
+	const [successOpen, setSuccessOpen] = useState(false);
+	const [openError, setOpenError] = useState(false);
 
 	useEffect(() => {
-    if (teacherToEdit) {
+		if (teacherToEdit) {
 			setTeacher({
 				name: teacherToEdit.User.name || '',
 				email: teacherToEdit.User.email || '',
@@ -26,7 +30,7 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 				academic_formation: teacherToEdit.academic_formation || '',
 				tecnic_especialization: teacherToEdit.tecnic_especialization || '',
 			});
-    } else {
+		} else {
 			setTeacher({
 				name: '',
 				email: '',
@@ -43,241 +47,256 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 	};
 
 	const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+		e.preventDefault();
+		setLoading(true);
 
-    try {
+		try {
 			let response;
 			const payload = {
-				name: teacher.name,
-				email: teacher.email,
-				phone_number: teacher.phone_number,
-				cpf: teacher.cpf,
-				type: 'teacher',
 				academic_formation: teacher.academic_formation,
-				tecnic_especialization: teacher.tecnic_especialization
+				tecnic_especialization: teacher.tecnic_especialization,
+				user_data: {
+					name: teacher.name,
+					email: teacher.email,
+					phone_number: teacher.phone_number,
+					cpf: teacher.cpf,
+					type: 'teacher'
+				}
 			};
-			
 
 			if (teacherToEdit) {
-					response = await api.put(`/teachers/${teacherToEdit.id}`, payload);
+				response = await api.put(`/teachers/${teacherToEdit.id}`, payload);
 			} else {
-					response = await api.post(`/teachers`, payload);
+				response = await api.post(`/teachers`, payload);
 			}
 
 			onUpdate(response.data);
-			onClose();
+			setSuccessOpen(true);
 
-    } catch (err) {
-        setError(err.response?.data?.message || 'Erro ao salvar professor: ' + err.message);
-    } finally {
-        setLoading(false);
-    }
+		} catch (err) {
+			setError(err.response?.data?.message || 'Erro ao salvar professor: ' + err.message);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const handleSuccessClose = () => {
+		onClose();
+		setSuccessOpen(false);
 	};
 
 
 	return (
-		<Dialog open={open} onClose={onClose}>
-			<DialogTitle>
-				{teacherToEdit ? "Editar Professor" : "Cadastrar Professor"}
-			</DialogTitle>
-			<DialogContent>
-				{loading ? (
-					<Box>
-						<CircularProgress />
-					</Box>
-				) : (
-					<form onSubmit={handleSubmit}>
-						{error && <Box sx={{ color: 'red', marginBottom: 2 }}>{error}</Box>}
-						<Typography variant="subtitle1" sx={{  color: '#000'  }}>
-							Nome:
-						</Typography>
-						<TextField className="custom-textfield"
-							name="name"
-							variant="outlined"
-							fullWidth
-							margin="normal"
-							value={teacher.name}
-							onChange={handleInputChange}
-							required
-							sx={{ mb: 1.5, marginTop: '-1px' }}
-							InputProps={{
-								startAdornment: (
-									<InputAdornment position="start">
-										<Person style={{ color: "#F8F9FA" }} />
-									</InputAdornment>
-								),
-								sx: {
-									backgroundColor: '#1E2951',
-									color: '#EAEFF7',
-									border: '1px solid rgba(200, 208, 218, 0.25)',
-								},
-							}}
-						/>
-
-						<Typography variant="subtitle1" sx={{  color: '#000'  }}>
-							E-mail:
-						</Typography>
-						<TextField className="custom-textfield"
-							name="email"
-							variant="outlined"
-							fullWidth
-							margin="normal"
-							value={teacher.email}
-							onChange={handleInputChange}
-							required
-							sx={{ mb: 1.5, marginTop: '-1px' }}
-							InputProps={{
-								startAdornment: (
-									<InputAdornment position="start">
-										<Email style={{ color: "#F8F9FA" }} />
-									</InputAdornment>
-								),
-								sx: {
-									backgroundColor: '#1E2951',
-									color: '#EAEFF7',
-									border: '1px solid rgba(200, 208, 218, 0.25)',
-								},
-							}}
-						/>
-
-						<Typography variant="subtitle1" sx={{  color: '#000'  }}>
-							Telefone:
-						</Typography>
-						<MaskedTextField className="custom-textfield"
-							name="phone_number"
-							variant="outlined"
-							fullWidth
-							margin="normal"
-							value={teacher.phone_number}
-							onChange={handleInputChange}
-							mask="(99) 99999-9999" 
-							required
-							sx={{ mb: 1.5, marginTop: '-1px' }}
-							InputProps={{
-								startAdornment: (
-									<InputAdornment position="start">
-										<Phone style={{ color: "#F8F9FA" }} />
-									</InputAdornment>
-								),
-								sx: {
-									backgroundColor: '#1E2951',
-									color: '#EAEFF7',
-									border: '1px solid rgba(200, 208, 218, 0.25)',
-								},
-							}}
-						/>
-
-						<Typography variant="subtitle1" sx={{  color: '#000'  }}>
-							CPF:
-						</Typography>
-						<MaskedTextField className="custom-textfield"
-							name="cpf"
-							variant="outlined"
-							fullWidth
-							margin="normal"
-							value={teacher.cpf}
-							onChange={handleInputChange}
-							mask="999.999.999-99"
-							required
-							sx={{ mb: 1.5, marginTop: '-1px' }}
-							InputProps={{
-								startAdornment: (
-									<InputAdornment position="start">
-										<Description style={{ color: "#F8F9FA" }} />
-									</InputAdornment>
-								),
-								sx: {
-									backgroundColor: '#1E2951',
-									color: '#EAEFF7',
-									border: '1px solid rgba(200, 208, 218, 0.25)',
-								},
-							}}
-						/>
-
-						<Typography variant="subtitle1" sx={{  color: '#000'  }}>
-							Formação Acadêmica:
-						</Typography>
-						<TextField className="custom-textfield"
-							name="academic_formation"
-							variant="outlined"
-							fullWidth
-							margin="normal"
-							value={teacher.academic_formation}
-							onChange={handleInputChange}
-							required
-							sx={{ mb: 1.5, marginTop: '-1px' }}
-							InputProps={{
-								startAdornment: (
-									<InputAdornment position="start">
-										<Draw style={{ color: "#F8F9FA" }} />
-									</InputAdornment>
-								),
-								sx: {
-									backgroundColor: '#1E2951',
-									color: '#EAEFF7',
-									border: '1px solid rgba(200, 208, 218, 0.25)',
-								},
-							}}
-						/>
-
-						<Typography variant="subtitle1" sx={{  color: '#000'  }}>
-							Especialização Técnica:
-						</Typography>
-						<TextField className="custom-textfield"
-							name="tecnic_especialization"
-							variant="outlined"
-							fullWidth
-							margin="normal"
-							value={teacher.tecnic_especialization}
-							onChange={handleInputChange}
-							required
-							sx={{ mb: 1.5, marginTop: '-1px' }}
-							InputProps={{
-								startAdornment: (
-									<InputAdornment position="start">
-										<TrackChanges style={{ color: "#F8F9FA" }} />
-									</InputAdornment>
-								),
-								sx: {
-									backgroundColor: '#1E2951',
-									color: '#EAEFF7',
-									border: '1px solid rgba(200, 208, 218, 0.25)',
-								},
-							}}
-						/>
-						<DialogActions
-							sx={{
-								justifyContent: 'center',
-								gap: 2, 
-								padding: '10px 24px',
-								marginTop: '8px'
-							}}
-						>
-							<Button onClick={onClose} variant="contained"
-								sx={{
-									backgroundColor: '#FF342D',
-									color: '#fff',
-									'&:hover': {
-										backgroundColor: '#FF2018',
+		<>
+			<Dialog open={open} onClose={onClose}>
+				<DialogTitle>
+					{teacherToEdit ? "Editar Professor" : "Cadastrar Professor"}
+				</DialogTitle>
+				<DialogContent>
+					{loading ? (
+						<Box>
+							<CircularProgress />
+						</Box>
+					) : (
+						<form onSubmit={handleSubmit}>
+							{error && <Box sx={{ color: 'red', marginBottom: 2 }}>{error}</Box>}
+							<Typography variant="subtitle1" sx={{  color: '#000'  }}>
+								Nome:
+							</Typography>
+							<TextField className="custom-textfield"
+								name="name"
+								variant="outlined"
+								fullWidth
+								margin="normal"
+								value={teacher.name}
+								onChange={handleInputChange}
+								required
+								sx={{ mb: 1.5, marginTop: '-1px' }}
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">
+											<Person style={{ color: "#F8F9FA" }} />
+										</InputAdornment>
+									),
+									sx: {
+										backgroundColor: '#1E2951',
+										color: '#EAEFF7',
+										border: '1px solid rgba(200, 208, 218, 0.25)',
 									},
-									padding: '6px 30px'
 								}}
-							>
-								Cancelar
-							</Button>
-							<Button type="submit" color="primary" variant="contained" 
+							/>
+
+							<Typography variant="subtitle1" sx={{  color: '#000'  }}>
+								E-mail:
+							</Typography>
+							<TextField className="custom-textfield"
+								name="email"
+								variant="outlined"
+								fullWidth
+								margin="normal"
+								value={teacher.email}
+								onChange={handleInputChange}
+								required
+								sx={{ mb: 1.5, marginTop: '-1px' }}
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">
+											<Email style={{ color: "#F8F9FA" }} />
+										</InputAdornment>
+									),
+									sx: {
+										backgroundColor: '#1E2951',
+										color: '#EAEFF7',
+										border: '1px solid rgba(200, 208, 218, 0.25)',
+									},
+								}}
+							/>
+
+							<Typography variant="subtitle1" sx={{  color: '#000'  }}>
+								Telefone:
+							</Typography>
+							<MaskedTextField className="custom-textfield"
+								name="phone_number"
+								variant="outlined"
+								fullWidth
+								margin="normal"
+								value={teacher.phone_number}
+								onChange={handleInputChange}
+								mask="(99) 99999-9999" 
+								required
+								sx={{ mb: 1.5, marginTop: '-1px' }}
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">
+											<Phone style={{ color: "#F8F9FA" }} />
+										</InputAdornment>
+									),
+									sx: {
+										backgroundColor: '#1E2951',
+										color: '#EAEFF7',
+										border: '1px solid rgba(200, 208, 218, 0.25)',
+									},
+								}}
+							/>
+
+							<Typography variant="subtitle1" sx={{  color: '#000'  }}>
+								CPF:
+							</Typography>
+							<MaskedTextField className="custom-textfield"
+								name="cpf"
+								variant="outlined"
+								fullWidth
+								margin="normal"
+								value={teacher.cpf}
+								onChange={handleInputChange}
+								mask="999.999.999-99"
+								required
+								sx={{ mb: 1.5, marginTop: '-1px' }}
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">
+											<Description style={{ color: "#F8F9FA" }} />
+										</InputAdornment>
+									),
+									sx: {
+										backgroundColor: '#1E2951',
+										color: '#EAEFF7',
+										border: '1px solid rgba(200, 208, 218, 0.25)',
+									},
+								}}
+							/>
+
+							<Typography variant="subtitle1" sx={{  color: '#000'  }}>
+								Formação Acadêmica:
+							</Typography>
+							<TextField className="custom-textfield"
+								name="academic_formation"
+								variant="outlined"
+								fullWidth
+								margin="normal"
+								value={teacher.academic_formation}
+								onChange={handleInputChange}
+								required
+								sx={{ mb: 1.5, marginTop: '-1px' }}
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">
+											<Draw style={{ color: "#F8F9FA" }} />
+										</InputAdornment>
+									),
+									sx: {
+										backgroundColor: '#1E2951',
+										color: '#EAEFF7',
+										border: '1px solid rgba(200, 208, 218, 0.25)',
+									},
+								}}
+							/>
+
+							<Typography variant="subtitle1" sx={{  color: '#000'  }}>
+								Especialização Técnica:
+							</Typography>
+							<TextField className="custom-textfield"
+								name="tecnic_especialization"
+								variant="outlined"
+								fullWidth
+								margin="normal"
+								value={teacher.tecnic_especialization}
+								onChange={handleInputChange}
+								required
+								sx={{ mb: 1.5, marginTop: '-1px' }}
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">
+											<TrackChanges style={{ color: "#F8F9FA" }} />
+										</InputAdornment>
+									),
+									sx: {
+										backgroundColor: '#1E2951',
+										color: '#EAEFF7',
+										border: '1px solid rgba(200, 208, 218, 0.25)',
+									},
+								}}
+							/>
+							<DialogActions
 								sx={{
-									padding: '6px 35px'
+									justifyContent: 'center',
+									gap: 2, 
+									padding: '10px 24px',
+									marginTop: '8px'
 								}}
 							>
-								{teacherToEdit ? "Salvar" : "Cadastrar"}
-							</Button>
-						</DialogActions>
-					</form>
-				)}
-			</DialogContent>
-		</Dialog>
+								<Button onClick={onClose} variant="contained"
+									sx={{
+										backgroundColor: '#FF342D',
+										color: '#fff',
+										'&:hover': {
+											backgroundColor: '#FF2018',
+										},
+										padding: '6px 30px'
+									}}
+								>
+									Cancelar
+								</Button>
+								<Button type="submit" color="primary" variant="contained" 
+									sx={{
+										padding: '6px 35px'
+									}}
+								>
+									{teacherToEdit ? "Salvar" : "Cadastrar"}
+								</Button>
+							</DialogActions>
+						</form>
+					)}
+				</DialogContent>
+			</Dialog>
+
+			{/* Modal de sucesso */}
+			<SuccessMessageModal
+				open={successOpen}
+				onClose={handleSuccessClose}
+				message={teacherToEdit ? "Professor atualizado com sucesso!" : "Professor cadastrado com sucesso!"}
+      		/>
+		</>
 	);
 };
 

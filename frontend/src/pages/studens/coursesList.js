@@ -2,18 +2,37 @@ import React, { useEffect, useState } from 'react';
 import { Container, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Box } from '@mui/material';
 import api from '../../service/api.js';
 import Menu from '../../components/Menu.js';
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from 'react-router-dom';
 
 const CoursesList = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [role, setRole] = useState(null);
+  const [roleAdmin, setRoleAdmin] = useState(null);
+  const [authenticated, setAuthenticated] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const decoded = jwtDecode(token);
-    setRole(decoded.role);
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+
+        console.log('Token decodificado:', decoded);
+
+        setRole(decoded.role);
+        setRoleAdmin(decoded.role_adm || null);
+
+      } catch (err) {
+        console.error('Erro ao decodificar o token:', err);
+        setError('Token inválido');
+        setAuthenticated(false);
+      }
+    } else {
+      setAuthenticated(false);
+    }
 
     const fetchCourses = async () => {
       try {
@@ -28,9 +47,14 @@ const CoursesList = () => {
     fetchCourses();
   }, []);
 
+  if (!authenticated) {
+    navigate('/login');
+    return null;
+  }
+
   return (
     <Box sx={{ display: 'flex' }}> 
-      <Menu userRole={role} />
+      <Menu userRole={role} roleAdmin={roleAdmin} setAuthenticated={setAuthenticated} />
 
       <Container component='main' maxWidth='md' sx={{ flexGrow: 1, p: 3 }}>
         <Paper elevation={3} sx={{ mt: 2, p: 3 }}>

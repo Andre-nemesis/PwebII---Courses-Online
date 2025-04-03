@@ -7,6 +7,8 @@ import SearchBar from '../../components/SearchBar.js';
 import { Delete, Edit, Add } from "@mui/icons-material";
 import EditTeacherModal from '../../components/EditTeacherModal.js';
 import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
+import SuccessMessageModal from '../../components/SuccessMessageModal.js';
+import ErrorMessageModal from '../../components/ErrorMessageModal.js';
 
 const TeachersList = () => {
   const [teachers, setTeachers] = useState([]);
@@ -21,6 +23,10 @@ const TeachersList = () => {
   const [openStoreModal, setOpenStoreModal] = useState(false);
   const [teacherToEdit, setTeacherToEdit] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [openMessage, setOpenMessage] = useState(false);
+  const [messageInfo, setMessageInfo] = useState({ type: "success", message: "" });
+  const [openError, setOpenError] = useState(false);
+  const [errorInfo, setErrorInfo] = useState({ type: "error", message: "" });
 
   useEffect(() => {
     const fetchTeachers = async () => {
@@ -92,8 +98,13 @@ const TeachersList = () => {
         await api.delete(`/teachers/${teacherToDelete.id}`);
         setTeachers(teachers.filter(teacher => teacher.id !== teacherToDelete.id));
         handleCloseDialog();
-      
+        
+        setMessageInfo({ type: "success", message: "Professor excluído com sucesso!" });
+        setOpenMessage(true);
+
       } catch (err) {
+        setErrorInfo({ type: "error", message: "Erro ao excluir professor" });
+        setOpenError(true);
         setError('Erro ao excluir professor' + err);
       }
     }
@@ -112,6 +123,9 @@ const TeachersList = () => {
   const handleCloseStoreModal = () => {
     setOpenStoreModal(false);
   }
+
+  const handleCloseMessage = () => setOpenMessage(false);
+  const handleCloseError = () => setOpenError(false);
   
   const handleUpdateTeacher = (updatedTeacher) => {
     if (updatedTeacher.id) {
@@ -129,7 +143,7 @@ const TeachersList = () => {
 
   return (
     <Box sx={{ display: "flex", flexDirection:'column', alignItems: 'center' }}>
-      <Menu userRole="admin" roleAdmin={"admin"}/>
+      <Menu userRole="admin" roleAdmin={"admin"} />
 
       <Container component='section' maxWidth='md' sx={{ ml: {md: '240px', lg: '240px' } }}>
         <Typography component='h1' variant='h5' sx={{ mb: 2, mt: 5, color: '#FFFFFF' }}>
@@ -158,7 +172,7 @@ const TeachersList = () => {
 					}}
 				/>
 
-				<Button
+				<Button 
 					variant="contained"
 					sx={{
 						bgcolor: '#60BFBF',
@@ -298,10 +312,13 @@ const TeachersList = () => {
         open={openDialog}
         onClose={handleCloseDialog}
         title={'Excluir Professor'}
-        message={'Realmente deseja excluir o professor? Essa ação não poderá ser dedsfeita.'}
+        message={'Realmente deseja excluir o professor? Essa ação não poderá ser desfeita.'}
         onConfirm={handleDelete}
         teacherName={teacherToDelete ? teacherToDelete.User.name : ''}
       />
+
+      <SuccessMessageModal open={openMessage} onClose={handleCloseMessage} type={messageInfo.type} message={messageInfo.message} />
+      <ErrorMessageModal open={openError} onClose={handleCloseError} type={errorInfo.type} message={errorInfo.message} />
 
       {/* Modal de edição */}
       {teacherToEdit && (

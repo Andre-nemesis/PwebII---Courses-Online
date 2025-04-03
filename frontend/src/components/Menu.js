@@ -17,6 +17,7 @@ import {
 import { useMediaQuery } from '@mui/material';
 
 const Menu = ({ userRole, roleAdmin, setAuthenticated }) => {
+  console.log('Props recebidas no Menu:', { userRole, roleAdmin, setAuthenticated });
   const location = useLocation();
   const [user, setUser] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -28,7 +29,6 @@ const Menu = ({ userRole, roleAdmin, setAuthenticated }) => {
   const handleCloseConfirmDialog = () => {
     setOpenConfirmDialog(false);
   };
-
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -42,6 +42,7 @@ const Menu = ({ userRole, roleAdmin, setAuthenticated }) => {
     localStorage.removeItem('token');
     setAuthenticated(false);
     navigate('/login');
+    console.log('Navegação para /login chamada');
   };
 
   const selectedOption = (path) => ({
@@ -54,7 +55,7 @@ const Menu = ({ userRole, roleAdmin, setAuthenticated }) => {
   }, []);
 
   if (!user) {
-    return;
+    return null;
   }
 
 
@@ -323,7 +324,7 @@ const Menu = ({ userRole, roleAdmin, setAuthenticated }) => {
         </>
       )}
 
-      {/* Configurações e Sair */}
+      {/* Sair */}
       <ListItemButton onClick={handleOpenConfirmDialog}
         sx={{
           color: "white",
