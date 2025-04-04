@@ -3,7 +3,7 @@ import { Card, CardContent, Typography } from "@mui/material";
 
 const CardTeacher = ({ name, description }) => {
   return (
-    <Card sx={{ backgroundColor: "#0A0F29", color: "white", padding: 2, borderRadius: 2, width: 280 }}>
+    <Card sx={{ backgroundColor: "#0A0F29", color: "white", padding: 2, borderRadius: 2, width: 220 }}>
       <CardContent>
         <Typography variant="h6" fontWeight="bold">
           <strong>{name}</strong>

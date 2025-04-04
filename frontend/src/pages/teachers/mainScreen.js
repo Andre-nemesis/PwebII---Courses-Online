@@ -21,7 +21,7 @@ const HomePageTeacher = ({userRole }) => {
   ];
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", backgroundColor: "#0f172a", color: "white" }}>
+    <Box sx={{ display: "flex", minHeight: "100vh", color: "white" }}>
         {/* Menu lateral */}
         <Box sx={{ width: 250, flexShrink: 0 }}>
             <Menu userRole={userRole} />

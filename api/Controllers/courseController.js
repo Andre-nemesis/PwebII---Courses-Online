@@ -32,17 +32,29 @@ const courseController = {
   async getModulesByCourseId(req, res) {
     try {
       const { id } = req.params;
+
       const course = await db.Course.findByPk(id, {
-        include: [{ model: db.Module, through: 'Course_module', attributes: ['id', 'name', 'description'] }]
+        include: [{
+          model: db.Module,
+          as: 'Modules',
+          through: {
+            attributes: [], 
+          },
+          attributes: ['id', 'name', 'description']
+        }]
       });
-
+  
       if (!course) return res.status(404).json({ error: 'Curso não encontrado' });
-
-      res.json(course.Modules);
+  
+      res.json({
+        courseName: course.name,
+        modules: course.Modules || [] 
+      });
     } catch (error) {
+      console.error('Erro no backend:', error.stack);
       res.status(500).json({ error: 'Erro ao buscar módulos do curso', details: error.message });
     }
-  },
+  },  
 
   async getCourseByStudentId(req, res) {
     const studentId = req.params.id;

@@ -6,8 +6,8 @@ import MainScreen from '../components/mainScreen.js';
 import Login from '../components/login.js';
 import { SignUpStudent } from '../pages/signUp/signUpStudent.js';
 import SignUpTeacher from '../pages/signUp/SignUpTeacher.js';
-import CoursesList from '../pages/studens/coursesList.js';
-import SubscribedCourses from '../pages/studens/subcribetCourses.js';
+import CoursesList from '../pages/students/coursesList.js';
+import SubscribedCourses from '../pages/students/subcribetCourses.js';
 import TeachersList from '../pages/Admins/teachersList.js';
 import StudentsList from '../pages/Admins/studentsList.js';
 import AdminList from '../pages/Admins/adminList.js';
@@ -18,6 +18,7 @@ import ProfileSettings from '../components/profileSettings.js';
 import HomePageTeacher from '../pages/teachers/mainScreen.js';
 import { isTokenExpired } from '../service/auth.js';
 import AdminMainScreen from '../pages/Admins/AdminMainScreen.js';
+import CourseDetails from '../pages/ModulesCourse.js';
 
 
 const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
@@ -59,6 +60,7 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
                 <Route path="admin/module/view" element={<ModulesTeacherList userRole={type} admRole={role} />} />
                 <Route path="admin/module/view/all" element={<ModulesList userRole={type} adminRole={role} />} />
                 <Route path="admin/settings" element={<ProfileSettings userRole={type} roleAdmin={role} />} />
+                <Route path="admin/courses/:id/modules" element={<CourseDetails />} />
               </>
             )}
 
