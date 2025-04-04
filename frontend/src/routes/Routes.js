@@ -17,6 +17,7 @@ import LearnifyPage from '../pages/landingPage/page.js';
 import ProfileSettings from '../components/profileSettings.js';
 import HomePageTeacher from '../pages/teachers/mainScreen.js';
 import { isTokenExpired } from '../service/auth.js';
+import AdminMainScreen from '../pages/Admins/AdminMainScreen.js';
 
 
 const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
@@ -50,7 +51,7 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
             {/* Rotas para Admin */}
             {type === 'admin' && role === 'admin' && (
               <>
-                <Route path="admin/mainScreen" element={<MainScreen userRole={type} roleAdm={type} />} />
+                <Route path="admin/mainScreen" element={<AdminMainScreen />} />
                 <Route path="admin/courses" element={<CoursesList />} />
                 <Route path="admin/teachers" element={<TeachersList />} />
                 <Route path="admin/students" element={<StudentsList />} />

@@ -9,6 +9,7 @@ const router = express.Router();
 router.get('/', verifyToken,authorizeRoles(['admin','teacher']), moduleController.getAll);
 router.get('/:id',verifyToken,authorizeRoles(['admin','teacher']),moduleController.getById);
 router.get('/teacher/:id',verifyToken,authorizeRoles(['admin','teacher']),moduleController.getAllModuleForTeacherId);
+router.get('/view/modules-by-teacher',verifyToken,authorizeRole('admin'),moduleController.getTeacherModuleCount);
 
 // post
 router.post('/',verifyToken,authorizeRole('teacher'),moduleController.create);

@@ -60,8 +60,8 @@ const moduleController = {
       const { id } = req.params;
       const module = await db.Module.findByPk(id, {
         include: [
-          { model: db.Teacher, attributes: ['id', 'academic_formation'] },
-          { model: db.Course, through: 'Course_module', attributes: ['id', 'name'] }
+          { model: db.Teachers, as:'Author' },
+          { model: db.Course, through: 'Course_module', as:'Courses', attributes: ['id', 'name'] }
         ]
       });
 
@@ -72,6 +72,40 @@ const moduleController = {
       res.status(500).json({ error: 'Erro ao buscar módulo', details: error.message });
     }
   },
+
+  async getTeacherModuleCount(req, res) {
+    try {
+      const teacherModuleCount = await db.Module.findAll({
+        attributes: [
+          [db.Sequelize.fn('COUNT', db.Sequelize.col('Module.id')), 'moduleCount'],
+          [db.Sequelize.col('Author.User.name'), 'userName']
+        ],
+        include: [
+          {
+            model: db.Teachers,
+            as: 'Author',
+            attributes: [],
+            include: [
+              {
+                model: db.Users,
+                as: 'User',
+                attributes: []
+              }
+            ]
+          }
+        ],
+        group: ['Author.User.name'],
+        order: [[db.Sequelize.literal('moduleCount'), 'DESC']],
+        raw: true
+      });
+  
+      res.json({ teachers: teacherModuleCount });
+    } catch (error) {
+      res.status(500).json({ error: 'Erro ao contar módulos por professor', details: error.message });
+    }
+  },
+  
+  
 
   async create(req, res) {
     try {

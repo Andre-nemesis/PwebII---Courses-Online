@@ -7,9 +7,9 @@ const MainScreen = ({ setAuthenticated,userRole, roleAdm}) => {
   return (
     <div>
       {roleAdm ? (
-        <Menu userRole={userRole} roleAdmin={roleAdm} setAuthenticated={setAuthenticated} />
+        <Menu userRole={userRole} roleAdmin={roleAdm} />
       ):(
-        <Menu userRole={userRole} setAuthenticated={setAuthenticated} />
+        <Menu userRole={userRole} />
       )}
       
       <Outlet context={{ userRole }} /> {/* Passa o userRole para as rotas filhas */}

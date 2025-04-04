@@ -60,7 +60,7 @@ export default (sequelize) => {
 
   Module.associate = (models) => {
     Module.belongsTo(models.Teachers, {foreignKey: 'teacher_id', as: 'Author'});
-    Module.belongsToMany(models.Course,{through : 'Course_module', foreignKey: 'module_id'});
+    Module.belongsToMany(models.Course,{through : 'Course_module', foreignKey: 'module_id', as: 'Courses'});
   }
   
   return Module;

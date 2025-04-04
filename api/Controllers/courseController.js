@@ -76,6 +76,91 @@ const courseController = {
     }
   },
 
+  async getCountCoursesByAdmin(req, res) {
+    try {
+      const countCourses = await db.Course.findAll({
+        attributes: [
+          [db.Sequelize.fn('COUNT', db.Sequelize.col('admin_id')), 'courseCount'],
+          [db.Sequelize.col('Author.User.name'), 'userName']
+        ],
+        include: [
+          {
+            model: db.Admin,
+            as: 'Author',
+            where: { role: 'content_manager' },
+            attributes: [], 
+            include: [
+              {
+                model: db.Users,
+                as: 'User',
+                attributes: [] 
+              }
+            ]
+          }
+        ],
+        group: ['Author.User.name'], 
+        order: [[db.Sequelize.literal('courseCount'), 'DESC']],
+        raw: true 
+      });
+  
+      res.json({ countCourses: result });
+    } catch (error) {
+      res.status(500).json({ error: 'Erro ao contar cursos de todos os administradores', details: error.message });
+    }
+  },
+
+  async getCourseStudentCount(req, res) {
+    try {
+      const courseStudentCount = await db.Course.findAll({
+        attributes: [
+          ['name', 'courseName'],  
+          [db.Sequelize.fn('COUNT', db.Sequelize.col('Students.id')), 'studentCount'] 
+        ],
+        include: [
+          {
+            model: db.Student,
+            as: 'Students',
+            attributes: [], 
+            through: { attributes: [] } 
+          }
+        ],
+        group: ['Course.id', 'Course.name'], 
+        order: [[db.Sequelize.literal('studentCount'), 'DESC']], 
+        raw: true
+      });
+  
+      res.json({ courses: courseStudentCount });
+    } catch (error) {
+      res.status(500).json({ error: 'Erro ao contar estudantes por curso', details: error.message });
+    }
+  },
+
+  async getCourseModuleCount(req, res) {
+    try {
+      const courseModuleCount = await db.Course.findAll({
+        attributes: [
+          ['name', 'courseName'],  
+          [db.Sequelize.fn('COUNT', db.Sequelize.col('Modules.id')), 'moduleCount'] 
+        ],
+        include: [
+          {
+            model: db.Module,
+            as: 'Modules',
+            attributes: [], 
+            through: { attributes: [] } 
+          }
+        ],
+        group: ['Course.id', 'Course.name'], 
+        order: [[db.Sequelize.literal('moduleCount'), 'DESC']], 
+        raw: true
+      });
+  
+      res.json({ courses: courseModuleCount });
+    } catch (error) {
+      res.status(500).json({ error: 'Erro ao contar módulos por curso', details: error.message });
+    }
+  },
+
   async create(req, res) {
     try {
       const { name, course_duration, num_hours, percent_complete } = req.body;

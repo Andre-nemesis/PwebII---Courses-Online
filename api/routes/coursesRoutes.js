@@ -9,6 +9,9 @@ const router = express.Router();
 router.get('/', verifyToken,authorizeRoles(['admin','student']), courseController.getAll);
 router.get('/:id',verifyToken,authorizeRoles(['admin','student']),courseController.getById);
 router.get('/student/:id',verifyToken,authorizeRole('student'),courseController.getCourseByStudentId);
+router.get('/view/student-by-course',verifyToken,authorizeRole('admin'),courseController.getCourseStudentCount);
+router.get('/view/course-by-admin',verifyToken,authorizeRole('admin'),courseController.getCountCoursesByAdmin)
+router.get('/view/modules-by-course',verifyToken,authorizeRole('admin'),courseController.getCourseModuleCount);
 
 // post
 router.post('/',verifyToken,authorizeRole('admin'),courseController.create);

@@ -73,10 +73,10 @@ export default (sequelize) => {
   });
 
   Course.associate = (models) => {
-      Course.belongsToMany(models.Module, { through : 'Course_module', foreignKey: 'course_id' }); 
-      Course.belongsToMany(models.Student, { through: 'Student_courses', foreignKey: 'course_id' });
+      Course.belongsToMany(models.Module, { through : 'Course_module', foreignKey: 'course_id', as: 'Modules' }); 
+      Course.belongsToMany(models.Student, { through: 'Student_courses', foreignKey: 'course_id', as: 'Students' });
       Course.hasMany(models.Certificate, { foreignKey: "course_id" })
-      Course.belongsTo(models.Admin, { foreignKey: "admin_id"});
+      Course.belongsTo(models.Admin, { foreignKey: "admin_id", as:"Author"});
   }
 
   return Course;

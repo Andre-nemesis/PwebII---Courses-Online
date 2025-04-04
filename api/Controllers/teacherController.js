@@ -6,8 +6,8 @@ const teacherController = {
     try {
       const teachers = await db.Teachers.findAll({
         include: [
-          { model: db.Users, attributes: ['id', 'name', 'email'] },
-          { model: db.Module, attributes: ['id', 'name'] }
+          { model: db.Users, as: 'User' },
+          { model: db.Module, as: 'Modules' }
         ]
       });
       res.json(teachers);
