@@ -15,9 +15,10 @@ import {
   Menu as MenuIcon
 } from '@mui/icons-material';
 import { useMediaQuery } from '@mui/material';
+import { logout } from '../service/auth';
 
-const Menu = ({ userRole, roleAdmin, setAuthenticated }) => {
-  console.log('Props recebidas no Menu:', { userRole, roleAdmin, setAuthenticated });
+const Menu = ({ userRole, roleAdmin }) => {
+  const [isAuthenticated,setAuthenticated] = useState(null);
   const location = useLocation();
   const [user, setUser] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -39,10 +40,12 @@ const Menu = ({ userRole, roleAdmin, setAuthenticated }) => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    setAuthenticated(false);
-    navigate('/login');
-    console.log('Navegação para /login chamada');
+    let result = logout(setAuthenticated);
+    if(result) {
+      window.location.reload(true);
+      console.log('Navegação para /login chamada');
+    }
+    
   };
 
   const selectedOption = (path) => ({
@@ -261,6 +264,19 @@ const Menu = ({ userRole, roleAdmin, setAuthenticated }) => {
             </ListItemIcon>
             <ListItemText primary="Módulos" />
           </ListItemButton>
+          <ListItemButton component={Link} to="/teacher/settings"
+            sx={{
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#05134E"
+              },
+              ...selectedOption('/teacher/settings')
+            }}>
+            <ListItemIcon sx={{ color: "white" }}>
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Configurações" />
+          </ListItemButton>
         </>
       )}
 
@@ -320,6 +336,19 @@ const Menu = ({ userRole, roleAdmin, setAuthenticated }) => {
               <CertificatesIcon />
             </ListItemIcon>
             <ListItemText primary="Certificados" />
+          </ListItemButton>
+          <ListItemButton component={Link} to="/student/settings"
+            sx={{
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#05134E"
+              },
+              ...selectedOption('/student/settings')
+            }}>
+            <ListItemIcon sx={{ color: "white" }}>
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Configurações" />
           </ListItemButton>
         </>
       )}

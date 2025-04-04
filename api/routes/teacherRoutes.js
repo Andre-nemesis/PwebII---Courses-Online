@@ -1,11 +1,11 @@
 import express from 'express';
 import teacherController from '../Controllers/teacherController.js';
-import { authorizeRole, verifyToken } from '../middleware/authMiddleware.js';
+import { authorizeRole, authorizeRoles, verifyToken } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 //get
 router.get('/',verifyToken,authorizeRole('admin'),teacherController.getAll);
-router.get('/:id',verifyToken,authorizeRole('admin'),teacherController.getById);
+router.get('/:id',verifyToken,authorizeRoles(['admin','teacher']),teacherController.getById);
 router.get('/search/:term', verifyToken, authorizeRole('admin'), teacherController.searchByTerm);
 
 //post

@@ -5,9 +5,9 @@ const studentController = {
     try {
       const students = await db.Student.findAll({
         include: [
-          { model: User, attributes: ['id', 'name', 'email'] },
-          { model: Course, through: Student_course, attributes: ['id', 'name'] },
-          { model: Certificate, attributes: ['id', 'certificate_code', 'status'] }
+          { model: db.Users, attributes: ['id', 'name', 'email'] },
+          { model: db.Course, through: Student_course, attributes: ['id', 'name'] },
+          { model: db.Certificate, attributes: ['id', 'certificate_code', 'status'] }
         ]
       });
       res.json(students);
@@ -21,7 +21,7 @@ const studentController = {
       const { id } = req.params;
       const student = await db.Student.findByPk(id, {
         include: [
-          { model: User, as:'User'},
+          { model: db.Users, as:'User'},
         ]
       });
 
@@ -42,7 +42,7 @@ const studentController = {
             {city: {[db.Sequelize.Op.like]: `%${term}%` }},
             {user_id: {
               [db.Sequelize.Op.in]: db.Sequelize.literal(
-                `(SELECT id FROM users WHERE name LIKE '%${term}%')`
+                `(SELECT id FROM db.users WHERE name LIKE '%${term}%')`
               )
             }}
           ]

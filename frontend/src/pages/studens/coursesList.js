@@ -20,8 +20,6 @@ const CoursesList = () => {
       try {
         const decoded = jwtDecode(token);
 
-        console.log('Token decodificado:', decoded);
-
         setRole(decoded.role);
         setRoleAdmin(decoded.role_adm || null);
 

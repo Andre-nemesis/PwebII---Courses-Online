@@ -4,7 +4,7 @@ import api from '../../service/api.js';
 import { jwtDecode } from 'jwt-decode';
 import Menu from '../../components/Menu.js';
 
-const ModulesTeacherList = () => {
+const ModulesTeacherList = ({userRole,admRole}) => {
     const [modules, setModules] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -25,8 +25,7 @@ const ModulesTeacherList = () => {
         const fetchModules = async () => {
             try {
                 const userId = getUserIdFromToken();
-                console.log(`id: ${userId}`);
-                const response = await api.get('/teachers/module/view/teacher/'+userId);
+                const response = await api.get('/modules/');
                 setModules(response.data);
             } catch (err) {
                 setError('Erro ao buscar os modules do professor!'+err);
@@ -39,7 +38,12 @@ const ModulesTeacherList = () => {
 
     return (
         <Box sx={{ display: "flex" }}>
-            <Menu userRole="teacher"/>
+            {admRole ? (
+                <Menu userRole={userRole} roleAdmin={admRole} />
+            ):(
+                <Menu userRole={userRole} />
+            )}
+            
 
             <Container component='main' maxWidth='md'>
             <Paper elevation={3} sx={{ mt: 2, p: 3 }}>

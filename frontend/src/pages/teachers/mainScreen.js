@@ -6,22 +6,7 @@ import { Box, Typography, Card, CardContent, Avatar, IconButton } from "@mui/mat
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-const HomePageTeacher = ({ setAuthenticade }) => {
-
-  const [userRole, setUserRole] = useState(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        setUserRole(decoded.role);
-      } catch (error) {
-        console.error('Erro ao decodificar token:', error);
-        localStorage.removeItem('token');
-      }
-    }
-  }, []);
+const HomePageTeacher = ({userRole }) => {
 
   const modules = [
     { title: "Álgebra Linear", duration: "10h" },
@@ -37,7 +22,7 @@ const HomePageTeacher = ({ setAuthenticade }) => {
 
   return (
     <Box sx={{ padding: 3, backgroundColor: "#0f172a", minHeight: "100vh", color: "white" }}>
-        <Menu setAuthenticade={setAuthenticade} userRole={userRole} />
+        <Menu userRole={userRole} />
         <Typography variant="h5" fontWeight="bold">Página Inicial</Typography>
 
         {/* Módulos Criados */}

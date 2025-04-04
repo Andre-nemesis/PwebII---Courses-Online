@@ -6,7 +6,7 @@ const teacherController = {
     try {
       const teachers = await db.Teachers.findAll({
         include: [
-          { model: db.User, attributes: ['id', 'name', 'email'] },
+          { model: db.Users, attributes: ['id', 'name', 'email'] },
           { model: db.Module, attributes: ['id', 'name'] }
         ]
       });
@@ -21,7 +21,7 @@ const teacherController = {
       const { id } = req.params;
       const teacher = await db.Teachers.findByPk(id, {
         include: [
-          { model: db.User, as:'User'},
+          { model: db.Users, as:'User'},
         ]
       });
 

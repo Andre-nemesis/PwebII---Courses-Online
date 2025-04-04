@@ -19,7 +19,8 @@ import Menu from "../../components/Menu.js";
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from "react-router-dom";
 
-const ModulesList = () => {
+const ModulesList = ({userRole, adminRole}) => {
+  console.log(userRole,adminRole);
   const [modules, setModules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -34,8 +35,6 @@ const ModulesList = () => {
     if (token) {
       try {
         const decoded = jwtDecode(token);
-
-        console.log('Token decodificado:', decoded);
 
         setRole(decoded.role);
         setRoleAdmin(decoded.role_adm || null);
@@ -78,7 +77,11 @@ const ModulesList = () => {
 
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", backgroundColor: "#1E2951" }}>
-      <Menu userRole={role} roleAdmin={roleAdmin} setAuthenticated={setAuthenticated} />
+      {adminRole ? (
+        <Menu userRole={userRole} roleAdmin={roleAdmin} />
+      ) : (
+        <Menu userRole={userRole} />
+      )}
 
       <Container sx={{ flexGrow: 1, p: 3 }}>
         <Typography variant="h4" sx={{ color: "white", mb: 3 }}>

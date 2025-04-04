@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { login } from '../service/auth';
+import { login,isTokenExpired } from '../service/auth';
 import { TextField, Container, Button, Typography, Paper, Box, CircularProgress, IconButton, InputAdornment } from '@mui/material';
 import { Email, Lock, Visibility, VisibilityOff } from '@mui/icons-material'; 
 import { useNavigate } from 'react-router-dom';
@@ -35,6 +35,9 @@ const Login = ({ onLogin }) => {
   const passwordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  if(isTokenExpired){
+    localStorage.removeItem('token');
+  }
 
   const navigate = useNavigate();
 
