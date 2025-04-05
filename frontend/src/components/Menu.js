@@ -264,7 +264,7 @@ const Menu = ({ userRole, roleAdmin }) => {
             </ListItemIcon>
             <ListItemText primary="Módulos" />
           </ListItemButton>
-          <ListItemButton component={Link} to="/teacher/module/view"
+          <ListItemButton component={Link} to="/teacher/course/view"
             sx={{
               color: "white",
               "&:hover": {
