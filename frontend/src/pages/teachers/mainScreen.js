@@ -1,16 +1,15 @@
 import api from "../../service/api";
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
+import { useState, useEffect } from "react";
 import Menu from "../../components/Menu";
-import { Box, Typography, Card, CardContent, Avatar, IconButton } from "@mui/material";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { Box, Container, Typography, IconButton, useTheme, useMediaQuery } from "@mui/material";
+import ErrorMessageModal from "../../components/ErrorMessageModal";
+import CardStatiticsAdmin from "../../components/cardStatiticsAdmin";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const HomePageTeacher = () => {
 
-
-  const [coursesModules, setCoursesModules] = useState(null);
+    const [coursesModules, setCoursesModules] = useState(null);
     const [coursesStudents, setCoursesStudents] = useState(null);
     const [modulesTeachers, setModulesTeachers] = useState(null);
     const [adminCourse, setAdminCourse] = useState(null);
