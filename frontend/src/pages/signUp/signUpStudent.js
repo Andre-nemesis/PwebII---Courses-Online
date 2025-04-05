@@ -134,7 +134,7 @@ export const SignUpStudent = () => {
 				<MaskedTextField
 					id="cpf"
 					value={cpf}
-					onChange={setCpf}
+					onChange={(e) => setCpf(e.target.value)}
 					mask="999.999.999-99"
 					label="CPF"
 					sx={{
@@ -176,7 +176,7 @@ export const SignUpStudent = () => {
 				<MaskedTextField
 					id="phone_number"
 					value={phone_number}
-					onChange={setPhoneNumber}
+					onChange={(e) => setPhoneNumber(e.target.value)}
 					mask="(99) 99999-9999"
 					label="Número de Telefone"
 					icon={<PhoneIcon sx={{ color: '#C8D0DA', mr: 1 }} />}

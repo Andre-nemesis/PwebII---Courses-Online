@@ -5,7 +5,6 @@ import { Hello } from '../components/HelloReact';
 import MainScreen from '../components/mainScreen.js';
 import Login from '../components/login.js';
 import { SignUpStudent } from '../pages/signUp/signUpStudent.js';
-import SignUpTeacher from '../pages/signUp/SignUpTeacher.js';
 import CoursesList from '../pages/students/coursesList.js';
 import SubscribedCourses from '../pages/students/subcribetCourses.js';
 import TeachersList from '../pages/Admins/teachersList.js';
@@ -39,7 +38,6 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
         {/* Rotas Públicas */}
         <Route path="/signUp" element={<SignUpAdmin />} />
         <Route path="/signUp-student" element={<SignUpStudent />} />
-        <Route path="/signUp-teacher" element={<SignUpTeacher />} />
         <Route path="/login" element={!isAuthenticated ? <Login onLogin={handleLogin} /> : <Navigate to={`/${getBasePath()}/mainScreen`} />} />
         <Route path="/Hello" element={<Hello />} />
 

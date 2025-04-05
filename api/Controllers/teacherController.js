@@ -82,7 +82,7 @@ const teacherController = {
   async update(req, res) {
     try {
       const { id } = req.params;
-      const { academic_formation, tecnic_especialization, user_data } = req.body;
+      const { name, email, phone_number, cpf, academic_formation, tecnic_especialization } = req.body;
 
       const teacher = await db.Teachers.findByPk(id);
       if (!teacher) return res.status(404).json({ error: 'Professor não encontrado' });
@@ -91,18 +91,16 @@ const teacherController = {
       await teacher.update({ academic_formation, tecnic_especialization });
 
       // Atualiza users
-      if (user_data) {
-        await db.Users.update(
-          {
-            name: user_data.name,
-            email: user_data.email,
-            phone_number: user_data.phone_number,
-            cpf: user_data.cpf,
-            type: 'teacher'
-          },
-          { where: { id: teacher.user_id } }
-        );
-      }
+      await db.Users.update(
+        {
+          name,
+          email,
+          phone_number,
+          cpf,
+          type: 'teacher'
+        },
+        { where: { id: teacher.user_id } }
+      );
 
       const updatedTeacher = await db.Teachers.findByPk(id, { 
         include: { model: db.Users, as: 'User' } 

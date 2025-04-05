@@ -4,8 +4,7 @@ import { Container, Paper, Typography, Table, TableBody, TableCell, TableContain
 import api from '../../service/api';
 import Menu from '../../components/Menu';
 import SearchBar from '../../components/SearchBar.js';
-import { Delete, Edit, Add } from "@mui/icons-material";
-import EditStudentModal from '../../components/EditStudentModal';
+import { Delete, } from "@mui/icons-material";
 import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
 
 const StudentsList = () => {
@@ -18,9 +17,6 @@ const StudentsList = () => {
 	const [isSearch, setSearch] = useState(false);
 	const [searchValue, setSearchValue] = useState('');
 	const [studentToDelete, setStudentToDelete] = useState(null);
-	const [openEditModal, setOpenEditModal] = useState(false);
-	const [openStoreModal, setOpenStoreModal] = useState(false);
-	const [studentToEdit, setStudentToEdit] = useState(null);
 
 	useEffect(() => {
 		const fetchStudents = async () => {
@@ -99,32 +95,6 @@ const StudentsList = () => {
 		}
 	};
 
-
-	const handleOpenEditModal = (student) => {
-		setStudentToEdit(student);
-		setOpenEditModal(true);
-	}
-
-
-	const handleCloseEditModal = () => {
-		setOpenEditModal(false);
-		setStudentToEdit(null);
-	};
-
-	const handleCloseStoreModal = () => {
-		setOpenStoreModal(false);
-	}
-
-	const handleUpdateStudent = async (updatedStudent) => {
-		try {
-			const response = await api.get('/admin/viewStudent');
-			setStudents(response.data);
-			setFilteredUsers(response.data);
-		} catch (err) {
-			setError('Erro ao atualizar lista de estudantes' + err);
-		}
-	};
-
 	return (
 		<Box sx={{ display: 'flex', flexDirection: 'column' }}>
 			<Menu userRole="admin" roleAdmin={"admin"} />
@@ -154,26 +124,6 @@ const StudentsList = () => {
 						},
 					}}
 				/>
-
-				<Button
-					variant="contained"
-					sx={{
-						bgcolor: '#60BFBF',
-						'&:hover': { bgcolor: '#43DBF9' },
-						width: { xs: '100%', sm: 'auto' },
-						px: 2,
-						height: '40px',
-						fontSize: '0.875rem',
-						textTransform: 'none',
-						display: 'flex',
-						alignItems: 'center',
-						color: '#040D33',
-					}}
-					endIcon={<Add sx={{ color: '#040D33' }} />}
-					onClick={() => setOpenStoreModal(true)}
-				>
-					Cadastrar Aluno
-				</Button>
 			</Container>
 			<Container component="main" sx={{
 				width: {
@@ -219,9 +169,6 @@ const StudentsList = () => {
 												<TableCell align="right">{student.User && student.User.cpf ? student.User.cpf : 'CPF Indisponível'}</TableCell>
 												<TableCell align="right">{student.city ? student.city : 'Cidade Indisponível'}</TableCell>
 												<TableCell align="right">
-													<IconButton color="primary" onClick={() => handleOpenEditModal(student)}>
-														<Edit />
-													</IconButton>
 													<IconButton color="error" onClick={() => handleOpenDialog(student)}>
 														<Delete />
 													</IconButton>
@@ -255,9 +202,6 @@ const StudentsList = () => {
 												<TableCell align="right">{student.User && student.User.cpf ? student.User.cpf : 'CPF Indisponível'}</TableCell>
 												<TableCell align="right">{student.city ? student.city : 'Cidade Indisponível'}</TableCell>
 												<TableCell align="right">
-													<IconButton color="primary" onClick={() => handleOpenEditModal(student)}>
-														<Edit />
-													</IconButton>
 													<IconButton color="error" onClick={() => handleOpenDialog(student)}>
 														<Delete />
 													</IconButton>
@@ -272,6 +216,7 @@ const StudentsList = () => {
 					)}
 				</Paper>
 			</Container>
+
 			{/* Dialog de confirmação de exclusão */}
 			<DeleteConfirmationDialog
 				open={openDialog}
@@ -280,23 +225,6 @@ const StudentsList = () => {
 				message={'Deseja excluir o usuário'}
 				onConfirm={handleDelete}
 				studentName={studentToDelete ? studentToDelete.User.name : ''}
-			/>
-
-			{/* Modal de edição */}
-			{studentToEdit && (
-				<EditStudentModal
-					open={openEditModal}
-					onClose={handleCloseEditModal}
-					studentToEdit={studentToEdit}
-					onUpdate={handleUpdateStudent}
-				/>
-			)}
-
-			<EditStudentModal
-				open={openStoreModal}
-				onClose={handleCloseStoreModal}
-				studentToEdit={null}
-				onUpdate={handleUpdateStudent}
 			/>
 		</Box>
 	);

@@ -53,15 +53,12 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 		try {
 			let response;
 			const payload = {
+				name: teacher.name,
+				email: teacher.email,
+				phone_number: teacher.phone_number,
+				cpf: teacher.cpf,
 				academic_formation: teacher.academic_formation,
-				tecnic_especialization: teacher.tecnic_especialization,
-				user_data: {
-					name: teacher.name,
-					email: teacher.email,
-					phone_number: teacher.phone_number,
-					cpf: teacher.cpf,
-					type: 'teacher'
-				}
+				tecnic_especialization: teacher.tecnic_especialization
 			};
 
 			if (teacherToEdit) {
@@ -74,7 +71,7 @@ const EditTeacherModal = ({ open, onClose, teacherToEdit, onUpdate }) => {
 			setSuccessOpen(true);
 
 		} catch (err) {
-			setError(err.response?.data?.message || 'Erro ao salvar professor: ' + err.message);
+			setError(err.response?.data?.message || 'Erro ao salvar professor: '+err);
 		} finally {
 			setLoading(false);
 		}

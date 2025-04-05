@@ -29,7 +29,6 @@ const AdminMainScreen = () => {
   // Ajuste dinâmico do número de cartões e largura
   const cardsPerPage = isXs ? 1 : isSm ? 2 : 3;
   const cardWidth = isXs ? "90%" : isSm ? "45%" : "30%"; // Ajustado para 30% em telas grandes para caber 3 cartões
-  const menuWidth = isXs ? "100%" : "240px";
 
   const handleCloseError = () => setOpenError(false);
 
@@ -79,8 +78,8 @@ const AdminMainScreen = () => {
     const cardWidthPx = isXs
       ? (90 * window.innerWidth) / 100
       : isSm
-      ? (45 * window.innerWidth) / 100
-      : (30 * (window.innerWidth - (isXs ? 0 : 240))) / 100; // Ajusta para o espaço disponível após o menu
+      ? window.innerWidth * 0.45
+      : (window.innerWidth - 240) * 0.3;
     const gapPx = 16;
 
     return (
@@ -135,16 +134,7 @@ const AdminMainScreen = () => {
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", overflowX: "hidden" }}>
       {/* Menu Lateral */}
-      <Box
-        sx={{
-          width: menuWidth,
-          position: isXs ? "relative" : "fixed",
-          height: isXs ? "auto" : "100vh",
-          backgroundColor: "#0A0F29",
-          zIndex: 1200,
-          overflowX: "hidden",
-        }}
-      >
+      <Box>
         <Menu userRole={"admin"} roleAdmin={"admin"} />
       </Box>
 
@@ -152,15 +142,13 @@ const AdminMainScreen = () => {
       <Box
         sx={{
           flex: 1,
-          marginLeft: isXs ? 0 : menuWidth,
-          backgroundColor: "#0A1F44",
           minHeight: "100vh",
           padding: 2,
-          overflowX: "hidden",
+          overflowX: "hidden"
         }}
       >
         <Container sx={{ maxWidth: "100%", px: 0 }}>
-          <Typography component="h1" variant="h5" sx={{ color: "#FFFFFF", mb: 2, mt: 5, px: 2 }}>
+          <Typography component="h1" variant="h5" sx={{ color: "#FFFFFF", mb: 2, mt: { xs: 7, md: 4 }, px: { xs: 1, sm: 2, md: 4 }, px: 2 }}>
             Página Inicial
           </Typography>
         </Container>

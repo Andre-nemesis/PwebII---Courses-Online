@@ -104,7 +104,7 @@ const AdminSettings = ({ userRole, roleAdmin, adminData, setAdminData, onSave })
               InputProps={{ startAdornment: <Box sx={{ mr: 1 }}><Lock /></Box> }}
               sx={{ bgcolor: "white", borderRadius: 1 }}
             />
-            <Button variant="contained" color="success" fullWidth sx={{ mt: 3 }} type="submit">
+            <Button variant="contained" color="info" fullWidth sx={{ mt: 3 }} type="submit">
               Salvar
             </Button>
           </form>
@@ -429,13 +429,23 @@ const ProfileSettings = ({ userRole, roleAdmin }) => {
   };
 
   return (
-    <Box display="flex" height="100vh" bgcolor="#1d2951" color="white">
+    <Box sx={{ width: { md: '80%', xs: '100%' }, px: { xs: 0, sm: 1, md: 2 }, alignItems: 'center' }}>
       {roleAdmin ? (
         <Menu userRole={userRole} roleAdmin={roleAdmin} />
       ) : (
         <Menu userRole={userRole} />
       )}
-      <Container sx={{ flex: 1, py: 5 }}>
+
+      <Container
+        disableGutters
+        maxWidth={false}
+        sx={{
+          flex: 1,
+          py: 5,
+          px: { xs: 2, sm: 3 },
+          ml: { xs: 0, md: '240px' }, 
+        }}
+      >
         {renderSettingsContent()}
       </Container>
     </Box>

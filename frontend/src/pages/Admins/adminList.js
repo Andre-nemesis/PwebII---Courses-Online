@@ -252,7 +252,7 @@ const AdminList = () => {
                                                 <TableCell align='right'> {admin.User && admin.User.cpf ? admin.User.cpf : 'CPF Indisponível'}</TableCell>
                                                 <TableCell align='right'>{admin.role}</TableCell>
                                                 <TableCell align='right'>
-                                                    <IconButton color='primary' onClick={() => handleOpenEditModal(admin)}>
+                                                    <IconButton onClick={() => handleOpenEditModal(admin)} sx={{ color: "#60BFBF"}}>
                                                         <Edit />
                                                     </IconButton>
                                                     <IconButton color='error' onClick={() => handleOpenDialog(admin)}>
