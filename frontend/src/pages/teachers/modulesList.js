@@ -19,6 +19,7 @@ import Menu from "../../components/Menu.js";
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../../components/SearchBar.js";
+import CreateModuleModal from "../../components/CreateModuleModal.js";
 
 const ModulesList = ({ userRole, adminRole }) => {
   const [modules, setModules] = useState([]);
@@ -30,6 +31,11 @@ const ModulesList = ({ userRole, adminRole }) => {
   const [roleAdmin, setRoleAdmin] = useState(null);
   const [authenticated, setAuthenticated] = useState(true);
   const navigate = useNavigate();
+
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpen = () => setOpenModal(true);
+  const handleClose = () => setOpenModal(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -271,10 +277,12 @@ const ModulesList = ({ userRole, adminRole }) => {
                   minWidth: '200px'
                 }}
                 endIcon={<Add sx={{ color: '#040D33' }} />}
-                onClick={() => navigate('/modules/new')}
+                // onClick={() => navigate('../../components/CreateModuleModal.js')}
+                onClick={handleOpen}
               >
                 Cadastrar Módulo
               </Button>
+              <CreateModuleModal open={openModal} onClose={handleClose} />
             </Box>
 
             {loading ? (

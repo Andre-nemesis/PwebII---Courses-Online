@@ -135,7 +135,7 @@ const mainScreen = () => {
     <Box sx={{ display: "flex", minHeight: "100vh", overflowX: "hidden" }}>
       {/* Menu Lateral */}
       <Box>
-        <Menu userRole={"admin"} roleAdmin={"admin"} />
+        <Menu userRole={"teacher"} roleAdmin={"teacher"} />
       </Box>
 
       {/* Conteúdo Principal */}
