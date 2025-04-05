@@ -1,3 +1,4 @@
+import api from "../../service/api";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
@@ -8,17 +9,29 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const HomePageTeacher = ({userRole }) => {
 
-  const modules = [
-    { title: "Álgebra Linear", duration: "10h" },
-    { title: "SQL Básico", duration: "10h" },
-    { title: "Redação", duration: "10h" }
-  ];
 
-  const professors = [
-    { name: "Alice Ocean", role: "Professor(a) de Front-end" },
-    { name: "Alice Ocean", role: "Professor(a) de Front-end" },
-    { name: "Alice Ocean", role: "Professor(a) de Front-end" }
-  ];
+  const [modules, setModules] = useState(null);
+  const [teacher, setTeacher] = useState(null);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+        let response;
+        try {
+            response = await api.get('/modules/view/modules-by-teacher');
+            console.log("Módulos criados", response.data);
+            setModules(response.data);
+
+            response = await api.get('/teachers/view/teacher-by-id');
+            console.log("Professores cadastrados", response.data);
+            setTeacher(response.data);
+        } catch (error) {
+            console.error("Erro ao buscar dados:", error);
+        }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", color: "white" }}>
