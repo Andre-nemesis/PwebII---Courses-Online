@@ -7,84 +7,207 @@ import { Box, Typography, Card, CardContent, Avatar, IconButton } from "@mui/mat
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-const HomePageTeacher = ({userRole }) => {
+const HomePageTeacher = () => {
 
 
-  const [modules, setModules] = useState(null);
-  const [teacher, setTeacher] = useState(null);
+  const [coursesModules, setCoursesModules] = useState(null);
+    const [coursesStudents, setCoursesStudents] = useState(null);
+    const [modulesTeachers, setModulesTeachers] = useState(null);
+    const [adminCourse, setAdminCourse] = useState(null);
+    const [openError, setOpenError] = useState(false);
+    const [errorInfo, setErrorInfo] = useState({ type: "error", message: "" });
+  
+    const [studentsIndex, setStudentsIndex] = useState(0);
+    const [adminIndex, setAdminIndex] = useState(0);
+    const [modulesIndex, setModulesIndex] = useState(0);
+    const [teachersIndex, setTeachersIndex] = useState(0);
+  
+    const theme = useTheme();
+    const isXs = useMediaQuery(theme.breakpoints.down("sm")); // Até 600px
+    const isSm = useMediaQuery(theme.breakpoints.between("sm", "md")); // 600px a 960px
+    const isMd = useMediaQuery(theme.breakpoints.between("md", "lg")); // 960px a 1280px
+    const isLg = useMediaQuery(theme.breakpoints.up("lg")); // Acima de 1280px
+  
+    // Ajuste dinâmico do número de cartões e largura
+    const cardsPerPage = isXs ? 1 : isSm ? 2 : 3;
+    const cardWidth = isXs ? "90%" : isSm ? "45%" : "30%"; // Ajustado para 30% em telas grandes para caber 3 cartões
+  
+    const handleCloseError = () => setOpenError(false);
 
 
   useEffect(() => {
-    const fetchData = async () => {
+      const fetchData = async () => {
         let response;
         try {
-            response = await api.get('/modules/view/modules-by-teacher');
-            console.log("Módulos criados", response.data);
-            setModules(response.data);
-
-            response = await api.get('/teachers/view/teacher-by-id');
-            console.log("Professores cadastrados", response.data);
-            setTeacher(response.data);
+          response = await api.get('/courses/view/student-by-course');
+          console.log("Estudantes por Curso:", response.data);
+          setCoursesStudents(response.data);
+  
+          response = await api.get('/courses/view/course-by-admin');
+          console.log("Cursos por Admin:", response.data);
+          setAdminCourse(response.data);
+  
+          response = await api.get('/courses/view/modules-by-course');
+          console.log("Módulos por Curso:", response.data);
+          setCoursesModules(response.data);
+  
+          response = await api.get('/modules/view/modules-by-teacher');
+          console.log("Módulos por Professor:", response.data);
+          setModulesTeachers(response.data);
         } catch (error) {
-            console.error("Erro ao buscar dados:", error);
+          setOpenError(true);
+          setErrorInfo({ type: "error", message: "Falha ao carregar dados." });
+          console.error(error);
         }
+      };
+      fetchData();
+    }, []);
+
+  const handlePrev = (currentIndex, setIndex, totalItems) => {
+    if (currentIndex > 0) {
+      setIndex(currentIndex - cardsPerPage);
+    }
+  };
+
+  const handleNext = (currentIndex, setIndex, totalItems) => {
+    if (currentIndex + cardsPerPage < totalItems) {
+      setIndex(currentIndex + cardsPerPage);
+    }
+  };
+
+  const CarouselSection = ({ title, data, index, setIndex, dataKey, titleField, valueField, description }) => {
+      const totalItems = data?.[dataKey]?.length || 0;
+      // Calcula a largura do cartão em pixels para o translateX
+      const cardWidthPx = isXs
+        ? (90 * window.innerWidth) / 100
+        : isSm
+        ? window.innerWidth * 0.45
+        : (window.innerWidth - 240) * 0.3;
+      const gapPx = 16;
+  
+      return (
+        <Container sx={{ py: 2, px: 0, maxWidth: "100%", overflow: "hidden" }}>
+          <Typography variant="h6" sx={{ color: "#FFFFFF", mb: 2, px: 2 }}>
+            {title}
+          </Typography>
+          {totalItems > 0 ? (
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, px: 2 }}>
+              <IconButton
+                onClick={() => handlePrev(index, setIndex, totalItems)}
+                disabled={index === 0}
+                sx={{ color: "#FFFFFF", "&:disabled": { color: "gray" } }}
+              >
+                <ArrowBackIosIcon />
+              </IconButton>
+              <Box sx={{ overflow: "hidden", flex: 1 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 2,
+                    transform: `translateX(-${index * (cardWidthPx + gapPx)}px)`,
+                    transition: "transform 0.3s ease-in-out",
+                  }}
+                >
+                  {data?.[dataKey]?.map((item) => (
+                    <CardStatiticsAdmin
+                      key={item[titleField]}
+                      title={item[titleField]}
+                      description={description}
+                      value={item[valueField]}
+                      sx={{ width: cardWidth, minWidth: cardWidth, maxWidth: cardWidth }}
+                    />
+                  ))}
+                </Box>
+              </Box>
+              <IconButton
+                onClick={() => handleNext(index, setIndex, totalItems)}
+                disabled={index + cardsPerPage >= totalItems}
+                sx={{ color: "#FFFFFF", "&:disabled": { color: "gray" } }}
+              >
+                <ArrowForwardIosIcon />
+              </IconButton>
+            </Box>
+          ) : (
+            <Typography sx={{ color: "#C8D0DA", px: 2 }}>Nenhum dado disponível.</Typography>
+          )}
+        </Container>
+      );
     };
-
-    fetchData();
-  }, []);
-
-  return (
-    <Box sx={{ display: "flex", minHeight: "100vh", color: "white" }}>
-        {/* Menu lateral */}
-        <Box sx={{ width: 250, flexShrink: 0 }}>
-            <Menu userRole={userRole} />
-        </Box>
-
-        {/* Conteúdo principal */}
-        <Box sx={{ flexGrow: 1, padding: 3 }}>
-            <Typography variant="h5" fontWeight="bold">Página Inicial</Typography>
-
-            {/* Módulos Criados */}
-            <Typography variant="h6" mt={3}>Últimos módulos criados</Typography>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2, mt: 2 }}>
-                <IconButton sx={{ color: "white" }}>
-                    <ArrowBackIosNewIcon />
-                </IconButton>
-                {modules.map((mod, index) => (
-                    <Card key={index} sx={{ backgroundColor: "#1e293b", color: "white", width: 200 }}>
-                        <CardContent>
-                            <Typography variant="h6">{mod.title}</Typography>
-                            <Typography variant="body2">{mod.duration}</Typography>
-                            <Typography variant="body2" sx={{ color: "#38bdf8", cursor: "pointer" }}>Ver módulo →</Typography>
-                        </CardContent>
-                    </Card>
-                ))}
-                <IconButton sx={{ color: "white" }}>
-                    <ArrowForwardIosIcon />
-                </IconButton>
+  
+    return (
+        <Box sx={{ display: "flex", minHeight: "100vh", overflowX: "hidden" }}>
+            {/* Menu Lateral */}
+            <Box>
+            <Menu userRole={"teacher"} roleAdmin={"teacher"} />
             </Box>
 
-            {/* Professores */}
-            <Typography variant="h6" mt={4}>Professores</Typography>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2, mt: 2 }}>
-                <IconButton sx={{ color: "white" }}>
-                    <ArrowBackIosNewIcon />
-                </IconButton>
-                {teacher.map((prof, index) => (
-                    <Card key={index} sx={{ backgroundColor: "#1e293b", color: "white", width: 200, display: "flex", alignItems: "center", padding: 1 }}>
-                        <Avatar sx={{ width: 40, height: 40, marginRight: 1 }} />
-                        <Box>
-                            <Typography variant="body1">{prof.name}</Typography>
-                            <Typography variant="body2">{prof.role}</Typography>
-                        </Box>
-                    </Card>
-                ))}
-                <IconButton sx={{ color: "white" }}>
-                    <ArrowForwardIosIcon />
-                </IconButton>
+            {/* Conteúdo Principal */}
+            <Box
+            sx={{
+                flex: 1,
+                minHeight: "100vh",
+                padding: 2,
+                overflowX: "hidden"
+            }}
+            >
+            <Container sx={{ maxWidth: "100%", px: 0 }}>
+                <Typography component="h1" variant="h5" sx={{ color: "#FFFFFF", mb: 2, mt: { xs: 7, md: 4 }, px: { xs: 1, sm: 2, md: 4 }, px: 2 }}>
+                Página Inicial
+                </Typography>
+            </Container>
+
+            <CarouselSection
+                title="Módulos cadastrados"
+                data={coursesStudents}
+                index={studentsIndex}
+                setIndex={setStudentsIndex}
+                dataKey="courses"
+                titleField="courseName"
+                valueField="studentCount"
+                description="Número de estudantes inscritos"
+            />
+
+            <CarouselSection
+                title="Professores cadastrados"
+                data={adminCourse}
+                index={adminIndex}
+                setIndex={setAdminIndex}
+                dataKey="countCourses"
+                titleField="userName"
+                valueField="courseCount"
+                description="Número de cursos criados"
+            />
+
+            <CarouselSection
+                title="Módulos por Curso"
+                data={coursesModules}
+                index={modulesIndex}
+                setIndex={setModulesIndex}
+                dataKey="courses"
+                titleField="courseName"
+                valueField="moduleCount"
+                description="Número de módulos associados"
+            />
+
+            <CarouselSection
+                title="Módulos por Professor"
+                data={modulesTeachers}
+                index={teachersIndex}
+                setIndex={setTeachersIndex}
+                dataKey="teachers"
+                titleField="userName"
+                valueField="moduleCount"
+                description="Número de módulos lecionados"
+            />
+
+            <ErrorMessageModal
+                open={openError}
+                onClose={handleCloseError}
+                type={errorInfo.type}
+                message={errorInfo.message}
+            />
             </Box>
         </Box>
-    </Box>
-  );
+    );
 }
 export default HomePageTeacher;
