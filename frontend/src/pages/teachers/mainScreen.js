@@ -70,7 +70,7 @@ const HomePageTeacher = ({userRole }) => {
                 <IconButton sx={{ color: "white" }}>
                     <ArrowBackIosNewIcon />
                 </IconButton>
-                {professors.map((prof, index) => (
+                {teacher.map((prof, index) => (
                     <Card key={index} sx={{ backgroundColor: "#1e293b", color: "white", width: 200, display: "flex", alignItems: "center", padding: 1 }}>
                         <Avatar sx={{ width: 40, height: 40, marginRight: 1 }} />
                         <Box>

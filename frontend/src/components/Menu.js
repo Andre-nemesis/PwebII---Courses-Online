@@ -251,7 +251,7 @@ const Menu = ({ userRole, roleAdmin }) => {
             </ListItemIcon>
             <ListItemText primary="Página Inicial" />
           </ListItemButton>
-          <ListItemButton component={Link} to="admin/module/view"
+          <ListItemButton component={Link} to="/teacher/module/view"
             sx={{
               color: "white",
               "&:hover": {
