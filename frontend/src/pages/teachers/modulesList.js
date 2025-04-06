@@ -20,6 +20,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../../components/SearchBar.js";
 import CreateModuleModal from "../../components/CreateModuleModal.js";
+import CardModule from "../../components/CardModule.js";
 
 const ModulesList = ({ userRole, adminRole }) => {
   const [modules, setModules] = useState([]);
@@ -109,7 +110,7 @@ const ModulesList = ({ userRole, adminRole }) => {
       setFilteredModules([]);
       setSearch(true);
     }
-  };
+  }; 
 
   return (
     <Box sx={{ 
@@ -211,7 +212,7 @@ const ModulesList = ({ userRole, adminRole }) => {
           <Menu userRole={role} />
 
           <Container sx={{ flexGrow: 1, p: 3, alignItems: "center" }}>
-            <Typography variant="h4" sx={{ color: "white", mb: 3 }}>
+            <Typography variant="h4" sx={{ color: "white", mb: 2 }}>
               Lista de Módulos
             </Typography>
 
@@ -254,57 +255,60 @@ const ModulesList = ({ userRole, adminRole }) => {
             ) : filteredModules.length === 0 ? (
               <Typography color="white">Nenhum módulo encontrado</Typography>
             ) : (
-              <Grid container spacing={3}>
-                {filteredModules.map((mod, index) => (
-                  <Grid item sx={{mb:4}} xs={12} sm={6} md={4} key={mod.id || index}>
-                    <Paper
-                      sx={{
-                        p: 2,
-                        backgroundColor: "#0F172A",
-                        color: "white",
-                        borderRadius: 2,
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <Typography variant="h6">{mod.name || "Nome Indisponível"}</Typography>
-                      <Typography variant="body2" sx={{ mt: 1 }}>
-                        {mod.qtd_hours ? `${mod.qtd_hours} h` : "Horas Indisponíveis"}
-                      </Typography>
 
-                      {mod.topics && mod.topics.length > 0 && (
-                        <List dense sx={{ mt: 1, flexGrow: 1 }}>
-                          {mod.topics.slice(0, 3).map((topic, idx) => (
-                            <ListItem key={idx} sx={{ py: 0 }}>
-                              <ListItemText primary={`• ${topic}`} />
-                            </ListItem>
-                          ))}
-                          {mod.topics.length > 3 && (
-                            <Typography variant="caption">+ {mod.topics.length - 3} tópicos...</Typography>
-                          )}
-                        </List>
-                      )}
+              <>
+                {/* Meus Módulos */}
+                <Typography variant="h5" sx={{ color: "white", mt: 4, mb: 2 }}>
+                  Meus Módulos
+                </Typography>
+                <Grid container spacing={3}>
+                  {filteredModules.map((mod, index) => (
+                    <Grid item sx={{mb:2}} xs={4} sm={2} md={4} key={mod.id || index}>
+                      {/* ...card do módulo... */}
 
-                      <Button
-                        sx={{
-                          mt: 2,
-                          color: "#00C2FF",
-                          textTransform: "none",
-                          fontWeight: "bold",
-                          alignSelf: "flex-start",
-                        }}
-                        endIcon={<ArrowForwardIos />}
-                        onClick={() => setOpenModal(true)}
+                      <CardModule 
+                        title={mod.name || "Nome Indisponível"} 
+                        description={
+                          mod.qtd_hours 
+                            ? `${mod.qtd_hours} h • ${mod.topics?.length || 0} tópicos` 
+                            : "Horas Indisponíveis"
+                        }
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
 
-                      >
-                        Ver módulo
-                      </Button>
-                        <CreateModuleModal open={openModal} onClose={() => setOpenModal(false)} />
-                    </Paper>
-                  </Grid>
-                ))}
-              </Grid>
+                  <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
+                    <IconButton sx={{ color: "white" }}>
+                      <ArrowBackIos />
+                    </IconButton>
+                    <IconButton sx={{ color: "white" }}>
+                      <ArrowForwardIos />
+                    </IconButton>
+                  </Box>
+
+                {/* Módulos Gerais */}
+                <Typography variant="h5" sx={{ color: "white", mt: 6, mb: 2 }}>
+                  Módulos Gerais
+                </Typography>
+                <Grid container spacing={3}>
+                  {filteredModules.map((mod, index) => (
+                    <Grid item sx={{ mb: 4 }} xs={12} sm={6} md={4} key={mod.id || index}>
+                      {/* ...card do módulo... */}
+
+                      <CardModule 
+                        title={mod.name || "Nome Indisponível"} 
+                        description={
+                          mod.qtd_hours 
+                            ? `${mod.qtd_hours} h • ${mod.topics?.length || 0} tópicos` 
+                            : "Horas Indisponíveis"
+                        }
+                      />
+                      
+                    </Grid>
+                  ))}
+                </Grid>
+              </>
             )}
 
             <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
