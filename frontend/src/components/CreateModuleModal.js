@@ -23,9 +23,9 @@ const style = {
   borderRadius: 2,
 };
 
-const CreateModuleModal = ({ open, handleClose }) => {
+const CreateModuleModal = ({ open, onClose }) => {
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={open} onClose={onClose}>
       <Box sx={style}>
         <Typography variant="h6" fontWeight="bold" textAlign="center" mb={2}>
           Módulo
@@ -58,10 +58,10 @@ const CreateModuleModal = ({ open, handleClose }) => {
           }}
         />
         <Box display="flex" justifyContent="space-between">
-          <Button variant="contained" sx={{ bgcolor: "#F44336" }} onClick={handleClose}>
+          <Button variant="contained" sx={{ bgcolor: "#F44336" }} onClick={onClose}>
             Cancelar
           </Button>
-          <Button variant="contained" sx={{ bgcolor: "#26C6DA" }}>
+          <Button variant="contained" sx={{ bgcolor: "#26C6DA" }} onClick={onClose}>
             Salvar
           </Button>
         </Box>

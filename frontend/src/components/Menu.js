@@ -264,6 +264,19 @@ const Menu = ({ userRole, roleAdmin }) => {
             </ListItemIcon>
             <ListItemText primary="Módulos" />
           </ListItemButton>
+          <ListItemButton component={Link} to="/teacher/course/view"
+            sx={{
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#05134E"
+              },
+              ...selectedOption('/teacher/module/view')
+            }}>
+            <ListItemIcon sx={{ color: "white" }}>
+              <CoursesIcon />
+            </ListItemIcon>
+            <ListItemText primary="Cursos" />
+          </ListItemButton>
           <ListItemButton component={Link} to="/teacher/settings"
             sx={{
               color: "white",
@@ -275,7 +288,7 @@ const Menu = ({ userRole, roleAdmin }) => {
             <ListItemIcon sx={{ color: "white" }}>
               <SettingsIcon />
             </ListItemIcon>
-            <ListItemText primary="Configurações" />
+            <ListItemText primary="Perfil" />
           </ListItemButton>
         </>
       )}

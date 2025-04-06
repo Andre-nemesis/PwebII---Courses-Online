@@ -9,6 +9,7 @@ import CoursesList from '../pages/students/coursesList.js';
 import SubscribedCourses from '../pages/students/subcribetCourses.js';
 import TeachersList from '../pages/Admins/teachersList.js';
 import StudentsList from '../pages/Admins/studentsList.js';
+import HomePage from '../pages/students/studentMainScreen.js';
 import AdminList from '../pages/Admins/adminList.js';
 import ModulesTeacherList from '../pages/teachers/modulesCreatedList.js';
 import ModulesList from '../pages/teachers/modulesList.js';
@@ -81,6 +82,7 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
               <>
                 <Route path="teacher/mainScreen" element={<MainScreen userRole={type} roleAdm={role} />} />
                 <Route path="teacher/module/view" element={<ModulesList userRole={type} />} />
+                <Route path="teacher/course/view" element={<CoursesList userRole={type} />} />
                 <Route path="teacher/settings" element={<ProfileSettings userRole={type} />} />
               </>
             )}
@@ -88,7 +90,7 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
             {/* Rotas para Student */}
             {type === 'student' && (
               <>
-                <Route path="student/mainScreen" element={<MainScreen userRole={type} />} />
+                <Route path="student/mainScreen" element={<HomePage userRole={type} />} />
                 <Route path="student/courses" element={<CoursesList />} />
                 <Route path="student/subscribed-courses" element={<SubscribedCourses />} />
                 <Route path="student/settings" element={<ProfileSettings userRole={type} />} />
