@@ -101,14 +101,7 @@ const ModulesList = ({ userRole, adminRole }) => {
       return;
     }
 
-    const modulesByTerm = await modulesByTerm(value);
-    if (modulesByTerm && modulesByTerm.length > 0) {
-      setFilteredModules(modulesByTerm);
-      setSearch(true);
-    } else {
-      setFilteredModules([]);
-      setSearch(true);
-    }
+    
   };
 
   return (

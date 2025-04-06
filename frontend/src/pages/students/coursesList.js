@@ -26,7 +26,6 @@ import { useNavigate } from 'react-router-dom';
 import SuccessMessageModal from '../../components/SuccessMessageModal';
 import ErrorMessageModal from '../../components/ErrorMessageModal';
 
-
 const CoursesList = () => {
   const [courses, setCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
@@ -40,6 +39,9 @@ const CoursesList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [modules, setModules] = useState([]);
   const [id, setId] = useState(null);
+  const [courseIndex, setCourseIndex] = useState(0);
+  const [filteredCourseIndex, setFilteredCourseIndex] = useState(0);
+  const cardsPerPage = 4;
   const [newCourse, setNewCourse] = useState({
     id: '',
     name: '',
@@ -94,8 +96,14 @@ const CoursesList = () => {
       }
     };
 
-    fetchCourses();
-    fetchModules();
+    if(role === "student"){
+      fetchCourses();
+    }else{
+      fetchCourses();
+      fetchModules();
+    }
+    
+    
   }, []);
 
   const fetchCoursesByTermo = async (termo) => {
@@ -115,6 +123,7 @@ const CoursesList = () => {
   const handleSearchChange = async (e) => {
     const value = e.target.value.trim();
     setSearchTerm(value);
+    setFilteredCourseIndex(0); 
 
     if (!value) {
       setFilteredCourses(courses);
@@ -132,6 +141,30 @@ const CoursesList = () => {
     }
   };
 
+  const handleNextCourses = () => {
+    if (isSearch) {
+      if (filteredCourseIndex + cardsPerPage < filteredCourses.length) {
+        setFilteredCourseIndex(filteredCourseIndex + 1);
+      }
+    } else {
+      if (courseIndex + cardsPerPage < courses.length) {
+        setCourseIndex(courseIndex + 1);
+      }
+    }
+  };
+
+  const handlePrevCourses = () => {
+    if (isSearch) {
+      if (filteredCourseIndex > 0) {
+        setFilteredCourseIndex(filteredCourseIndex - 1);
+      }
+    } else {
+      if (courseIndex > 0) {
+        setCourseIndex(courseIndex - 1);
+      }
+    }
+  };
+
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
@@ -141,9 +174,7 @@ const CoursesList = () => {
   };
 
   const handleModuleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
+    const { target: { value } } = event;
     setNewCourse(prev => ({
       ...prev,
       module: typeof value === 'string' ? value.split(',') : value,
@@ -153,14 +184,15 @@ const CoursesList = () => {
   const handleSubmit = async () => {
     try {
       newCourse.id = id;
-      console.log(newCourse);
       await api.post('/courses/', newCourse);
       const response = await api.get('/courses/');
       setCourses(response.data);
       setFilteredCourses(response.data);
+      setCourseIndex(0);
+      setFilteredCourseIndex(0);
       handleCloseModal();
       setNewCourse({ name: '', qtd_hours: '', module: [] });
-      setMessageInfo({ type: "sucess", message: "Curso cadastrado com sucesso!" })
+      setMessageInfo({ type: "success", message: "Curso cadastrado com sucesso!" });
       setOpenMessage(true);
     } catch (err) {
       setErrorInfo({ type: 'error', message: err.message });
@@ -187,6 +219,10 @@ const CoursesList = () => {
     p: 4,
     borderRadius: 2
   };
+
+  const visibleCourses = isSearch
+    ? filteredCourses.slice(filteredCourseIndex, filteredCourseIndex + cardsPerPage)
+    : courses.slice(courseIndex, courseIndex + cardsPerPage);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -224,35 +260,9 @@ const CoursesList = () => {
                   <Typography sx={{ color: "white", textAlign: "center" }}>
                     Nenhum curso encontrado
                   </Typography>
-                ) : isSearch ? (
-                  <Grid container spacing={4} marginTop="2px">
-                    {filteredCourses.map((course) => (
-                      <Grid
-                        item
-                        xs={12}
-                        sm={6}
-                        md={4}
-                        lg={3}
-                        key={course.id}
-                        sx={{ display: "flex", justifyContent: "center" }}
-                      >
-                        <CardCourse
-                          id={course.id}
-                          title={course.name || "Nome Indisponível"}
-                          description={
-                            course.qtd_hours
-                              ? `${course.qtd_hours} horas`
-                              : "Horas Indisponíveis"
-                          }
-                          type={role}
-                          role={roleAdmin}
-                        />
-                      </Grid>
-                    ))}
-                  </Grid>
                 ) : (
                   <Grid container spacing={4} marginTop="2px">
-                    {courses.map((course) => (
+                    {visibleCourses.map((course) => (
                       <Grid
                         item
                         xs={12}
@@ -279,10 +289,20 @@ const CoursesList = () => {
                 )}
 
                 <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-                  <IconButton sx={{ color: "white" }}>
+                  <IconButton 
+                    onClick={handlePrevCourses}
+                    sx={{ color: "white" }}
+                    disabled={isSearch ? filteredCourseIndex === 0 : courseIndex === 0}
+                  >
                     <ArrowBackIos />
                   </IconButton>
-                  <IconButton sx={{ color: "white" }}>
+                  <IconButton 
+                    onClick={handleNextCourses}
+                    sx={{ color: "white" }}
+                    disabled={isSearch 
+                      ? filteredCourseIndex + cardsPerPage >= filteredCourses.length 
+                      : courseIndex + cardsPerPage >= courses.length}
+                  >
                     <ArrowForwardIos />
                   </IconButton>
                 </Box>
@@ -336,35 +356,9 @@ const CoursesList = () => {
                   <Typography sx={{ color: "white", textAlign: "center" }}>
                     Nenhum curso encontrado
                   </Typography>
-                ) : isSearch ? (
-                  <Grid container spacing={4} marginTop="2px">
-                    {filteredCourses.map((course) => (
-                      <Grid
-                        item
-                        xs={12}
-                        sm={6}
-                        md={4}
-                        lg={3}
-                        key={course.id}
-                        sx={{ display: "flex", justifyContent: "center" }}
-                      >
-                        <CardCourse
-                          id={course.id}
-                          title={course.name || "Nome Indisponível"}
-                          description={
-                            course.qtd_hours
-                              ? `${course.qtd_hours} horas`
-                              : "Horas Indisponíveis"
-                          }
-                          type={role}
-                          role={roleAdmin}
-                        />
-                      </Grid>
-                    ))}
-                  </Grid>
                 ) : (
                   <Grid container spacing={4} marginTop="2px">
-                    {courses.map((course) => (
+                    {visibleCourses.map((course) => (
                       <Grid
                         item
                         xs={12}
@@ -391,10 +385,20 @@ const CoursesList = () => {
                 )}
 
                 <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-                  <IconButton sx={{ color: "white" }}>
+                  <IconButton 
+                    onClick={handlePrevCourses}
+                    sx={{ color: "white" }}
+                    disabled={isSearch ? filteredCourseIndex === 0 : courseIndex === 0}
+                  >
                     <ArrowBackIos />
                   </IconButton>
-                  <IconButton sx={{ color: "white" }}>
+                  <IconButton 
+                    onClick={handleNextCourses}
+                    sx={{ color: "white" }}
+                    disabled={isSearch 
+                      ? filteredCourseIndex + cardsPerPage >= filteredCourses.length 
+                      : courseIndex + cardsPerPage >= courses.length}
+                  >
                     <ArrowForwardIos />
                   </IconButton>
                 </Box>
@@ -495,22 +499,9 @@ const CoursesList = () => {
                 <Typography sx={{ color: "white", textAlign: "center" }}>
                   Nenhum curso encontrado
                 </Typography>
-              ) : isSearch ? (
-                <Grid container spacing={4} marginTop="2px">
-                  {filteredCourses.map((course) => (
-                    <Grid item xs={12} sm={6} md={4} lg={3} key={course.id} sx={{ display: "flex", justifyContent: "center" }}>
-                      <CardCourse
-                        id={course.id}
-                        title={course.name || "Nome Indisponível"}
-                        description={course.qtd_hours ? `${course.qtd_hours} horas` : "Horas Indisponíveis"}
-                        type={role}
-                      />
-                    </Grid>
-                  ))}
-                </Grid>
               ) : (
                 <Grid container spacing={4} marginTop="2px">
-                  {courses.map((course) => (
+                  {visibleCourses.map((course) => (
                     <Grid item xs={12} sm={6} md={4} lg={3} key={course.id} sx={{ display: "flex", justifyContent: "center" }}>
                       <CardCourse
                         id={course.id}
@@ -521,14 +512,23 @@ const CoursesList = () => {
                     </Grid>
                   ))}
                 </Grid>
-              )
+              )}
 
-              }
               <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-                <IconButton sx={{ color: "white" }}>
+                <IconButton 
+                  onClick={handlePrevCourses}
+                  sx={{ color: "white" }}
+                  disabled={isSearch ? filteredCourseIndex === 0 : courseIndex === 0}
+                >
                   <ArrowBackIos />
                 </IconButton>
-                <IconButton sx={{ color: "white" }}>
+                <IconButton 
+                  onClick={handleNextCourses}
+                  sx={{ color: "white" }}
+                  disabled={isSearch 
+                    ? filteredCourseIndex + cardsPerPage >= filteredCourses.length 
+                    : courseIndex + cardsPerPage >= courses.length}
+                >
                   <ArrowForwardIos />
                 </IconButton>
               </Box>

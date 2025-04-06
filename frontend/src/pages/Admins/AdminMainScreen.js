@@ -1,7 +1,7 @@
 import api from "../../service/api";
 import { useState, useEffect } from "react";
 import Menu from "../../components/Menu";
-import { Box, Container, Typography, IconButton, useTheme, useMediaQuery } from "@mui/material";
+import { Box, Container, Typography, IconButton } from "@mui/material";
 import ErrorMessageModal from "../../components/ErrorMessageModal";
 import CardStatiticsAdmin from "../../components/cardStatiticsAdmin";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
@@ -20,14 +20,8 @@ const AdminMainScreen = () => {
   const [modulesIndex, setModulesIndex] = useState(0);
   const [teachersIndex, setTeachersIndex] = useState(0);
 
-  const theme = useTheme();
-  const isXs = useMediaQuery(theme.breakpoints.down("sm")); 
-  const isSm = useMediaQuery(theme.breakpoints.between("sm", "md")); 
-  const isMd = useMediaQuery(theme.breakpoints.between("md", "lg")); 
-  const isLg = useMediaQuery(theme.breakpoints.up("lg")); 
-
-  const cardsPerPage = isXs ? 1 : isSm ? 2 : 3;
-  const cardWidth = isXs ? "90%" : isSm ? "45%" : "30%"; 
+  const cardsPerPage = 3; 
+  const cardWidth = "30%"; 
 
   const handleCloseError = () => setOpenError(false);
 
@@ -61,24 +55,19 @@ const AdminMainScreen = () => {
 
   const handlePrev = (currentIndex, setIndex, totalItems) => {
     if (currentIndex > 0) {
-      setIndex(currentIndex - cardsPerPage);
+      setIndex(currentIndex - 1);
     }
   };
 
   const handleNext = (currentIndex, setIndex, totalItems) => {
     if (currentIndex + cardsPerPage < totalItems) {
-      setIndex(currentIndex + cardsPerPage);
+      setIndex(currentIndex + 1);
     }
   };
 
   const CarouselSection = ({ title, data, index, setIndex, dataKey, titleField, valueField, description }) => {
     const totalItems = data?.[dataKey]?.length || 0;
-    const cardWidthPx = isXs
-      ? (90 * window.innerWidth) / 100
-      : isSm
-      ? window.innerWidth * 0.45
-      : (window.innerWidth - 240) * 0.3;
-    const gapPx = 16;
+    const visibleItems = data?.[dataKey]?.slice(index, index + cardsPerPage) || [];
 
     return (
       <Container sx={{ py: 2, px: 0, maxWidth: "100%", overflow: "hidden" }}>
@@ -99,11 +88,10 @@ const AdminMainScreen = () => {
                 sx={{
                   display: "flex",
                   gap: 2,
-                  transform: `translateX(-${index * (cardWidthPx + gapPx)}px)`,
                   transition: "transform 0.3s ease-in-out",
                 }}
               >
-                {data?.[dataKey]?.map((item) => (
+                {visibleItems.map((item) => (
                   <CardStatiticsAdmin
                     key={item[titleField]}
                     title={item[titleField]}
@@ -146,7 +134,7 @@ const AdminMainScreen = () => {
         }}
       >
         <Container sx={{ maxWidth: "100%", px: 0 }}>
-          <Typography component="h1" variant="h5" sx={{ color: "#FFFFFF", mb: 2, mt: { xs: 7, md: 4 }, px: { xs: 1, sm: 2, md: 4 }, px: 2 }}>
+          <Typography component="h1" variant="h5" sx={{ color: "#FFFFFF", mb: 2, mt: { xs: 7, md: 4 }, px: 2 }}>
             Página Inicial
           </Typography>
         </Container>

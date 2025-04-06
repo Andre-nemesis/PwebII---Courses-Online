@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-
 import {
-  Box, Container, Typography,
-  IconButton, useTheme, useMediaQuery,
+  Box,
+  Container,
+  Typography,
+  IconButton,
   CircularProgress,
 } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
@@ -32,18 +33,8 @@ const HomePage = () => {
   const [openError, setOpenError] = useState(false);
   const [errorInfo, setErrorInfo] = useState({ type: "error", message: "" });
 
-  const theme = useTheme();
-  const isXs = useMediaQuery(theme.breakpoints.down("sm"));
-  const isSm = useMediaQuery(theme.breakpoints.between("sm", "md"));
-
-  const cardsPerPage = isXs ? 1 : isSm ? 2 : 3;
-  const cardWidth = isXs ? "90%" : isSm ? "45%" : "30%";
-  const gapPx = 16;
-  const cardWidthPx = isXs
-    ? (90 * window.innerWidth) / 100
-    : isSm
-      ? window.innerWidth * 0.45
-      : (window.innerWidth - 240) * 0.3;
+  const cardsPerPage = 3; 
+  const cardWidth = "30%"; 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -83,18 +74,23 @@ const HomePage = () => {
   }
 
   const handlePrev = (index, setIndex) => {
-    setIndex(Math.max(0, index - cardsPerPage));
+    if (index > 0) {
+      setIndex(index - 1);
+    }
   };
 
   const handleNext = (index, setIndex, total) => {
-    const maxIndex = Math.max(0, total - cardsPerPage);
-    setIndex(Math.min(index + cardsPerPage, maxIndex));
+    if (index + cardsPerPage < total) {
+      setIndex(index + 1);
+    }
   };
 
   const handleCloseError = () => setOpenError(false);
 
   const CarouselSection = ({ title, data, index, setIndex }) => {
     const totalItems = data.length;
+    const visibleItems = data.slice(index, index + cardsPerPage);
+
     return (
       <Container sx={{ py: 2, px: 0, maxWidth: "100%", overflow: "hidden" }}>
         <Typography variant="h6" sx={{ color: "#FFFFFF", mb: 2, px: 2 }}>{title}</Typography>
@@ -107,7 +103,7 @@ const HomePage = () => {
             <ArrowBackIosIcon />
           </IconButton>
           <Box sx={{ overflow: "hidden", flex: 1 }}>
-            {loading ? (
+            {loading && title === "Lançamentos" ? (
               <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
                 <CircularProgress color="primary" />
               </Box>
@@ -116,15 +112,14 @@ const HomePage = () => {
                 sx={{
                   display: "flex",
                   gap: 2,
-                  transform: `translateX(-${index * (cardWidthPx + gapPx)}px)`,
                   transition: "transform 0.3s ease-in-out",
                 }}
               >
-                {data.map((item, i) => (
+                {visibleItems.map((item, i) => (
                   <CardStatiticsAdmin
                     key={i}
                     title={item.name || item.title}
-                    description="Disponível"
+                    description={item.status ? item.status: "Disponivel"}
                     value={`${item.qtd_hours || item.hours || "0"}h`}
                     action={item.action || "Ver curso"}
                     sx={{

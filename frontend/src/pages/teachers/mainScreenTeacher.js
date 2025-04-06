@@ -1,7 +1,7 @@
 import api from "../../service/api";
 import { useState, useEffect } from "react";
 import Menu from "../../components/Menu";
-import { Box, Container, Typography, IconButton, useTheme, useMediaQuery } from "@mui/material";
+import { Box, Container, Typography, IconButton } from "@mui/material";
 import ErrorMessageModal from "../../components/ErrorMessageModal";
 import CardStatiticsAdmin from "../../components/cardStatiticsAdmin";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
@@ -17,14 +17,8 @@ const MainScreenTeacher = () => {
   const [modulesIndex, setModulesIndex] = useState(0);
   const [teachersIndex, setTeachersIndex] = useState(0);
 
-  const theme = useTheme();
-  const isXs = useMediaQuery(theme.breakpoints.down("sm"));
-  const isSm = useMediaQuery(theme.breakpoints.between("sm", "md"));
-  const isMd = useMediaQuery(theme.breakpoints.between("md", "lg"));
-  const isLg = useMediaQuery(theme.breakpoints.up("lg"));
-
-  const cardsPerPage = isXs ? 1 : isSm ? 2 : 3;
-  const cardWidth = isXs ? "90%" : isSm ? "45%" : "30%";
+  const cardsPerPage = 3; 
+  const cardWidth = "30%"; 
 
   const handleCloseError = () => setOpenError(false);
 
@@ -36,7 +30,6 @@ const MainScreenTeacher = () => {
         setModules(modulesResponse.data);
 
         const teachersResponse = await api.get("/teachers/");
-        // Ordenar professores por nome (opcional, pode remover se não precisar)
         const sortedTeachers = teachersResponse.data.sort((a, b) =>
           a.User.name.localeCompare(b.User.name)
         );
@@ -52,24 +45,19 @@ const MainScreenTeacher = () => {
 
   const handlePrev = (currentIndex, setIndex, totalItems) => {
     if (currentIndex > 0) {
-      setIndex(currentIndex - cardsPerPage);
+      setIndex(currentIndex - 1);
     }
   };
 
   const handleNext = (currentIndex, setIndex, totalItems) => {
     if (currentIndex + cardsPerPage < totalItems) {
-      setIndex(currentIndex + cardsPerPage);
+      setIndex(currentIndex + 1);
     }
   };
 
   const CarouselSection = ({ title, data, index, setIndex, titleField, valueField, description }) => {
     const totalItems = data?.length || 0;
-    const cardWidthPx = isXs
-      ? (90 * window.innerWidth) / 100
-      : isSm
-      ? window.innerWidth * 0.45
-      : (window.innerWidth - 240) * 0.3;
-    const gapPx = 16;
+    const visibleItems = data?.slice(index, index + cardsPerPage) || [];
 
     return (
       <Container sx={{ py: 2, px: 0, maxWidth: "100%", overflow: "hidden" }}>
@@ -90,11 +78,10 @@ const MainScreenTeacher = () => {
                 sx={{
                   display: "flex",
                   gap: 2,
-                  transform: `translateX(-${index * (cardWidthPx + gapPx)}px)`,
                   transition: "transform 0.3s ease-in-out",
                 }}
               >
-                {data.map((item) => (
+                {visibleItems.map((item) => (
                   <CardStatiticsAdmin
                     key={item.id}
                     title={titleField === "User.name" ? item.User.name : item[titleField]}

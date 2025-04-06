@@ -92,18 +92,35 @@ const Certificates = () => {
                     <Typography variant="h6" gutterBottom>
                       {cert.Course.name}
                     </Typography>
-                    <Typography variant="body2">Concluído</Typography>
+                    {cert.final_score < 7 ? (
+                      <Typography variant="body2" color="error">Reprovado</Typography>
+                    ) : (
+                      <Typography variant="body2" color="success">Concluído</Typography>
+                    )}
+
                     <Typography variant="body2" sx={{ mt: 1 }}>
                       Nota: {cert.final_score}
                     </Typography>
-                    <Button
-                      variant="text"
-                      sx={{ color: "#00BFFF", mt: 1 }}
-                      endIcon={<ArrowForwardIos />}
-                      onClick={() => window.open(cert.url, "_blank")}
-                    >
-                      Ver Certificado
-                    </Button>
+                    {cert.final_score < 7 ? (
+                      <Button
+                        variant="text"
+                        sx={{ color: "#00BFFF", mt: 1 }}
+                        endIcon={<ArrowForwardIos />}
+                        onClick={() => window.open(cert.url, "_blank")}
+                      >
+                        Refazer Prova
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="text"
+                        sx={{ color: "#00BFFF", mt: 1 }}
+                        endIcon={<ArrowForwardIos />}
+                        onClick={() => window.open(cert.url, "_blank")}
+                      >
+                        Ver Certificado
+                      </Button>
+                    )}
+
                   </CardContent>
                 </Card>
               </Grid>
