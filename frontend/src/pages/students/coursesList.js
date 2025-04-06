@@ -23,6 +23,8 @@ import { ArrowBackIos, ArrowForwardIos, Add } from "@mui/icons-material";
 import CircularProgress from '@mui/material/CircularProgress';
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
+import SuccessMessageModal from '../../components/SuccessMessageModal';
+import ErrorMessageModal from '../../components/ErrorMessageModal';
 
 
 const CoursesList = () => {
@@ -45,6 +47,10 @@ const CoursesList = () => {
     module: []
   });
   const navigate = useNavigate();
+  const [openMessage, setOpenMessage] = useState(false);
+  const [messageInfo, setMessageInfo] = useState({ type: "success", message: "" });
+  const [openError, setOpenError] = useState(false);
+  const [errorInfo, setErrorInfo] = useState({ type: "error", message: "" });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -57,6 +63,8 @@ const CoursesList = () => {
         setRoleAdmin(decoded.role_adm || null);
       } catch (err) {
         setError('Token inválido');
+        setErrorInfo({ type: 'error', message: err.message });
+        setOpenError(true);
         setAuthenticated(false);
       }
     } else {
@@ -69,7 +77,8 @@ const CoursesList = () => {
         setCourses(response.data);
         setFilteredCourses(response.data);
       } catch (err) {
-        setError(`Erro ao carregar os cursos: ${err.message}`);
+        setErrorInfo({ type: 'error', message: err.message });
+        setOpenError(true);
       } finally {
         setLoading(false);
       }
@@ -80,7 +89,8 @@ const CoursesList = () => {
         const response = await api.get('/modules/');
         setModules(response.data);
       } catch (err) {
-        console.error('Erro ao carregar módulos:', err);
+        setErrorInfo({ type: 'error', message: err.message });
+        setOpenError(true);
       }
     };
 
@@ -96,7 +106,8 @@ const CoursesList = () => {
       }
       return response.data;
     } catch (error) {
-      console.error('Erro ao buscar por termo:', error);
+      setErrorInfo({ type: 'error', message: error.message });
+      setOpenError(true);
       return null;
     }
   };
@@ -149,8 +160,11 @@ const CoursesList = () => {
       setFilteredCourses(response.data);
       handleCloseModal();
       setNewCourse({ name: '', qtd_hours: '', module: [] });
+      setMessageInfo({ type: "sucess", message: "Curso cadastrado com sucesso!" })
+      setOpenMessage(true);
     } catch (err) {
-      setError('Erro ao criar curso');
+      setErrorInfo({ type: 'error', message: err.message });
+      setOpenError(true);
     }
   };
 
@@ -158,6 +172,9 @@ const CoursesList = () => {
     navigate('/login');
     return null;
   }
+
+  const handleCloseMessage = () => setOpenMessage(false);
+  const handleCloseError = () => setOpenError(false);
 
   const modalStyle = {
     position: 'absolute',
@@ -233,7 +250,7 @@ const CoursesList = () => {
                       </Grid>
                     ))}
                   </Grid>
-                ):(
+                ) : (
                   <Grid container spacing={4} marginTop="2px">
                     {courses.map((course) => (
                       <Grid
@@ -519,6 +536,8 @@ const CoursesList = () => {
           </Box>
         </>
       )}
+      <SuccessMessageModal open={openMessage} onClose={handleCloseMessage} type={messageInfo.type} message={messageInfo.message} />
+      <ErrorMessageModal open={openError} onClose={handleCloseError} type={errorInfo.type} message={errorInfo.message} />
     </Box>
   );
 };

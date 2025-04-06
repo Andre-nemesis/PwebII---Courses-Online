@@ -1,15 +1,21 @@
 import React, { useState } from "react";
-import { login,isTokenExpired } from '../service/auth';
+import { login, isTokenExpired } from '../service/auth';
 import { TextField, Container, Button, Typography, Paper, Box, CircularProgress, IconButton, InputAdornment } from '@mui/material';
-import { Email, Lock, Visibility, VisibilityOff } from '@mui/icons-material'; 
+import { Email, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import SuccessMessageModal from '../components/SuccessMessageModal';
+import ErrorMessageModal from '../components/ErrorMessageModal';
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
+  const [openMessage, setOpenMessage] = useState(false);
+  const [messageInfo, setMessageInfo] = useState({ type: "success", message: "" });
+  const [openError, setOpenError] = useState(false);
+  const [errorInfo, setErrorInfo] = useState({ type: "error", message: "" });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,14 +24,16 @@ const Login = ({ onLogin }) => {
 
     try {
       await login(email, password);
+      setMessageInfo({ type: "success", message: "Login efetuado com sucesso!" });
+      setOpenMessage(true);
       onLogin();
-    
     } catch (err) {
+      setErrorInfo({ type: "error", message: "Falha no login" });
       setError('E-mail ou senha inválida!');
-    
+
     } finally {
       setLoading(false);
-    } 
+    }
   };
 
   const isEmailValid = () => {
@@ -35,36 +43,39 @@ const Login = ({ onLogin }) => {
   const passwordVisibility = () => {
     setShowPassword(!showPassword);
   };
-  if(isTokenExpired){
+  if (isTokenExpired) {
     localStorage.removeItem('token');
   }
 
   const navigate = useNavigate();
 
+  const handleCloseMessage = () => setOpenMessage(false);
+  const handleCloseError = () => setOpenError(false);
+
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: '#040D33', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Container component="main" maxWidth="xs">
-        <Paper 
-          sx={{ 
-            p: 4, 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'start', 
-            backgroundColor: '#040D33', 
-            border: '1px solid rgba(200, 208, 218, 0.25)' 
+        <Paper
+          sx={{
+            p: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'start',
+            backgroundColor: '#040D33',
+            border: '1px solid rgba(200, 208, 218, 0.25)'
           }}
         >
           <Typography component="h1" variant="h5" sx={{ mb: 2, color: '#EAEFF7', fontWeight: 'bold' }}>
             Learnify
           </Typography>
-          <Typography component="h2" variant="h5" sx={{ mb: 2, color: '#EAEFF7'}}>
+          <Typography component="h2" variant="h5" sx={{ mb: 2, color: '#EAEFF7' }}>
             Bem-vindo novamente!
           </Typography>
-          <Typography component="p" variant="body1" sx={{ mb: 1, color: '#C8D0DA'}}>
+          <Typography component="p" variant="body1" sx={{ mb: 1, color: '#C8D0DA' }}>
             Faça login para acessar sua conta ou crie uma nova na Learnify.
           </Typography>
-          
-          <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%'}}>
+
+          <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
             {/* Campo de Email */}
             <TextField
               fullWidth
@@ -74,15 +85,15 @@ const Login = ({ onLogin }) => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              error={!!email && !isEmailValid()} 
+              error={!!email && !isEmailValid()}
               helperText={!!email && !isEmailValid() ? 'Email ou senha inválida' : ''}
               InputProps={{
                 startAdornment: <Email sx={{ color: '#C8D0DA', mr: 1 }} />,
-                sx: { backgroundColor: '#1E2951', color: '#C8D0DA', border: '1px solid rgba(200, 208, 218, 0.25)'} 
+                sx: { backgroundColor: '#1E2951', color: '#C8D0DA', border: '1px solid rgba(200, 208, 218, 0.25)' }
               }}
-              InputLabelProps={{ sx: { color: '#C8D0DA' }}}
+              InputLabelProps={{ sx: { color: '#C8D0DA' } }}
             />
-  
+
             {/* Campo de Senha */}
             <TextField
               fullWidth
@@ -107,16 +118,16 @@ const Login = ({ onLogin }) => {
                   </InputAdornment>
                 )
               }}
-              InputLabelProps={{ sx: { color: '#C8D0DA' }}}
+              InputLabelProps={{ sx: { color: '#C8D0DA' } }}
             />
-  
+
             {/* Exibição de Erro */}
             {error && (
               <Typography color="error" variant="body2" sx={{ mt: 1 }}>
                 {error}
               </Typography>
             )}
-  
+
             {/* Botão de Login */}
             <Button
               type="submit"
@@ -136,7 +147,7 @@ const Login = ({ onLogin }) => {
             >
               {loading ? <CircularProgress size={24} /> : 'Entrar'}
             </Button>
-  
+
             {/* Botão de ir para o cadastro*/}
             <Button
               type="button"
@@ -157,20 +168,22 @@ const Login = ({ onLogin }) => {
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '18px' }}>
               <Typography sx={{ color: '#C8D0DA', fontSize: '14px' }}>Esqueceu a senha?</Typography>
               <Button
-              type="button"
-              variant="text"
-              onClick={() => navigate('/verify-email')}
-              sx={{ color: '#2176FF', '&:hover': { color: '#185BDB', fontSize: '14px' } }}
+                type="button"
+                variant="text"
+                onClick={() => navigate('/verify-email')}
+                sx={{ color: '#2176FF', '&:hover': { color: '#185BDB', fontSize: '14px' } }}
               >
-              Recuperar Senha
+                Recuperar Senha
               </Button>
             </Box>
           </Box>
         </Paper>
       </Container>
+      <SuccessMessageModal open={openMessage} onClose={handleCloseMessage} type={messageInfo.type} message={messageInfo.message} />
+      <ErrorMessageModal open={openError} onClose={handleCloseError} type={errorInfo.type} message={errorInfo.message} />
     </Box>
   );
-  
+
 }
 
 export default Login;

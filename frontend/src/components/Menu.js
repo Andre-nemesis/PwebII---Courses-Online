@@ -42,8 +42,7 @@ const Menu = ({ userRole, roleAdmin }) => {
   const handleLogout = () => {
     let result = logout(setAuthenticated);
     if(result) {
-      window.location.reload(true);
-      console.log('Navegação para /login chamada');
+      window.location.assign("/login");
     }
     
   };
@@ -270,7 +269,7 @@ const Menu = ({ userRole, roleAdmin }) => {
               "&:hover": {
                 backgroundColor: "#05134E"
               },
-              ...selectedOption('/teacher/module/view')
+              ...selectedOption('/teacher/course/view')
             }}>
             <ListItemIcon sx={{ color: "white" }}>
               <CoursesIcon />

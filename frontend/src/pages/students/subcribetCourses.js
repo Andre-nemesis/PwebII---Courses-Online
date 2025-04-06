@@ -7,12 +7,16 @@ import {
 import api from '../../service/api.js';
 import { jwtDecode } from 'jwt-decode';
 import Menu from '../../components/Menu.js';
+import ErrorMessageModal from '../../components/ErrorMessageModal';
+
 
 const SubscribedCourses = () => {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [noCourses, setNoCourses] = useState(false);
+    const [openError, setOpenError] = useState(false);
+    const [errorInfo, setErrorInfo] = useState({ type: "error", message: "" });
 
     const getUserIdFromToken = () => {
         const token = localStorage.getItem('token');
@@ -21,7 +25,8 @@ const SubscribedCourses = () => {
             const decoded = jwtDecode(token);
             return decoded.id;
         } catch (error) {
-            console.error('Erro ao decodificar o token:', error);
+            setErrorInfo({ type: "error", message: error.message });
+            setOpenError(true);
             return null;
         }
     };
@@ -40,6 +45,8 @@ const SubscribedCourses = () => {
                 }
             } catch (err) {
                 const errorMessage = err.response?.data?.message || 'Erro ao buscar cursos. Tente novamente mais tarde.';
+                setErrorInfo({ type: "error", message: errorMessage });
+                setOpenError(true);
                 setError(errorMessage);
             } finally {
                 setLoading(false);
@@ -48,6 +55,8 @@ const SubscribedCourses = () => {
 
         fetchCourses();
     }, []);
+
+    const handleCloseError = () => setOpenError(false);
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -95,6 +104,7 @@ const SubscribedCourses = () => {
                     )}
                 </Paper>
             </Container>
+            <ErrorMessageModal open={openError} onClose={handleCloseError} type={errorInfo.type} message={errorInfo.message} />
         </Box>
     );
 };

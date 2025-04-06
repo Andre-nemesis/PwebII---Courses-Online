@@ -12,6 +12,9 @@ const CardCourse = ({ id, title, description, type,role }) => {
       if(role === "admin") navigate(`/admin/courses/${id}/modules`);
       else navigate(`/manager/courses/${id}/modules`);
     }
+    else if (type === "teacher") {
+      navigate(`/teacher/courses/${id}/modules`);
+    }
     else {
       navigate(`/student/courses/${id}/modules`);
     }

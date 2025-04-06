@@ -15,7 +15,7 @@ const Footer = () => {
       }}
     >
       <Typography variant="body2" component="p">
-        Desenvolvido por &copy; InfinityCode
+        Desenvolvido por &copy; Learnfy
       </Typography>
       <Typography variant="body2" component="p">
         Alguns direitos reservados

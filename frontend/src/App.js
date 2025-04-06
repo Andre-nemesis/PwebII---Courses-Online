@@ -3,6 +3,7 @@ import AppRoutes from './routes/Routes';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import { jwtDecode } from 'jwt-decode';
+import {isTokenExpired} from './service/auth';
 
 function App() {
   const token = localStorage.getItem('token');
@@ -12,11 +13,19 @@ function App() {
 
   useEffect(() => {
     if (token) {
-      const decoded = jwtDecode(token);
-      setType(decoded.role);
-      if (decoded.role_adm) {
-        setRole(decoded.role_adm);
+      if (isTokenExpired(token)) {
+        localStorage.removeItem('token');
+        setAuthenticated(false);
+        setType(null);
+        setRole(null);
+      } else {
+        const decoded = jwtDecode(token);
+        setType(decoded.role);
+        if (decoded.role_adm) {
+          setRole(decoded.role_adm);
+        }
       }
+
     }
   }, [token]);
 

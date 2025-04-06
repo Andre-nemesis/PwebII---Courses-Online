@@ -23,7 +23,7 @@ import CourseDetails from '../pages/ModulesCourse.js';
 import ResetPassword from '../pages/resetPassword.js';
 import NewPassword from '../pages/newPassword.js';
 import DashboardPage from '../pages/Admins/Dashboard.js';
-
+import NotFound from '../pages/notFound.js';
 
 const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
   const handleLogin = () => {
@@ -34,7 +34,7 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
     if (type === 'admin' && role === 'content_manager') {
       return 'manager';
     }
-    return type; 
+    return type;
   };
 
   return (
@@ -45,7 +45,16 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
         <Route path="/verify-email" element={<ResetPassword />} />
         <Route path="/reset-password/:id" element={<NewPassword />} />
         <Route path="/signUp-student" element={<SignUpStudent />} />
-        <Route path="/login" element={!isAuthenticated ? <Login onLogin={handleLogin} /> : <Navigate to={`/${getBasePath()}/mainScreen`} />} />
+        <Route
+          path="/login"
+          element={
+            !isAuthenticated ? (
+              <Login onLogin={handleLogin} />
+            ) : (
+              <Navigate to={`/${getBasePath()}/mainScreen`} />
+            )
+          }
+        />
         <Route path="/Hello" element={<Hello />} />
 
         {/* Rotas Protegidas */}
@@ -86,6 +95,7 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
                 <Route path="teacher/mainScreen" element={<MainScreenTeacher userRole={type} roleAdm={role} />} />
                 <Route path="teacher/module/view" element={<ModulesList userRole={type} />} />
                 <Route path="teacher/course/view" element={<CoursesList userRole={type} />} />
+                <Route path="teacher/courses/:id/modules" element={<CourseDetails />} />
                 <Route path="teacher/settings" element={<ProfileSettings userRole={type} />} />
               </>
             )}
@@ -101,9 +111,13 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
                 <Route path="student/settings" element={<ProfileSettings userRole={type} />} />
               </>
             )}
+
+            {/* Rota 404 para URLs inválidas dentro das rotas protegidas */}
+            <Route path="/*" element={<NotFound />} />
           </>
         ) : (
-          <Route path="/*" element={<Navigate to="/login" />} />
+          /* Rota 404 para usuários não autenticados ou token expirado */
+          <Route path="/*" element={<NotFound />} />
         )}
 
         {/* Página de boas-vindas ou página inicial */}

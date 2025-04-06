@@ -5,7 +5,6 @@ import {
   IconButton, useTheme, useMediaQuery,
   CircularProgress,
 } from "@mui/material";
-
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Menu from "../../components/Menu";
@@ -13,6 +12,7 @@ import CardStatiticsAdmin from "../../components/cardStatiticsAdmin";
 import api from "../../service/api";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import ErrorMessageModal from '../../components/ErrorMessageModal';
 
 const coursesViewed = [
   { title: "Fundamentos de Front-end", status: "Iniciado", hours: "30", action: "Continuar" },
@@ -28,8 +28,9 @@ const HomePage = () => {
   const [role, setRole] = useState(null);
   const [roleAdmin, setRoleAdmin] = useState(null);
   const [authenticated, setAuthenticated] = useState(true);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [openError, setOpenError] = useState(false);
+  const [errorInfo, setErrorInfo] = useState({ type: "error", message: "" });
 
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down("sm"));
@@ -41,8 +42,8 @@ const HomePage = () => {
   const cardWidthPx = isXs
     ? (90 * window.innerWidth) / 100
     : isSm
-    ? window.innerWidth * 0.45
-    : (window.innerWidth - 240) * 0.3;
+      ? window.innerWidth * 0.45
+      : (window.innerWidth - 240) * 0.3;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -53,7 +54,8 @@ const HomePage = () => {
         setRole(decoded.role);
         setRoleAdmin(decoded.role_adm || null);
       } catch (err) {
-        console.error("Erro ao decodificar o token:", err);
+        setErrorInfo({ message: err.message });
+        setOpenError(true);
         setAuthenticated(false);
       }
     } else {
@@ -65,7 +67,8 @@ const HomePage = () => {
         const response = await api.get("/courses/");
         setLaunchCourses(response.data);
       } catch (err) {
-        setError("Erro ao carregar cursos de lançamento");
+        setErrorInfo({ message: err.message });
+        setOpenError(true);
       } finally {
         setLoading(false);
       }
@@ -82,11 +85,13 @@ const HomePage = () => {
   const handlePrev = (index, setIndex) => {
     setIndex(Math.max(0, index - cardsPerPage));
   };
-  
+
   const handleNext = (index, setIndex, total) => {
     const maxIndex = Math.max(0, total - cardsPerPage);
     setIndex(Math.min(index + cardsPerPage, maxIndex));
   };
+
+  const handleCloseError = () => setOpenError(false);
 
   const CarouselSection = ({ title, data, index, setIndex }) => {
     const totalItems = data.length;
@@ -117,17 +122,17 @@ const HomePage = () => {
               >
                 {data.map((item, i) => (
                   <CardStatiticsAdmin
-                  key={i}
-                  title={item.name || item.title}
-                  description="Disponível"
-                  value={`${item.qtd_hours || item.hours || "0"}h`}
-                  action={item.action || "Ver curso"}
-                  sx={{
-                    width: cardWidth,
-                    minWidth: cardWidth,
-                    maxWidth: cardWidth,
-                  }}
-                />
+                    key={i}
+                    title={item.name || item.title}
+                    description="Disponível"
+                    value={`${item.qtd_hours || item.hours || "0"}h`}
+                    action={item.action || "Ver curso"}
+                    sx={{
+                      width: cardWidth,
+                      minWidth: cardWidth,
+                      maxWidth: cardWidth,
+                    }}
+                  />
                 ))}
               </Box>
             )}
@@ -171,6 +176,7 @@ const HomePage = () => {
           setIndex={setViewedIndex}
         />
       </Box>
+      <ErrorMessageModal open={openError} onClose={handleCloseError} type={errorInfo.type} message={errorInfo.message} />
     </Box>
   );
 };

@@ -6,51 +6,41 @@ import ErrorMessageModal from "../../components/ErrorMessageModal";
 import CardStatiticsAdmin from "../../components/cardStatiticsAdmin";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { jwtDecode } from "jwt-decode";
 
 const MainScreenTeacher = () => {
-  // const [coursesModules, setCoursesModules] = useState(null);
-  const [coursesStudents, setCoursesStudents] = useState(null);
-  // const [modulesTeachers, setModulesTeachers] = useState(null);
-  const [adminCourse, setAdminCourse] = useState(null);
+  const [modules, setModules] = useState([]);
+  const [teachers, setTeachers] = useState([]);
   const [openError, setOpenError] = useState(false);
   const [errorInfo, setErrorInfo] = useState({ type: "error", message: "" });
 
-  const [studentsIndex, setStudentsIndex] = useState(0);
-  const [adminIndex, setAdminIndex] = useState(0);
-  // const [modulesIndex, setModulesIndex] = useState(0);
-  // const [teachersIndex, setTeachersIndex] = useState(0);
+  const [modulesIndex, setModulesIndex] = useState(0);
+  const [teachersIndex, setTeachersIndex] = useState(0);
 
   const theme = useTheme();
-  const isXs = useMediaQuery(theme.breakpoints.down("sm")); // Até 600px
-  const isSm = useMediaQuery(theme.breakpoints.between("sm", "md")); // 600px a 960px
-  const isMd = useMediaQuery(theme.breakpoints.between("md", "lg")); // 960px a 1280px
-  const isLg = useMediaQuery(theme.breakpoints.up("lg")); // Acima de 1280px
+  const isXs = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSm = useMediaQuery(theme.breakpoints.between("sm", "md"));
+  const isMd = useMediaQuery(theme.breakpoints.between("md", "lg"));
+  const isLg = useMediaQuery(theme.breakpoints.up("lg"));
 
-  // Ajuste dinâmico do número de cartões e largura
   const cardsPerPage = isXs ? 1 : isSm ? 2 : 3;
-  const cardWidth = isXs ? "90%" : isSm ? "45%" : "30%"; // Ajustado para 30% em telas grandes para caber 3 cartões
+  const cardWidth = isXs ? "90%" : isSm ? "45%" : "30%";
 
   const handleCloseError = () => setOpenError(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      let response;
       try {
-        response = await api.get('/courses/view/student-by-course');
-        console.log("Estudantes por Curso:", response.data);
-        setCoursesStudents(response.data);
+        const token = jwtDecode(localStorage.getItem("token"));
+        const modulesResponse = await api.get(`/modules/leatest/${token.id}`);
+        setModules(modulesResponse.data);
 
-        response = await api.get('/courses/view/course-by-admin');
-        console.log("Cursos por Admin:", response.data);
-        setAdminCourse(response.data);
-
-        // response = await api.get('/courses/view/modules-by-course');
-        // console.log("Módulos por Curso:", response.data);
-        // setCoursesModules(response.data);
-
-        // response = await api.get('/modules/view/modules-by-teacher');
-        // console.log("Módulos por Professor:", response.data);
-        // setModulesTeachers(response.data);
+        const teachersResponse = await api.get("/teachers/");
+        // Ordenar professores por nome (opcional, pode remover se não precisar)
+        const sortedTeachers = teachersResponse.data.sort((a, b) =>
+          a.User.name.localeCompare(b.User.name)
+        );
+        setTeachers(sortedTeachers);
       } catch (error) {
         setOpenError(true);
         setErrorInfo({ type: "error", message: "Falha ao carregar dados." });
@@ -72,9 +62,8 @@ const MainScreenTeacher = () => {
     }
   };
 
-  const CarouselSection = ({ title, data, index, setIndex, dataKey, titleField, valueField, description }) => {
-    const totalItems = data?.[dataKey]?.length || 0;
-    // Calcula a largura do cartão em pixels para o translateX
+  const CarouselSection = ({ title, data, index, setIndex, titleField, valueField, description }) => {
+    const totalItems = data?.length || 0;
     const cardWidthPx = isXs
       ? (90 * window.innerWidth) / 100
       : isSm
@@ -105,12 +94,12 @@ const MainScreenTeacher = () => {
                   transition: "transform 0.3s ease-in-out",
                 }}
               >
-                {data?.[dataKey]?.map((item) => (
+                {data.map((item) => (
                   <CardStatiticsAdmin
-                    key={item[titleField]}
-                    title={item[titleField]}
+                    key={item.id}
+                    title={titleField === "User.name" ? item.User.name : item[titleField]}
                     description={description}
-                    value={item[valueField]}
+                    value={valueField === "academic_formation" ? item[valueField] : item[valueField]}
                     sx={{ width: cardWidth, minWidth: cardWidth, maxWidth: cardWidth }}
                   />
                 ))}
@@ -133,69 +122,40 @@ const MainScreenTeacher = () => {
 
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", overflowX: "hidden" }}>
-      {/* Menu Lateral */}
       <Box>
         <Menu userRole={"teacher"} roleAdmin={"teacher"} />
       </Box>
 
-      {/* Conteúdo Principal */}
-      <Box
-        sx={{
-          flex: 1,
-          minHeight: "100vh",
-          padding: 2,
-          overflowX: "hidden"
-        }}
-      >
+      <Box sx={{ flex: 1, minHeight: "100vh", padding: 2, overflowX: "hidden" }}>
         <Container sx={{ maxWidth: "100%", px: 0 }}>
-          <Typography component="h1" variant="h5" sx={{ color: "#FFFFFF", mb: 2, mt: { xs: 7, md: 4 }, px: { xs: 1, sm: 2, md: 4 }, px: 2 }}>
+          <Typography
+            component="h1"
+            variant="h5"
+            sx={{ color: "#FFFFFF", mb: 2, mt: { xs: 7, md: 4 }, px: 2 }}
+          >
             Página Inicial
           </Typography>
         </Container>
 
         <CarouselSection
-          title="Estudantes por Curso"
-          data={coursesStudents}
-          index={studentsIndex}
-          setIndex={setStudentsIndex}
-          dataKey="courses"
-          titleField="courseName"
-          valueField="studentCount"
-          description="Número de estudantes inscritos"
+          title="Últimos módulos criados"
+          data={modules}
+          index={modulesIndex}
+          setIndex={setModulesIndex}
+          titleField="name"
+          valueField="qtd_hours"
+          description="Quantidade de horas"
         />
 
         <CarouselSection
-          title="Cursos por Administrador"
-          data={adminCourse}
-          index={adminIndex}
-          setIndex={setAdminIndex}
-          dataKey="countCourses"
-          titleField="userName"
-          valueField="courseCount"
-          description="Número de cursos criados"
-        />
-
-        {/* <CarouselSection
-          title="Módulos por Curso"
-          data={coursesModules}
-          index={modulesIndex}
-          setIndex={setModulesIndex}
-          dataKey="courses"
-          titleField="courseName"
-          valueField="moduleCount"
-          description="Número de módulos associados"
-        /> */}
-
-        {/* <CarouselSection
-          title="Módulos por Professor"
-          data={modulesTeachers}
+          title="Professores"
+          data={teachers}
           index={teachersIndex}
           setIndex={setTeachersIndex}
-          dataKey="teachers"
-          titleField="userName"
-          valueField="moduleCount"
-          description="Número de módulos lecionados"
-        /> */}
+          titleField="User.name"
+          valueField="academic_formation"
+          description="Formação acadêmica"
+        />
 
         <ErrorMessageModal
           open={openError}

@@ -7,6 +7,8 @@ import SearchBar from '../../components/SearchBar.js';
 import { Delete, Edit, Add } from "@mui/icons-material";
 import EditAdminModal from '../../components/EditAdminModal.js';
 import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
+import SuccessMessageModal from '../../components/SuccessMessageModal';
+import ErrorMessageModal from '../../components/ErrorMessageModal';
 
 const AdminList = () => {
     const navigate = useNavigate();
@@ -20,6 +22,10 @@ const AdminList = () => {
     const [adminToDelete, setAdminToDelete] = useState(null);
     const [openEditModal, setOpenEditModal] = useState(false);
     const [adminToEdit, setAdminToEdit] = useState(null);
+    const [openMessage, setOpenMessage] = useState(false);
+    const [messageInfo, setMessageInfo] = useState({ type: "success", message: "" });
+    const [openError, setOpenError] = useState(false);
+    const [errorInfo, setErrorInfo] = useState({ type: "error", message: "" });
 
     useEffect(() => {
         const fetchAdmins = async () => {
@@ -28,6 +34,8 @@ const AdminList = () => {
                 setAdmins(response.data);
                 setFilteredUsers(response.data);
             } catch (err) {
+                setErrorInfo({ message: err.message });
+                setOpenError(true);
                 setError('Erro ao buscar os administradores' + err);
             } finally {
                 setLoading(false);
@@ -44,7 +52,8 @@ const AdminList = () => {
             }
             return response.data;
         } catch (error) {
-            console.error('Erro ao buscar por termo:', error);
+            setErrorInfo({ message: error.message });
+            setOpenError(true);
             return null;
         }
     };
@@ -89,8 +98,11 @@ const AdminList = () => {
                 await api.delete(`/admin/deleteStudent/${adminToDelete.id}`);
                 setAdmins(admins.filter(admin => admin.id !== adminToDelete.id));
                 handleCloseDialog();
+                setMessageInfo({ type: "success", message: "Administrador excluído com sucesso!" });
+                setOpenMessage(true);
             } catch (err) {
-                setError('Erro ao excluir estudante' + err);
+                setErrorInfo({ message: err.message });
+                setOpenError(true);
             }
         }
     };
@@ -111,13 +123,16 @@ const AdminList = () => {
             setAdmins(response.data);
             setFilteredUsers(response.data);
         } catch (err) {
-            setError('Erro ao buscar os administradores' + err);
+            setErrorInfo({ message: err.message });
+            setOpenError(true);
         } finally {
             setLoading(false);
         }
     };
 
+    const handleCloseMessage = () => setOpenMessage(false);
 
+    const handleCloseError = () => setOpenError(false);
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -252,7 +267,7 @@ const AdminList = () => {
                                                 <TableCell align='right'> {admin.User && admin.User.cpf ? admin.User.cpf : 'CPF Indisponível'}</TableCell>
                                                 <TableCell align='right'>{admin.role}</TableCell>
                                                 <TableCell align='right'>
-                                                    <IconButton onClick={() => handleOpenEditModal(admin)} sx={{ color: "#60BFBF"}}>
+                                                    <IconButton onClick={() => handleOpenEditModal(admin)} sx={{ color: "#60BFBF" }}>
                                                         <Edit />
                                                     </IconButton>
                                                     <IconButton color='error' onClick={() => handleOpenDialog(admin)}>
@@ -296,7 +311,8 @@ const AdminList = () => {
                 />
             )}
 
-
+            <SuccessMessageModal open={openMessage} onClose={handleCloseMessage} type={messageInfo.type} message={messageInfo.message} />
+            <ErrorMessageModal open={openError} onClose={handleCloseError} type={errorInfo.type} message={errorInfo.message} />
         </Box>
     );
 

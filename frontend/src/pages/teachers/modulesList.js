@@ -262,7 +262,6 @@ const ModulesList = ({ userRole, adminRole }) => {
                   minWidth: '200px'
                 }}
                 endIcon={<Add sx={{ color: '#040D33' }} />}
-                // onClick={() => navigate('../../components/CreateModuleModal.js')}
                 onClick={handleOpen}
               >
                 Cadastrar Módulo
@@ -281,7 +280,7 @@ const ModulesList = ({ userRole, adminRole }) => {
             ) : (
               <Grid container spacing={2}>
                 {filteredModules.map((mod, index) => (
-                  <Grid item xs={12} sm={6} md={4} key={mod.id || index}>
+                  <Grid item sx={{mb:4}} xs={12} sm={6} md={4} key={mod.id || index}>
                     <Paper
                       sx={{
                         p: 2,

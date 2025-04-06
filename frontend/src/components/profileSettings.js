@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, Container, Grid, Paper, TextField, Typography, Avatar, FormControl, Select, MenuItem, FormHelperText } from "@mui/material";
-import { Email, Phone, Assignment, Work, Lock, Class,Draw, TrackChanges } from "@mui/icons-material";
+import { Email, Phone, Assignment, Work, Lock, Class, Draw, TrackChanges } from "@mui/icons-material";
 import { jwtDecode } from "jwt-decode";
 import api from "../service/api";
 import Menu from "./Menu";
-import MaskedTextField from "../components/maskTextField"; 
+import MaskedTextField from "../components/maskTextField";
+import SuccessMessageModal from '../components/SuccessMessageModal';
+import ErrorMessageModal from '../components/ErrorMessageModal';
+import Footer from "./footer";
 
 const AdminSettings = ({ userRole, roleAdmin, adminData, setAdminData, onSave }) => {
   const handleInputChange = (e) => {
@@ -176,7 +179,7 @@ const TeacherSettings = ({ userRole, teacherData, setTeacherData, onSave }) => {
               InputProps={{ startAdornment: <Box sx={{ mr: 1 }}><Assignment /></Box> }}
               sx={{ bgcolor: "white", borderRadius: 1 }}
             />
-             <TextField
+            <TextField
               fullWidth
               margin="normal"
               label="Formação Acadêmica"
@@ -314,12 +317,19 @@ const StudentSettings = ({ userRole, studentData, setStudentData, onSave }) => {
 };
 
 const ProfileSettings = ({ userRole, roleAdmin }) => {
-  
+
   const [adminData, setAdminData] = useState({ name: '', email: '', phone_number: '', cpf: '', role: '', password: '' });
-  const [teacherData, setTeacherData] = useState({ name: '', email: '', phone_number: '', cpf: '',academic_formation:'', tecnic_especialization: '', password: '' });
+  const [teacherData, setTeacherData] = useState({ name: '', email: '', phone_number: '', cpf: '', academic_formation: '', tecnic_especialization: '', password: '' });
   const [studentData, setStudentData] = useState({ name: '', email: '', phone_number: '', cpf: '', city: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [openMessage, setOpenMessage] = useState(false);
+  const [messageInfo, setMessageInfo] = useState({ type: "success", message: "" });
+  const [openError, setOpenError] = useState(false);
+  const [errorInfo, setErrorInfo] = useState({ type: "error", message: "" });
+
+  const handleCloseMessage = () => setOpenMessage(false);
+const handleCloseError = () => setOpenError(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -372,6 +382,8 @@ const ProfileSettings = ({ userRole, roleAdmin }) => {
         }
       } catch (err) {
         setError("Erro ao carregar dados do usuário");
+        setErrorInfo({ message: "Erro ao carregar dados do usuário" });
+        setOpenError(true);
         console.error(err);
       } finally {
         setLoading(false);
@@ -381,7 +393,6 @@ const ProfileSettings = ({ userRole, roleAdmin }) => {
     fetchUserData();
   }, [userRole, roleAdmin]);
 
-  // Função para salvar os dados
   const handleSave = async (data, role) => {
     setLoading(true);
     setError(null);
@@ -393,20 +404,26 @@ const ProfileSettings = ({ userRole, roleAdmin }) => {
       switch (role) {
         case "admin":
           await api.put(`/admin/${id}`, data);
+          setMessageInfo({ type: "success", message: "Administrador atualizado com sucesso!" });
+          setOpenMessage(true);
           break;
         case "teacher":
           await api.put(`/teachers/${id}`, data);
+          setMessageInfo({ type: "success", message: "Professor atualizado com sucesso!" });
+          setOpenMessage(true);
           break;
         case "student":
           await api.put(`/students/${id}`, data);
+          setMessageInfo({ type: "success", message: "Estudante atualizado com sucesso!" });
+          setOpenMessage(true);
           break;
         default:
           throw new Error("Tipo de usuário inválido");
       }
-      alert("Dados salvos com sucesso!");
     } catch (err) {
       setError("Erro ao salvar os dados");
-      console.error(err);
+      setErrorInfo({ message: err.message });
+      setOpenError(true);
     } finally {
       setLoading(false);
     }
@@ -414,7 +431,7 @@ const ProfileSettings = ({ userRole, roleAdmin }) => {
 
   const renderSettingsContent = () => {
     if (loading) return <Typography>Carregando...</Typography>;
-    if (error) return <Typography color="error">{error}</Typography>;
+    if (error) return <Typography color="#FFFFFF">Ocorreu um erro mas não é sua culpa :/</Typography>;
 
     switch (userRole) {
       case "admin":
@@ -443,11 +460,13 @@ const ProfileSettings = ({ userRole, roleAdmin }) => {
           flex: 1,
           py: 5,
           px: { xs: 2, sm: 3 },
-          ml: { xs: 0, md: '240px' }, 
+          ml: { xs: 0, md: '240px' },
         }}
       >
         {renderSettingsContent()}
       </Container>
+      <SuccessMessageModal open={openMessage} onClose={handleCloseMessage} type={messageInfo.type} message={messageInfo.message} />
+      <ErrorMessageModal open={openError} onClose={handleCloseError} type={errorInfo.type} message={errorInfo.message} />
     </Box>
   );
 };

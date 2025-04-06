@@ -21,14 +21,13 @@ const AdminMainScreen = () => {
   const [teachersIndex, setTeachersIndex] = useState(0);
 
   const theme = useTheme();
-  const isXs = useMediaQuery(theme.breakpoints.down("sm")); // Até 600px
-  const isSm = useMediaQuery(theme.breakpoints.between("sm", "md")); // 600px a 960px
-  const isMd = useMediaQuery(theme.breakpoints.between("md", "lg")); // 960px a 1280px
-  const isLg = useMediaQuery(theme.breakpoints.up("lg")); // Acima de 1280px
+  const isXs = useMediaQuery(theme.breakpoints.down("sm")); 
+  const isSm = useMediaQuery(theme.breakpoints.between("sm", "md")); 
+  const isMd = useMediaQuery(theme.breakpoints.between("md", "lg")); 
+  const isLg = useMediaQuery(theme.breakpoints.up("lg")); 
 
-  // Ajuste dinâmico do número de cartões e largura
   const cardsPerPage = isXs ? 1 : isSm ? 2 : 3;
-  const cardWidth = isXs ? "90%" : isSm ? "45%" : "30%"; // Ajustado para 30% em telas grandes para caber 3 cartões
+  const cardWidth = isXs ? "90%" : isSm ? "45%" : "30%"; 
 
   const handleCloseError = () => setOpenError(false);
 
@@ -74,7 +73,6 @@ const AdminMainScreen = () => {
 
   const CarouselSection = ({ title, data, index, setIndex, dataKey, titleField, valueField, description }) => {
     const totalItems = data?.[dataKey]?.length || 0;
-    // Calcula a largura do cartão em pixels para o translateX
     const cardWidthPx = isXs
       ? (90 * window.innerWidth) / 100
       : isSm

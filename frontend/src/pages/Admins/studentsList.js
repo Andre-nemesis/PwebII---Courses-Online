@@ -6,6 +6,7 @@ import Menu from '../../components/Menu';
 import SearchBar from '../../components/SearchBar.js';
 import { Delete, } from "@mui/icons-material";
 import DeleteConfirmationDialog from '../../components/DeleteConfirmationDialog';
+import ErrorMessageModal from "../../components/ErrorMessageModal";
 
 const StudentsList = () => {
 	const [students, setStudents] = useState([]);
@@ -17,6 +18,8 @@ const StudentsList = () => {
 	const [isSearch, setSearch] = useState(false);
 	const [searchValue, setSearchValue] = useState('');
 	const [studentToDelete, setStudentToDelete] = useState(null);
+	const [openError, setOpenError] = useState(false);
+	const [errorInfo, setErrorInfo] = useState({ type: "error", message: "" });
 
 	useEffect(() => {
 		const fetchStudents = async () => {
@@ -26,6 +29,8 @@ const StudentsList = () => {
 				setFilteredUsers(response.data);
 			} catch (err) {
 				setError('Erro ao buscar estudantes' + err);
+				setErrorInfo({ message: err.message });
+				setOpenError(true);
 			} finally {
 				setLoading(false);
 			}
@@ -41,7 +46,8 @@ const StudentsList = () => {
 			}
 			return response.data;
 		} catch (error) {
-			console.error('Erro ao buscar por termo:', error);
+			setErrorInfo({ message: "Erro ao buscar por termo" });
+			setOpenError(true);
 			return null;
 		}
 	};
@@ -89,10 +95,13 @@ const StudentsList = () => {
 				setStudents(students.filter(student => student.id !== studentToDelete.id)); // Remove o estudante da lista
 				handleCloseDialog();
 			} catch (err) {
-				setError('Erro ao excluir estudante' + err);
+				setErrorInfo({ message: "Erro ao excluir estudante" });
+				setOpenError(true);
 			}
 		}
 	};
+
+	const handleCloseError = () => setOpenError(false);
 
 	return (
 		<Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -224,6 +233,13 @@ const StudentsList = () => {
 				message={'Deseja excluir o usuário'}
 				onConfirm={handleDelete}
 				studentName={studentToDelete ? studentToDelete.User.name : ''}
+			/>
+
+			<ErrorMessageModal
+				open={openError}
+				onClose={handleCloseError}
+				type={errorInfo.type}
+				message={errorInfo.message}
 			/>
 		</Box>
 	);
