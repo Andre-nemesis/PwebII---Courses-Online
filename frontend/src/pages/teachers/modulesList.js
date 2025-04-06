@@ -38,6 +38,7 @@ const ModulesList = ({ userRole, adminRole }) => {
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
 
+
   useEffect(() => {
     const token = localStorage.getItem('token');
 
@@ -294,10 +295,12 @@ const ModulesList = ({ userRole, adminRole }) => {
                           alignSelf: "flex-start",
                         }}
                         endIcon={<ArrowForwardIos />}
-                        onClick={() => navigate(`/modules/${mod.id}`)}
+                        onClick={() => setOpenModal(true)}
+
                       >
                         Ver módulo
                       </Button>
+                        <CreateModuleModal open={openModal} onClose={() => setOpenModal(false)} />
                     </Paper>
                   </Grid>
                 ))}

@@ -287,7 +287,7 @@ const Menu = ({ userRole, roleAdmin }) => {
             <ListItemIcon sx={{ color: "white" }}>
               <SettingsIcon />
             </ListItemIcon>
-            <ListItemText primary="Perfil" />
+            <ListItemText primary="Configurações" />
           </ListItemButton>
         </>
       )}
