@@ -1,52 +1,13 @@
 import React from 'react';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Box, Typography, Avatar, Card, CardContent, Button, IconButton } from '@mui/material';
-import { Home, ViewModule, MenuBook, Settings, ExitToApp, ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
-
-const drawerWidth = 240;
+import { Box, Typography, Avatar, Card, CardContent, Button, IconButton } from '@mui/material';
+import { ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
+import Menu from '../../components/Menu'; 
 
 export default function DashboardPage() {
   return (
     <Box sx={{ display: 'flex' }}>
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: {
-            width: drawerWidth,
-            boxSizing: 'border-box',
-            backgroundColor: '#0F2C59',
-            color: '#fff',
-          },
-        }}
-      >
-        <Box sx={{ p: 2, borderBottom: '1px solid #ccc' }}>
-          <Typography variant="h6" sx={{ color: '#fff' }}>Learnify</Typography>
-          <Typography variant="body2" sx={{ color: '#fff' }}>Bem vindo [Usuário]</Typography>
-        </Box>
-        <List>
-          <ListItem button selected sx={{ bgcolor: '#101D42', color: '#fff' }}>
-            <ListItemIcon sx={{ color: '#fff' }}><Home /></ListItemIcon>
-            <ListItemText primary="Página Inicial" />
-          </ListItem>
-          <ListItem button sx={{ color: '#fff', '&:hover': { backgroundColor: '#0095cc' } }}>
-            <ListItemIcon sx={{ color: '#fff' }}><ViewModule /></ListItemIcon>
-            <ListItemText primary="Módulos" />
-          </ListItem>
-          <ListItem button sx={{ color: '#fff', '&:hover': { backgroundColor: '#0095cc' } }}>
-            <ListItemIcon sx={{ color: '#fff' }}><MenuBook /></ListItemIcon>
-            <ListItemText primary="Cursos" />
-          </ListItem>
-          <ListItem button sx={{ color: '#fff', '&:hover': { backgroundColor: '#0095cc' } }}>
-            <ListItemIcon sx={{ color: '#fff' }}><Settings /></ListItemIcon>
-            <ListItemText primary="Configurações" />
-          </ListItem>
-          <ListItem button sx={{ color: '#fff', '&:hover': { backgroundColor: '#0095cc' } }}>
-            <ListItemIcon sx={{ color: '#fff' }}><ExitToApp /></ListItemIcon>
-            <ListItemText primary="Sair" />
-          </ListItem>
-        </List>
-      </Drawer>
+      {/* Menu lateral (externo) */}
+      <Menu userRole="admin" roleAdmin={"content_manager"} />
 
       <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: '#1b2a4e', minHeight: '100vh' }}>
         <Typography variant="h5" sx={{ color: '#fff', mb: 2 }}>Página Inicial</Typography>

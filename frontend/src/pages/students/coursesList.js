@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Container, Grid, Typography, Box, IconButton } from "@mui/material";
+import { Container, Grid, Typography, Box, IconButton, Button } from "@mui/material";
 import CardCourse from "../../components/CardCourse.js";
 import api from "../../service/api.js";
 import Menu from "../../components/Menu.js";
 import SearchBar from "../../components/SearchBar.js";
-import { ArrowBackIos, ArrowForwardIos  }  from "@mui/icons-material";
+import { ArrowBackIos, ArrowForwardIos, Add } from "@mui/icons-material";
 import CircularProgress from '@mui/material/CircularProgress';
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
 
-const CoursesList = ({ userRole, adminRole }) => {
+const CoursesList = () => {
   const [courses, setCourses] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,6 +18,7 @@ const CoursesList = ({ userRole, adminRole }) => {
   const [roleAdmin, setRoleAdmin] = useState(null);
   const [authenticated, setAuthenticated] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isSearch, setSearch] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,6 +42,7 @@ const CoursesList = ({ userRole, adminRole }) => {
     const fetchCourses = async () => {
       try {
         const response = await api.get('/courses/');
+        setCourses(response.data);
         setFilteredCourses(response.data);
 
       } catch (err) {
@@ -52,88 +54,209 @@ const CoursesList = ({ userRole, adminRole }) => {
     fetchCourses();
   }, []);
 
-  const handleSearchChange = (e) => {
-    const value = e.target.value.toLowerCase();
+  const fetchCoursesByTermo = async (termo) => {
+    try {
+      const response = await api.get(`/courses/search/${encodeURI(termo)}`);
+      if (!response.data) {
+        throw new Error('Erro ao buscar cursos por termo.');
+      }
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao buscar por termo:', error);
+      return null;
+    }
+  };
+
+  const handleSearchChange = async (e) => {
+    const value = e.target.value.trim();
     setSearchTerm(value);
 
     if (!value) {
       setFilteredCourses(courses);
-
-    } else {
-      const filtered = courses.filter((course) =>
-        course.name?.toLowerCase().includes(value)
-      );
-      setFilteredCourses(filtered);
+      setSearch(false);
+      return;
     }
+
+    const coursesByTerm = await fetchCoursesByTermo(value);
+    if (coursesByTerm && coursesByTerm.length > 0) {
+      setFilteredCourses(coursesByTerm);
+      setSearch(true);
+      return;
+    } else {
+      setFilteredCourses([]);
+      setSearch(true);
+    }
+
+
   };
 
   if (!authenticated) {
     navigate('/login');
     return null;
   }
-  
+
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}> 
+    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       {roleAdmin ? (
-        <>
-        {/* Para Administrador Geral*/ }
-          <Menu userRole={role} roleAdmin={roleAdmin} />
-          
-          <Box
-            component="main"
-            sx={{
-              flexGrow: 1,
-              p: 3,
-              ml: { md: "240px" },
-              width: { xs: "100%", md: "calc(100% - 240px)" },
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Container maxWidth="lg" sx={{ py: 4 }}>
-              <Typography variant="h5" sx={{ color: "white", mb: 3 }}>
-                Cursos Disponíveis
-              </Typography>
-
-              <SearchBar onChange={handleSearchChange} />
-
-              {loading ? (
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <CircularProgress color="primary" />
-              </Box>
-              ) : error ? (
-                <Typography color="error" sx={{ textAlign: "center" }}>{error}</Typography>
-              ) : filteredCourses.length === 0 ? (
-                <Typography sx={{ color: "white", textAlign: "center" }}>
-                  Nenhum curso encontrado
+        roleAdmin !== "content_manager" ? (
+          <>
+            <Menu userRole={role} roleAdmin={roleAdmin} />
+            <Box
+              component="main"
+              sx={{
+                flexGrow: 1,
+                p: 3,
+                ml: { md: "240px" },
+                width: { xs: "100%", md: "calc(100% - 240px)" },
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Container maxWidth="lg" sx={{ py: 4 }}>
+                <Typography variant="h5" sx={{ color: "white", mb: 3 }}>
+                  Cursos Disponíveis
                 </Typography>
-              ) : (
-                <Grid container spacing={4} marginTop="2px">
-                  {filteredCourses.map((course) => (
-                    <Grid item xs={12} sm={6} md={4} lg={3} key={course.id} sx={{ display: "flex", justifyContent: "center" }}>
-                      <CardCourse
-                        id={course.id}
-                        title={course.name || "Nome Indisponível"}
-                        description={course.qtd_hours ? `${course.qtd_hours} horas` : "Horas Indisponíveis"}
-                      />
-                    </Grid>
-                  ))}
-                </Grid>
-              )}
-              <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-                <IconButton sx={{ color: "white" }}>
-                  <ArrowBackIos />
-                </IconButton>
-                <IconButton sx={{ color: "white" }}>
-                  <ArrowForwardIos />
-                </IconButton>
-              </Box>
-            </Container>
-          </Box>
-        </>
+
+                <SearchBar onChange={handleSearchChange} />
+
+                {loading ? (
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <CircularProgress color="primary" />
+                  </Box>
+                ) : error ? (
+                  <Typography color="error" sx={{ textAlign: "center" }}>
+                    {error}
+                  </Typography>
+                ) : filteredCourses.length === 0 ? (
+                  <Typography sx={{ color: "white", textAlign: "center" }}>
+                    Nenhum curso encontrado
+                  </Typography>
+                ) : (
+                  <Grid container spacing={4} marginTop="2px">
+                    {filteredCourses.map((course) => (
+                      <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        lg={3}
+                        key={course.id}
+                        sx={{ display: "flex", justifyContent: "center" }}
+                      >
+                        <CardCourse
+                          id={course.id}
+                          title={course.name || "Nome Indisponível"}
+                          description={
+                            course.qtd_hours
+                              ? `${course.qtd_hours} horas`
+                              : "Horas Indisponíveis"
+                          }
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                )}
+
+                <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+                  <IconButton sx={{ color: "white" }}>
+                    <ArrowBackIos />
+                  </IconButton>
+                  <IconButton sx={{ color: "white" }}>
+                    <ArrowForwardIos />
+                  </IconButton>
+                </Box>
+              </Container>
+            </Box>
+          </>
+        ) : (
+          <>
+            <Menu userRole={role} roleAdmin={roleAdmin} />
+            <Box
+              component="main"
+              sx={{
+                flexGrow: 1,
+                p: 3,
+                ml: { md: "240px" },
+                width: { xs: "100%", md: "calc(100% - 240px)" },
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Container maxWidth="lg" sx={{ py: 4 }}>
+                <Typography variant="h5" sx={{ color: "white", mb: 3 }}>
+                  Cursos Disponíveis
+                </Typography>
+
+                <SearchBar value={searchTerm} onChange={handleSearchChange} />
+
+
+                <Button
+                  variant="contained"
+                  startIcon={<Add />}
+                  sx={{
+                    backgroundColor: "#00BFFF",
+                    "&:hover": { backgroundColor: "#0099cc" },
+                    ml: 10,
+                    mt: 0.1
+                  }}
+                  onClick={() => navigate("/cursos/novo")}
+                >
+                  Criar Novo Curso
+                </Button>
+
+
+                {loading ? (
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <CircularProgress color="primary" />
+                  </Box>
+                ) : error ? (
+                  <Typography color="error" sx={{ textAlign: "center" }}>
+                    {error}
+                  </Typography>
+                ) : filteredCourses.length === 0 ? (
+                  <Typography sx={{ color: "white", textAlign: "center" }}>
+                    Nenhum curso encontrado
+                  </Typography>
+                ) : (
+                  <Grid container spacing={4} marginTop="2px">
+                    {filteredCourses.map((course) => (
+                      <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        lg={3}
+                        key={course.id}
+                        sx={{ display: "flex", justifyContent: "center" }}
+                      >
+                        <CardCourse
+                          id={course.id}
+                          title={course.name || "Nome Indisponível"}
+                          description={
+                            course.qtd_hours
+                              ? `${course.qtd_hours} horas`
+                              : "Horas Indisponíveis"
+                          }
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                )}
+
+                <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+                  <IconButton sx={{ color: "white" }}>
+                    <ArrowBackIos />
+                  </IconButton>
+                  <IconButton sx={{ color: "white" }}>
+                    <ArrowForwardIos />
+                  </IconButton>
+                </Box>
+              </Container>
+            </Box>
+          </>
+        )
       ) : (
         <>
-        {/* Para Estudante*/ }
           <Menu userRole={role} />
 
           <Box
@@ -156,15 +279,15 @@ const CoursesList = ({ userRole, adminRole }) => {
 
               {loading ? (
                 <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <CircularProgress color="primary" />
-              </Box>
+                  <CircularProgress color="primary" />
+                </Box>
               ) : error ? (
                 <Typography color="error" sx={{ textAlign: "center" }}>{error}</Typography>
               ) : filteredCourses.length === 0 ? (
                 <Typography sx={{ color: "white", textAlign: "center" }}>
                   Nenhum curso encontrado
                 </Typography>
-              ) : (
+              ) : isSearch ? (
                 <Grid container spacing={4} marginTop="2px">
                   {filteredCourses.map((course) => (
                     <Grid item xs={12} sm={6} md={4} lg={3} key={course.id} sx={{ display: "flex", justifyContent: "center" }}>
@@ -172,11 +295,27 @@ const CoursesList = ({ userRole, adminRole }) => {
                         id={course.id}
                         title={course.name || "Nome Indisponível"}
                         description={course.qtd_hours ? `${course.qtd_hours} horas` : "Horas Indisponíveis"}
+                        type={role}
                       />
                     </Grid>
                   ))}
                 </Grid>
-              )}
+              ) : (
+                <Grid container spacing={4} marginTop="2px">
+                  {courses.map((course) => (
+                    <Grid item xs={12} sm={6} md={4} lg={3} key={course.id} sx={{ display: "flex", justifyContent: "center" }}>
+                      <CardCourse
+                        id={course.id}
+                        title={course.name || "Nome Indisponível"}
+                        description={course.qtd_hours ? `${course.qtd_hours} horas` : "Horas Indisponíveis"}
+                        type={role}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              )
+
+              }
               <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
                 <IconButton sx={{ color: "white" }}>
                   <ArrowBackIos />

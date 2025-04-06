@@ -21,6 +21,7 @@ import AdminMainScreen from '../pages/Admins/AdminMainScreen.js';
 import CourseDetails from '../pages/ModulesCourse.js';
 import ResetPassword from '../pages/resetPassword.js';
 import NewPassword from '../pages/newPassword.js';
+import DashboardPage from '../pages/Admins/Dashboard.js';
 
 
 const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
@@ -70,9 +71,9 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
             {/* Rotas para Content Manager */}
             {type === 'admin' && role === 'content_manager' && (
               <>
-                <Route path="manager/mainScreen" element={<MainScreen userRole={type} roleAdm={role} />} />
+                <Route path="manager/mainScreen" element={<DashboardPage />} />
                 <Route path="manager/courses" element={<CoursesList />} />
-                <Route path="manager/module/view" element={<ModulesTeacherList userRole={type} admRole={role} />} />
+                <Route path="manager/module/view" element={<ModulesList userRole={type} adminRole={role} />} />
                 <Route path="manager/settings" element={<ProfileSettings userRole={type} roleAdmin={role} />} />
               </>
             )}
@@ -93,6 +94,7 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
                 <Route path="student/mainScreen" element={<HomePage userRole={type} />} />
                 <Route path="student/courses" element={<CoursesList />} />
                 <Route path="student/subscribed-courses" element={<SubscribedCourses />} />
+                <Route path="student/courses/:id/modules" element={<CourseDetails />} />
                 <Route path="student/settings" element={<ProfileSettings userRole={type} />} />
               </>
             )}

@@ -49,7 +49,6 @@ const StudentsList = () => {
 	const handleSearchChange = async (e) => {
 		const value = e.target.value.trim();
 		setSearchValue(value);
-		console.log(searchValue);
 
 		if (!value) {
 			setFilteredUsers(students);

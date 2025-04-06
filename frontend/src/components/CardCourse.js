@@ -1,14 +1,19 @@
 import React from "react";
-import { Card, CardContent, Typography, Box } from "@mui/material";
+import { Card, CardContent, Typography, Box, Button } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 
-const CardCourse = ({ id, title, description }) => {
+const CardCourse = ({ id, title, description, type }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/admin/courses/${id}/modules`);
+    if (type === "admin") {
+      navigate(`/admin/courses/${id}/modules`);
+    }
+    else {
+      navigate(`/student/courses/${id}/modules`);
+    }
   };
 
   return (
@@ -29,17 +34,15 @@ const CardCourse = ({ id, title, description }) => {
           {description}
         </Typography>
         <Box display="flex" alignItems="center">
-          <Link
-            to={`/courses/${id}/modules`}
-            style={{
+          <Button
+            sx={{
               color: "#00AEEF",
-              fontWeight: "bold",
-              marginTop: "15px",
+              mt: "15px",
               textDecoration: "none",
             }}
           >
             Ver mais
-          </Link>
+          </Button>
           <ArrowForwardIosIcon
             sx={{ color: "#00AEEF", fontSize: 16, marginLeft: 0.5, marginTop: "14px" }}
           />
