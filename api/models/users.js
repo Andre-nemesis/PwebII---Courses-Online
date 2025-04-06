@@ -17,10 +17,6 @@ export default (sequelize, DataTypes) => {
           args: true,
           msg: 'Nome não pode ser vazio.'
         },
-        isAlpha: {
-          args: true,
-          msg: 'Nome deve conter apenas letras.'
-        }
       }
     },
     email: {

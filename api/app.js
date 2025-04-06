@@ -5,6 +5,7 @@ import teachersRoutes from './routes/teacherRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import courseRoutes from './routes/coursesRoutes.js'
 import moduleRoutes from './routes/moduleRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 import cors from 'cors';
 
@@ -24,5 +25,6 @@ app.use('/api/teachers',teachersRoutes);
 app.use('/api/admin',adminRoutes);
 app.use('/api/courses',courseRoutes);
 app.use('/api/modules',moduleRoutes);
+app.use('/api/users',userRoutes);
 
 export default app;

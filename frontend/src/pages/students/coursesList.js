@@ -26,13 +26,11 @@ const CoursesList = ({ userRole, adminRole }) => {
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        console.log('Token decodificado:', decoded);
 
         setRole(decoded.role);
         setRoleAdmin(decoded.role_adm || null);
 
       } catch (err) {
-        console.error('Erro ao decodificar o token:', err);
         setError('Token inválido');
         setAuthenticated(false);
       }
@@ -73,8 +71,7 @@ const CoursesList = ({ userRole, adminRole }) => {
     navigate('/login');
     return null;
   }
-
-  console.log("userRole:", userRole, "adminRole:", adminRole);
+  
   return (
     <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}> 
       {roleAdmin ? (

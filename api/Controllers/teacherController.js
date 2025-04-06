@@ -82,7 +82,7 @@ const teacherController = {
   async update(req, res) {
     try {
       const { id } = req.params;
-      const { name, email, phone_number, cpf, academic_formation, tecnic_especialization } = req.body;
+      const { name, email, phone_number, password, cpf, academic_formation, tecnic_especialization } = req.body;
 
       const teacher = await db.Teachers.findByPk(id);
       if (!teacher) return res.status(404).json({ error: 'Professor não encontrado' });
@@ -91,12 +91,15 @@ const teacherController = {
       await teacher.update({ academic_formation, tecnic_especialization });
 
       // Atualiza users
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
       await db.Users.update(
         {
           name,
           email,
           phone_number,
           cpf,
+          password: hashedPassword,
           type: 'teacher'
         },
         { where: { id: teacher.user_id } }

@@ -16,7 +16,6 @@ router.get('/search/:term',verifyToken,authorizeRole('admin'),studentController.
 
 // put
 router.put('/:id',verifyToken,authorizeRoles(['admin','student']),studentController.update);
-router.put('/editPassword/:id', verifyToken, authorizeRole('student'), studentController.resetPassword);
 
 //delete
 router.delete('/account/:id', verifyToken, authorizeRoles(['admin','student']), studentController.delete);

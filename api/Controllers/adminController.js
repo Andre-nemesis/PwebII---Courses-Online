@@ -33,12 +33,14 @@ const adminController = {
       const admins = await db.Admin.findAll({
         where: {
           [db.Sequelize.Op.or]: [
-            {role: {[db.Sequelize.Op.like]: `%${term}%` }},
-            {user_id: {
-              [db.Sequelize.Op.in]: db.Sequelize.literal(
-                `(SELECT id FROM users WHERE name LIKE '%${term}%')`
-              )
-            }}
+            { role: { [db.Sequelize.Op.like]: `%${term}%` } },
+            {
+              user_id: {
+                [db.Sequelize.Op.in]: db.Sequelize.literal(
+                  `(SELECT id FROM users WHERE name LIKE '%${term}%')`
+                )
+              }
+            }
           ]
         },
         include: [{ model: db.Users, as: 'User' }]
@@ -88,7 +90,10 @@ const adminController = {
 
       const adminUser = await db.Users.findByPk(admin.user_id);
 
-      await adminUser.update({name, cpf, email, password, phone_number});
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      await adminUser.update({ name, cpf, email, password:hashedPassword, phone_number });
 
       await admin.update({ role });
 

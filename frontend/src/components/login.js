@@ -159,7 +159,7 @@ const Login = ({ onLogin }) => {
               <Button
               type="button"
               variant="text"
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/verify-email')}
               sx={{ color: '#2176FF', '&:hover': { color: '#185BDB', fontSize: '14px' } }}
               >
               Recuperar Senha

@@ -14,10 +14,12 @@ import ModulesTeacherList from '../pages/teachers/modulesCreatedList.js';
 import ModulesList from '../pages/teachers/modulesList.js';
 import LearnifyPage from '../pages/landingPage/page.js';
 import ProfileSettings from '../components/profileSettings.js';
-import HomePageTeacher from '../pages/teachers/mainScreen.js';
+import MainScreenTeacher from '../pages/teachers/mainScreen.js';
 import { isTokenExpired } from '../service/auth.js';
 import AdminMainScreen from '../pages/Admins/AdminMainScreen.js';
 import CourseDetails from '../pages/ModulesCourse.js';
+import ResetPassword from '../pages/resetPassword.js';
+import NewPassword from '../pages/newPassword.js';
 
 
 const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
@@ -37,6 +39,8 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
       <Routes>
         {/* Rotas Públicas */}
         <Route path="/signUp" element={<SignUpAdmin />} />
+        <Route path="/verify-email" element={<ResetPassword />} />
+        <Route path="/reset-password/:id" element={<NewPassword />} />
         <Route path="/signUp-student" element={<SignUpStudent />} />
         <Route path="/login" element={!isAuthenticated ? <Login onLogin={handleLogin} /> : <Navigate to={`/${getBasePath()}/mainScreen`} />} />
         <Route path="/Hello" element={<Hello />} />
@@ -75,7 +79,7 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
             {/* Rotas para Teacher */}
             {type === 'teacher' && (
               <>
-                <Route path="teacher/mainScreen" element={<HomePageTeacher userRole={type} />} />
+                <Route path="teacher/mainScreen" element={<MainScreen userRole={type} roleAdm={role} />} />
                 <Route path="teacher/module/view" element={<ModulesList userRole={type} />} />
                 <Route path="teacher/settings" element={<ProfileSettings userRole={type} />} />
               </>

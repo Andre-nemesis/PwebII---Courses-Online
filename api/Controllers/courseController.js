@@ -40,7 +40,6 @@ const courseController = {
           through: {
             attributes: [], 
           },
-          attributes: ['id', 'name', 'description']
         }]
       });
   

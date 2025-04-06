@@ -21,7 +21,7 @@ const studentController = {
       const { id } = req.params;
       const student = await db.Student.findByPk(id, {
         include: [
-          { model: db.Users, as:'User'},
+          { model: db.Users, as: 'User' },
         ]
       });
 
@@ -39,12 +39,14 @@ const studentController = {
       const students = await db.Student.findAll({
         where: {
           [db.Sequelize.Op.or]: [
-            {city: {[db.Sequelize.Op.like]: `%${term}%` }},
-            {user_id: {
-              [db.Sequelize.Op.in]: db.Sequelize.literal(
-                `(SELECT id FROM db.users WHERE name LIKE '%${term}%')`
-              )
-            }}
+            { city: { [db.Sequelize.Op.like]: `%${term}%` } },
+            {
+              user_id: {
+                [db.Sequelize.Op.in]: db.Sequelize.literal(
+                  `(SELECT id FROM db.users WHERE name LIKE '%${term}%')`
+                )
+              }
+            }
           ]
         },
         include: [{ model: db.Users, as: 'User' }]
@@ -86,7 +88,10 @@ const studentController = {
 
       const studentUser = await db.Users.findByPk(student.user_id);
 
-      await studentUser.update({phone_number, email, password, name, cpf});
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      await studentUser.update({ phone_number, email, password:hashedPassword, name, cpf });
 
       await student.update({ city });
 
@@ -139,22 +144,6 @@ const studentController = {
     }
   },
 
-  async resetPassword(req, res) {
-    try {
-      const { id } = req.params;
-      const { newPassword } = req.body;
-      const student = await db.Student.findByPk(id, { include: [User] });
-
-      if (!student) return res.status(404).json({ error: 'Estudante não encontrado' });
-
-      await student.User.update({ password: newPassword });
-
-      res.json({ message: 'Senha redefinida com sucesso' });
-    } catch (error) {
-      res.status(500).json({ error: 'Erro ao redefinir senha', details: error.message });
-    }
-  },
-
   async viewCompletedCourses(req, res) {
     try {
       const { id } = req.params;
@@ -184,38 +173,38 @@ const studentController = {
     }
   },
 
-  async subcribeCourse(req,res){
-    const {user} = req.params;
-    const {id} = req.params;
-    try{
+  async subcribeCourse(req, res) {
+    const { user } = req.params;
+    const { id } = req.params;
+    try {
       const studentCourse = await db.Student_courses.findOne({
-        where: {student_id:user, course_id:id}
+        where: { student_id: user, course_id: id }
       });
-      if(studentCourse){
-        return res.status(400).json({error: 'Você já está inscrito neste curso'});
+      if (studentCourse) {
+        return res.status(400).json({ error: 'Você já está inscrito neste curso' });
       }
-      await db.Student_courses.create({student_id:user, course_id:id});
-      res.status(201).json({message: 'Inscrição realizada com sucesso'});
+      await db.Student_courses.create({ student_id: user, course_id: id });
+      res.status(201).json({ message: 'Inscrição realizada com sucesso' });
     }
-    catch(error){
-      res.status(500).json({error: 'Erro ao inscrever-se no curso', details: error.message});
+    catch (error) {
+      res.status(500).json({ error: 'Erro ao inscrever-se no curso', details: error.message });
     }
   },
-  async unsubcribeCourse(req,res){
-    const {user} = req.params;
-    const {id} = req.params;
-    try{
+  async unsubcribeCourse(req, res) {
+    const { user } = req.params;
+    const { id } = req.params;
+    try {
       const studentCourse = await db.Student_courses.findOne({
-        where: {student_id:user, course_id:id}
+        where: { student_id: user, course_id: id }
       });
-      if(!studentCourse){
-        return res.status(404).json({error: 'Você não está inscrito neste curso'});
+      if (!studentCourse) {
+        return res.status(404).json({ error: 'Você não está inscrito neste curso' });
       }
       await studentCourse.destroy();
-      res.status(200).json({message: 'Inscrição cancelada com sucesso'});
+      res.status(200).json({ message: 'Inscrição cancelada com sucesso' });
     }
-    catch(error){
-      res.status(500).json({error: 'Erro ao cancelar inscrição no curso', details: error.message});
+    catch (error) {
+      res.status(500).json({ error: 'Erro ao cancelar inscrição no curso', details: error.message });
     }
   }
 };

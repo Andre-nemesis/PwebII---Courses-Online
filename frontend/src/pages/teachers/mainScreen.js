@@ -7,7 +7,7 @@ import CardStatiticsAdmin from "../../components/cardStatiticsAdmin";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-const mainScreen = () => {
+const MainScreenTeacher = () => {
   const [coursesModules, setCoursesModules] = useState(null);
   const [coursesStudents, setCoursesStudents] = useState(null);
   const [modulesTeachers, setModulesTeachers] = useState(null);
@@ -208,4 +208,4 @@ const mainScreen = () => {
   );
 };
 
-export default mainScreen;
+export default MainScreenTeacher;
