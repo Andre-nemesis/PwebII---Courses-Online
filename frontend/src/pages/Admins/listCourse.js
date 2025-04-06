@@ -19,17 +19,21 @@ export default function ListCourse() {
   const [busca, setBusca] = useState("");
   const [cursos, setCursos] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [userRole, setUserRole] = useState(null);
   const [novoCurso, setNovoCurso] = useState({
     name: "",
     course_duration: "",
     num_hours: "",
     percent_complete: ""
   });
+
   const navigation = useNavigation();
 
   const fetchCursos = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
+      const role = await AsyncStorage.getItem("role");
+      setUserRole(role);
       const response = await axios.get("http://localhost:3001/cursos", {
         headers: {
           Authorization: `Bearer ${token}`
@@ -97,10 +101,12 @@ export default function ListCourse() {
             />
           </View>
 
-          <TouchableOpacity style={styles.botaoCriar} onPress={() => setModalVisible(true)}>
-            <Text style={styles.textoBotaoCriar}>Criar Novo Curso</Text>
-            <Icon name="plus" size={16} color="#fff" />
-          </TouchableOpacity>
+          {userRole === 'admin' && (
+            <TouchableOpacity style={styles.botaoCriar} onPress={() => setModalVisible(true)}>
+              <Text style={styles.textoBotaoCriar}>Criar Novo Curso</Text>
+              <Icon name="plus" size={16} color="#fff" />
+            </TouchableOpacity>
+          )}
         </View>
 
         <FlatList
@@ -171,6 +177,7 @@ export default function ListCourse() {
       </Modal>
     </View>
   );
+
 }
 const styles = StyleSheet.create({
   container: { flex: 1, flexDirection: "row", backgroundColor: "#101D42" },
