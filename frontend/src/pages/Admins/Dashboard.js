@@ -1,72 +1,97 @@
 import React from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import Menu from '../../components/Menu';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Box, Typography, Avatar, Card, CardContent, Button, IconButton } from '@mui/material';
+import { Home, ViewModule, MenuBook, Settings, ExitToApp, ArrowForwardIos, ArrowBackIos } from '@mui/icons-material';
 
-const courses = [
-  { id: '1', title: 'Front-end', status: 'Iniciado', duration: '2h' },
-  { id: '2', title: 'Front-end', status: 'Iniciado', duration: '2h' },
-  { id: '3', title: 'Front-end', status: 'Iniciado', duration: '2h' },
-];
+const drawerWidth = 240;
 
-const professors = [
-  { id: '1', name: 'Alice Ocean', role: 'Professor(a) de Front-end', image: 'https://via.placeholder.com/50' },
-  { id: '2', name: 'Alice Ocean', role: 'Professor(a) de Front-end', image: 'https://via.placeholder.com/50' },
-  { id: '3', name: 'Alice Ocean', role: 'Professor(a) de Front-end', image: 'https://via.placeholder.com/50' },
-];
-
-const Dashboard = () => {
+export default function DashboardPage() {
   return (
-    <View style={styles.container}>
-      <Menu />
-      <View style={styles.content}>
-        <Text style={styles.title}>Página Inicial</Text>
-        <Text style={styles.subtitle}>Últimos cursos criados</Text>
-        <FlatList
-          horizontal
-          data={courses}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.courseCard}>
-              <Text style={styles.courseTitle}>{item.title}</Text>
-              <Text style={styles.courseInfo}>{item.status}</Text>
-              <Text style={styles.courseInfo}>{item.duration}</Text>
-              <TouchableOpacity>
-                <Text style={styles.link}>Ver curso →</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        />
-        <Text style={styles.subtitle}>Professores</Text>
-        <FlatList
-          horizontal
-          data={professors}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.professorCard}>
-              <Image source={{ uri: item.image }} style={styles.professorImage} />
-              <Text style={styles.professorName}>{item.name}</Text>
-              <Text style={styles.professorRole}>{item.role}</Text>
-            </View>
-          )}
-        />
-      </View>
-    </View>
+    <Box sx={{ display: 'flex' }}>
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+            backgroundColor: '#0F2C59',
+            color: '#fff',
+          },
+        }}
+      >
+        <Box sx={{ p: 2, borderBottom: '1px solid #ccc' }}>
+          <Typography variant="h6" sx={{ color: '#fff' }}>Learnify</Typography>
+          <Typography variant="body2" sx={{ color: '#fff' }}>Bem vindo [Usuário]</Typography>
+        </Box>
+        <List>
+          <ListItem button selected sx={{ bgcolor: '#101D42', color: '#fff' }}>
+            <ListItemIcon sx={{ color: '#fff' }}><Home /></ListItemIcon>
+            <ListItemText primary="Página Inicial" />
+          </ListItem>
+          <ListItem button sx={{ color: '#fff', '&:hover': { backgroundColor: '#0095cc' } }}>
+            <ListItemIcon sx={{ color: '#fff' }}><ViewModule /></ListItemIcon>
+            <ListItemText primary="Módulos" />
+          </ListItem>
+          <ListItem button sx={{ color: '#fff', '&:hover': { backgroundColor: '#0095cc' } }}>
+            <ListItemIcon sx={{ color: '#fff' }}><MenuBook /></ListItemIcon>
+            <ListItemText primary="Cursos" />
+          </ListItem>
+          <ListItem button sx={{ color: '#fff', '&:hover': { backgroundColor: '#0095cc' } }}>
+            <ListItemIcon sx={{ color: '#fff' }}><Settings /></ListItemIcon>
+            <ListItemText primary="Configurações" />
+          </ListItem>
+          <ListItem button sx={{ color: '#fff', '&:hover': { backgroundColor: '#0095cc' } }}>
+            <ListItemIcon sx={{ color: '#fff' }}><ExitToApp /></ListItemIcon>
+            <ListItemText primary="Sair" />
+          </ListItem>
+        </List>
+      </Drawer>
+
+      <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: '#1b2a4e', minHeight: '100vh' }}>
+        <Typography variant="h5" sx={{ color: '#fff', mb: 2 }}>Página Inicial</Typography>
+
+        <Typography variant="h6" sx={{ color: '#fff', mb: 1 }}>Últimos cursos criados</Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+          <IconButton sx={{ color: '#fff' }}><ArrowBackIos /></IconButton>
+
+          {[1, 2, 3].map((_, i) => (
+            <Card key={i} sx={{ backgroundColor: '#162447', color: '#fff', mx: 1, width: 200 }}>
+              <CardContent>
+                <Typography variant="subtitle1" fontWeight="bold">Front-end</Typography>
+                <Typography variant="body2" sx={{ mb: 1 }}>Iniciado</Typography>
+                <Typography variant="body2">2h</Typography>
+                <Button endIcon={<ArrowForwardIos />} sx={{ mt: 1, color: '#00BFFF', textTransform: 'none' }}>Ver curso</Button>
+              </CardContent>
+            </Card>
+          ))}
+
+          <IconButton sx={{ color: '#fff' }}><ArrowForwardIos /></IconButton>
+        </Box>
+
+        <Typography variant="h6" sx={{ color: '#fff', mb: 1 }}>Professores</Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <IconButton sx={{ color: '#fff' }}><ArrowBackIos /></IconButton>
+
+          {[1, 2, 3].map((_, i) => (
+            <Card key={i} sx={{ backgroundColor: '#162447', color: '#fff', mx: 1, width: 200 }}>
+              <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
+                <Avatar
+                  src="https://randomuser.me/api/portraits/women/44.jpg"
+                  alt="Alice Ocean"
+                  sx={{ width: 40, height: 40, mr: 2 }}
+                />
+                <Box>
+                  <Typography variant="subtitle2" fontWeight="bold">Alice Ocean</Typography>
+                  <Typography variant="body2">Professor(a) de Front-end</Typography>
+                </Box>
+              </CardContent>
+            </Card>
+          ))}
+
+          <IconButton sx={{ color: '#fff' }}><ArrowForwardIos /></IconButton>
+        </Box>
+      </Box>
+    </Box>
   );
-};
-
-const styles = StyleSheet.create({
-  container: { flex: 1, flexDirection: 'row', backgroundColor: '#1e2a47' },
-  content: { flex: 1, padding: 20 },
-  title: { fontSize: 24, color: '#fff', marginBottom: 10 },
-  subtitle: { fontSize: 18, color: '#fff', marginBottom: 10 },
-  courseCard: { backgroundColor: '#16213e', padding: 15, marginRight: 10, borderRadius: 10 },
-  courseTitle: { fontSize: 16, color: '#fff' },
-  courseInfo: { fontSize: 14, color: '#ccc' },
-  link: { color: '#1abc9c', marginTop: 5 },
-  professorCard: { backgroundColor: '#16213e', padding: 15, marginRight: 10, borderRadius: 10, alignItems: 'center' },
-  professorImage: { width: 50, height: 50, borderRadius: 25 },
-  professorName: { fontSize: 16, color: '#fff', marginTop: 5 },
-  professorRole: { fontSize: 14, color: '#ccc' },
-});
-
-export default Dashboard;
+}
