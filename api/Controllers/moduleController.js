@@ -1,3 +1,4 @@
+import { where } from 'sequelize';
 import db from '../models/index.js';
 
 const moduleController = {
@@ -17,6 +18,32 @@ const moduleController = {
             ],
           },
         ],
+      });
+      res.json(modules);
+    } catch (error) {
+      res.status(500).json({ error: 'Erro ao buscar módulos', details: error.message });
+    }
+  },
+
+  async getAllLast(req, res) {
+    try {
+      const {id} = req.params;
+      const modules = await db.Module.findAll({
+        where: {teacher_id:id},
+        include: [
+          {
+            model: db.Teachers,
+            as:'Author',
+            include: [
+              {
+                model: db.Users,
+                as: 'User',
+                attributes: ['id', 'name'],
+              },
+            ],
+          },
+        ],
+        order: [['id', 'DESC']],
       });
       res.json(modules);
     } catch (error) {
@@ -109,9 +136,9 @@ const moduleController = {
 
   async create(req, res) {
     try {
-      const { name, teacher_id } = req.body;
+      const { name, teacher_id,qtd_hours } = req.body;
 
-      const newModule = await db.Module.create({ name, teacher_id });
+      const newModule = await db.Module.create({ name, teacher_id,qtd_hours });
 
       res.status(201).json(newModule);
     } catch (error) {

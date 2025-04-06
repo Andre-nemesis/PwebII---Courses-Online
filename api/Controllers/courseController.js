@@ -203,7 +203,6 @@ const courseController = {
         admin_id:id,
         name, 
         qtd_hours, 
-        percent_complet: 0
       });
   
       if (!Array.isArray(module) || module.length === 0) {
@@ -213,7 +212,8 @@ const courseController = {
       const modulePromises = module.map((id) =>
         db.Course_module.create({ 
           course_id: newCourse.id, 
-          module_id: id 
+          module_id: id,
+          percent_complet: 0
         })
       );
   

@@ -43,10 +43,6 @@ export default (sequelize) => {
         key: 'id'
       }
     },
-    percent_complet: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
     created_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,

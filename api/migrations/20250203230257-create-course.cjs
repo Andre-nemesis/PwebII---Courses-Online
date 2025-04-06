@@ -30,10 +30,6 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT'
       },
-      percent_complet: {
-        type: Sequelize.FLOAT,
-        allowNull: false
-      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

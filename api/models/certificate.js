@@ -4,7 +4,7 @@ import { DataTypes } from 'sequelize';
 
 export default (sequelize) => {
   const Certificate = sequelize.define('Certificate', {
-    id:{
+    id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -61,24 +61,24 @@ export default (sequelize) => {
       allowNull: false,
       unique: true
     },
-    created_at:{
+    created_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
       allowNull: false
     },
-    updated_at:{
+    updated_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     }
   },
-  {
-    modelName:'Certificate',
-    underscored: true,
-    tableName: 'Certificates'
-  });
+    {
+      modelName: 'Certificate',
+      underscored: true,
+      tableName: 'Certificates'
+    });
   Certificate.associate = (models) => {
-    Certificate.belongsTo(models.Student, {foreignKey:'student_id'});
-    Certificate.belongsTo(models.Course, {foreignKey:'course_id'});
+    Certificate.belongsTo(models.Student, { foreignKey: 'student_id', as: "Student" });
+    Certificate.belongsTo(models.Course, { foreignKey: 'course_id', as: "Course" });
   }
 
   return Certificate;

@@ -4,7 +4,7 @@ import { authorizeRole, authorizeRoles, verifyToken } from '../middleware/authMi
 const router = express.Router();
 
 //get
-router.get('/',verifyToken,authorizeRole('admin'),teacherController.getAll);
+router.get('/',verifyToken,authorizeRoles(['admin','teacher']),teacherController.getAll);
 router.get('/:id',verifyToken,authorizeRoles(['admin','teacher']),teacherController.getById);
 router.get('/search/:term', verifyToken, authorizeRole('admin'), teacherController.searchByTerm);
 

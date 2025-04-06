@@ -7,6 +7,7 @@ const router = express.Router();
 // Routes for modules
 // get
 router.get('/', verifyToken,authorizeRoles(['admin','teacher']), moduleController.getAll);
+router.get('/leatest/:id',verifyToken,authorizeRoles(['admin','teacher']), moduleController.getAllLast);
 router.get('/:id',verifyToken,authorizeRoles(['admin','teacher']),moduleController.getById);
 router.get('/teacher/:id',verifyToken,authorizeRoles(['admin','teacher']),moduleController.getAllModuleForTeacherId);
 router.get('/view/modules-by-teacher',verifyToken,authorizeRole('admin'),moduleController.getTeacherModuleCount);

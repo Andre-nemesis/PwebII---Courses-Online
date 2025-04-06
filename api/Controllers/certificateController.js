@@ -1,15 +1,19 @@
-import { Certificate, Student, Course } from '../models/index.js';
+import db from '../models/index.js';
 
 const certificateController = {
 
-    //busca geral
+  //busca geral
 
   async getAll(req, res) {
     try {
-      const certificates = await Certificate.findAll({
+      const certificates = await db.Certificate.findAll({
         include: [
-          { model: Student, attributes: ['id', 'name'] },
-          { model: Course, attributes: ['id', 'name'] }
+          {
+            model: db.Student, as: "Student", include: [
+              { model: db.Users, as: "User" },
+            ]
+          },
+          { model: db.Course, as: "Course" }
         ]
       });
       res.json(certificates);
@@ -23,10 +27,15 @@ const certificateController = {
   async getById(req, res) {
     try {
       const { id } = req.params;
-      const certificate = await Certificate.findByPk(id, {
+      const certificate = await db.Certificate.findAll({
+        where: { student_id:id },
         include: [
-          { model: Student, attributes: ['id', 'name'] },
-          { model: Course, attributes: ['id', 'name'] }
+          {
+            model: db.Student, as: "Student", include: [
+              { model: db.Users, as: "User" },
+            ]
+          },
+          { model: db.Course, as: "Course" }
         ]
       });
 
@@ -45,14 +54,14 @@ const certificateController = {
       const { student_id, course_id, certificate_code, status, final_score, download_link } = req.body;
 
       // validação de aluno
-      const student = await Student.findByPk(student_id);
+      const student = await db.Student.findByPk(student_id);
       if (!student) return res.status(404).json({ error: 'Aluno não encontrado' });
 
       // validação de curso
-      const course = await Course.findByPk(course_id);
+      const course = await db.Course.findByPk(course_id);
       if (!course) return res.status(404).json({ error: 'Curso não encontrado' });
 
-      const newCertificate = await Certificate.create({
+      const newCertificate = await db.Certificate.create({
         student_id,
         course_id,
         certificate_code,
@@ -74,7 +83,7 @@ const certificateController = {
       const { id } = req.params;
       const { status, final_score, download_link } = req.body;
 
-      const certificate = await Certificate.findByPk(id);
+      const certificate = await db.Certificate.findByPk(id);
       if (!certificate) return res.status(404).json({ error: 'Certificado não encontrado' });
 
       await certificate.update({ status, final_score, download_link });
@@ -90,7 +99,7 @@ const certificateController = {
   async delete(req, res) {
     try {
       const { id } = req.params;
-      const certificate = await Certificate.findByPk(id);
+      const certificate = await db.Certificate.findByPk(id);
       if (!certificate) return res.status(404).json({ error: 'Certificado não encontrado' });
 
       await certificate.destroy();

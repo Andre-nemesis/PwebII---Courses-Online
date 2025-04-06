@@ -145,7 +145,7 @@ module.exports = {
       {
         id: adminId1,
         role: 'content_manager',
-        user_id: userId1,
+        user_id: userId9,
         created_at: new Date(),
         updated_at: new Date(),
       },
@@ -199,8 +199,7 @@ module.exports = {
         'Fundamentos de Redes',
       ][index],
       qtd_hours: [40, 120, 80, 80, 60, 50][index],
-      admin_id: adminId,
-      percent_complet: 0,
+      admin_id: adminId1,      
       created_at: new Date(),
       updated_at: new Date(),
     })));
@@ -237,12 +236,12 @@ module.exports = {
 
     // Matrículas Estudantes
     await queryInterface.bulkInsert('Student_courses', [
-      { id: 1, student_id: studentId1, course_id: courseId1, created_at: new Date(), updated_at: new Date() },
-      { id: 2, student_id: studentId2, course_id: courseId2, created_at: new Date(), updated_at: new Date() },
-      { id: 3, student_id: studentId3, course_id: courseId3, created_at: new Date(), updated_at: new Date() },
-      { id: 4, student_id: studentId4, course_id: courseId1, created_at: new Date(), updated_at: new Date() },
-      { id: 5, student_id: studentId1, course_id: courseId6, created_at: new Date(), updated_at: new Date() },
-      { id: 6, student_id: studentId2, course_id: courseId5, created_at: new Date(), updated_at: new Date() },
+      { id: 1, student_id: studentId1, course_id: courseId1, percent_complet: 0, created_at: new Date(), updated_at: new Date() },
+      { id: 2, student_id: studentId2, course_id: courseId2, percent_complet: 0, created_at: new Date(), updated_at: new Date() },
+      { id: 3, student_id: studentId3, course_id: courseId3, percent_complet: 0, created_at: new Date(), updated_at: new Date() },
+      { id: 4, student_id: studentId4, course_id: courseId1, percent_complet: 0, created_at: new Date(), updated_at: new Date() },
+      { id: 5, student_id: studentId1, course_id: courseId6, percent_complet: 0, created_at: new Date(), updated_at: new Date() },
+      { id: 6, student_id: studentId2, course_id: courseId5, percent_complet: 0, created_at: new Date(), updated_at: new Date() },
     ]);
   },
 

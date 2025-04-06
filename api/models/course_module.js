@@ -28,6 +28,10 @@ export default (sequelize) => {
           onUpdate: 'RESTRICT',
         }
     },
+    percent_complet: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
     created_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
