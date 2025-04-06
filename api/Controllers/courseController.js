@@ -29,6 +29,29 @@ const courseController = {
     }
   },
 
+  async searchByTerm(req, res) {
+    try {
+      const { term } = req.params;
+  
+      const courses = await db.Course.findAll({
+        where: {
+          name: {
+            [db.Sequelize.Op.like]: `%${term}%`
+          }
+        }
+      });
+  
+      if (courses.length === 0) {
+        return res.status(404).json({ error: 'Nenhum curso encontrado com esse termo' });
+      }
+  
+      res.status(200).json(courses);
+    } catch (err) {
+      res.status(500).json({ error: 'Erro ao pesquisar cursos', details: err.message });
+    }
+  },
+  
+
   async getModulesByCourseId(req, res) {
     try {
       const { id } = req.params;
@@ -38,33 +61,33 @@ const courseController = {
           model: db.Module,
           as: 'Modules',
           through: {
-            attributes: [], 
+            attributes: [],
           },
         }]
       });
-  
+
       if (!course) return res.status(404).json({ error: 'Curso não encontrado' });
-  
+
       res.json({
         courseName: course.name,
-        modules: course.Modules || [] 
+        modules: course.Modules || []
       });
     } catch (error) {
       console.error('Erro no backend:', error.stack);
       res.status(500).json({ error: 'Erro ao buscar módulos do curso', details: error.message });
     }
-  },  
+  },
 
   async getCourseByStudentId(req, res) {
     const studentId = req.params.id;
-  
+
     try {
       const courses = await db.Course.findAll({
         include: [
           {
             model: db.Student,
-            where: { id: studentId }, 
-            through: { attributes: [] }, 
+            where: { id: studentId },
+            through: { attributes: [] },
             include: [
               {
                 model: db.Users,
@@ -75,11 +98,11 @@ const courseController = {
           },
         ],
       });
-  
+
       if (!courses || courses.length === 0) {
         return res.status(404).json({ message: 'Não há inscrições em cursos para este aluno!' });
       }
-  
+
       res.status(200).json(courses);
     } catch (error) {
       console.error('Erro ao buscar cursos do aluno:', error.message);
@@ -99,22 +122,22 @@ const courseController = {
             model: db.Admin,
             as: 'Author',
             where: { role: 'content_manager' },
-            attributes: [], 
+            attributes: [],
             include: [
               {
                 model: db.Users,
                 as: 'User',
-                attributes: [] 
+                attributes: []
               }
             ]
           }
         ],
-        group: ['Author.User.name'], 
+        group: ['Author.User.name'],
         order: [[db.Sequelize.literal('courseCount'), 'DESC']],
-        raw: true 
+        raw: true
       });
-  
-      res.json({ countCourses: result });
+
+      res.json({ countCourses: countCourses });
     } catch (error) {
       res.status(500).json({ error: 'Erro ao contar cursos de todos os administradores', details: error.message });
     }
@@ -124,22 +147,22 @@ const courseController = {
     try {
       const courseStudentCount = await db.Course.findAll({
         attributes: [
-          ['name', 'courseName'],  
-          [db.Sequelize.fn('COUNT', db.Sequelize.col('Students.id')), 'studentCount'] 
+          ['name', 'courseName'],
+          [db.Sequelize.fn('COUNT', db.Sequelize.col('Students.id')), 'studentCount']
         ],
         include: [
           {
             model: db.Student,
             as: 'Students',
-            attributes: [], 
-            through: { attributes: [] } 
+            attributes: [],
+            through: { attributes: [] }
           }
         ],
-        group: ['Course.id', 'Course.name'], 
-        order: [[db.Sequelize.literal('studentCount'), 'DESC']], 
+        group: ['Course.id', 'Course.name'],
+        order: [[db.Sequelize.literal('studentCount'), 'DESC']],
         raw: true
       });
-  
+
       res.json({ courses: courseStudentCount });
     } catch (error) {
       res.status(500).json({ error: 'Erro ao contar estudantes por curso', details: error.message });
@@ -150,22 +173,22 @@ const courseController = {
     try {
       const courseModuleCount = await db.Course.findAll({
         attributes: [
-          ['name', 'courseName'],  
-          [db.Sequelize.fn('COUNT', db.Sequelize.col('Modules.id')), 'moduleCount'] 
+          ['name', 'courseName'],
+          [db.Sequelize.fn('COUNT', db.Sequelize.col('Modules.id')), 'moduleCount']
         ],
         include: [
           {
             model: db.Module,
             as: 'Modules',
-            attributes: [], 
-            through: { attributes: [] } 
+            attributes: [],
+            through: { attributes: [] }
           }
         ],
-        group: ['Course.id', 'Course.name'], 
-        order: [[db.Sequelize.literal('moduleCount'), 'DESC']], 
+        group: ['Course.id', 'Course.name'],
+        order: [[db.Sequelize.literal('moduleCount'), 'DESC']],
         raw: true
       });
-  
+
       res.json({ courses: courseModuleCount });
     } catch (error) {
       res.status(500).json({ error: 'Erro ao contar módulos por curso', details: error.message });
@@ -174,8 +197,28 @@ const courseController = {
 
   async create(req, res) {
     try {
-      const { name, course_duration, num_hours, percent_complete } = req.body;
-      const newCourse = await db.Course.create({ name, course_duration, num_hours, percent_complete });
+      const { name, qtd_hours, module,id } = req.body;
+  
+      const newCourse = await db.Course.create({ 
+        admin_id:id,
+        name, 
+        qtd_hours, 
+        percent_complet: 0
+      });
+  
+      if (!Array.isArray(module) || module.length === 0) {
+        return res.status(400).json({ error: 'É necessário selecionar pelo menos um módulo' });
+      }
+  
+      const modulePromises = module.map((id) =>
+        db.Course_module.create({ 
+          course_id: newCourse.id, 
+          module_id: id 
+        })
+      );
+  
+      await Promise.all(modulePromises);
+      
       res.status(201).json(newCourse);
     } catch (error) {
       res.status(500).json({ error: 'Erro ao criar curso', details: error.message });

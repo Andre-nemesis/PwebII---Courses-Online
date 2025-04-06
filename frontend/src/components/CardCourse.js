@@ -4,12 +4,13 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 
-const CardCourse = ({ id, title, description, type }) => {
+const CardCourse = ({ id, title, description, type,role }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
     if (type === "admin") {
-      navigate(`/admin/courses/${id}/modules`);
+      if(role === "admin") navigate(`/admin/courses/${id}/modules`);
+      else navigate(`/manager/courses/${id}/modules`);
     }
     else {
       navigate(`/student/courses/${id}/modules`);

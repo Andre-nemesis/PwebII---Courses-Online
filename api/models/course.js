@@ -46,16 +46,6 @@ export default (sequelize) => {
     percent_complet: {
       type: DataTypes.FLOAT,
       allowNull: false,
-      validate: {
-        min: {
-          args: 0,
-          msg: "O percentual de completude do curso deve ser maior ou igual a 0"
-        },
-        max: {
-          args: 100,
-          msg: "O percentual de completude do curso deve ser menor ou igual a 100"
-        }
-      }
     },
     created_at: {
       type: DataTypes.DATE,

@@ -190,6 +190,26 @@ const studentController = {
       res.status(500).json({ error: 'Erro ao inscrever-se no curso', details: error.message });
     }
   },
+
+  async subcribeCourseAll(req, res) {
+    const { id } = req.params;
+    try {
+      const studentCourses = await db.Student_courses.findOne({
+        where: { student_id: id },
+        include: [{ model: db.Course, as: "Course" }]
+      });
+
+      if(studentController.length == 0) {
+        return res.status(404).json({ message: 'Não há inscrições em cursos para este aluno!' });
+      }
+      
+      res.status(200).json({studentCourses});
+    }
+    catch (error) {
+      res.status(500).json({ error: 'Erro ao inscrever-se no curso', details: error.message });
+    }
+  },
+
   async unsubcribeCourse(req, res) {
     const { user } = req.params;
     const { id } = req.params;

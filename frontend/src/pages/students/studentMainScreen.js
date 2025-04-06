@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
+
 import {
-  Box,
-  Container,
-  Typography,
-  IconButton,
-  useTheme,
-  useMediaQuery,
+  Box, Container, Typography,
+  IconButton, useTheme, useMediaQuery,
   CircularProgress,
 } from "@mui/material";
+
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Menu from "../../components/Menu";
@@ -17,9 +15,9 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
 const coursesViewed = [
-  { title: "Fundamentos de Front-end", status: "Iniciado", hours: "30h", action: "Continuar" },
-  { title: "Fundamentos da Ciência de dados", status: "Iniciado", hours: "35h", action: "Continuar" },
-  { title: "Introdução a Lógica de Programação", status: "Iniciado", hours: "20h", action: "Continuar" },
+  { title: "Fundamentos de Front-end", status: "Iniciado", hours: "30", action: "Continuar" },
+  { title: "Fundamentos da Ciência de dados", status: "Iniciado", hours: "35", action: "Continuar" },
+  { title: "Introdução a Lógica de Programação", status: "Iniciado", hours: "20", action: "Continuar" },
 ];
 
 const HomePage = () => {
@@ -82,11 +80,12 @@ const HomePage = () => {
   }
 
   const handlePrev = (index, setIndex) => {
-    if (index > 0) setIndex(index - cardsPerPage);
+    setIndex(Math.max(0, index - cardsPerPage));
   };
-
+  
   const handleNext = (index, setIndex, total) => {
-    if (index + cardsPerPage < total) setIndex(index + cardsPerPage);
+    const maxIndex = Math.max(0, total - cardsPerPage);
+    setIndex(Math.min(index + cardsPerPage, maxIndex));
   };
 
   const CarouselSection = ({ title, data, index, setIndex }) => {

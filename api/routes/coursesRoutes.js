@@ -13,6 +13,7 @@ router.get('/view/student-by-course',verifyToken,authorizeRole('admin'),courseCo
 router.get('/view/course-by-admin',verifyToken,authorizeRole('admin'),courseController.getCountCoursesByAdmin)
 router.get('/view/modules-by-course',verifyToken,authorizeRole('admin'),courseController.getCourseModuleCount);
 router.get('/:id/modules',verifyToken,authorizeRoles(['admin','student']), courseController.getModulesByCourseId);
+router.get('/search/:term',verifyToken,courseController.searchByTerm);
 
 // post
 router.post('/',verifyToken,authorizeRole('admin'),courseController.create);

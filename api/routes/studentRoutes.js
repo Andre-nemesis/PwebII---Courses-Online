@@ -13,6 +13,7 @@ router.get('/viewCompleteCourse', verifyToken, authorizeRole('student'), student
 router.get('/searchCourse/:id', verifyToken, authorizeRole('student'), studentController.searchCourse);
 router.get('/:id',verifyToken,authorizeRoles(['admin','student']),studentController.getById);
 router.get('/search/:term',verifyToken,authorizeRole('admin'),studentController.searchByTerm);
+router.get('/subcribed-courses/:id',verifyToken,authorizeRole('student'),studentController.subcribeCourseAll);
 
 // put
 router.put('/:id',verifyToken,authorizeRoles(['admin','student']),studentController.update);

@@ -30,12 +30,13 @@ const SubscribedCourses = () => {
         const fetchCourses = async () => {
             try {
                 const userId = getUserIdFromToken();
-                const response = await api.get(`/students/courses/view/student/${userId}`);
+                const response = await api.get(`/students/subcribed-courses/${userId}`);
 
                 if (response.data.message === "Não há inscrições em cursos para este aluno!") {
                     setNoCourses(true);
                 } else {
-                    setCourses(response.data);
+                    setCourses(response.data.studentCourses.Course);
+                    console.log(response.data.studentCourses.Course, userId);
                 }
             } catch (err) {
                 const errorMessage = err.response?.data?.message || 'Erro ao buscar cursos. Tente novamente mais tarde.';

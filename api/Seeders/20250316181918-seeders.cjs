@@ -31,6 +31,7 @@ module.exports = {
     const courseId1 = 1;
     const courseId2 = 2;
     const courseId3 = 3;
+    const courseId4 = 4;
 
     const moduleId1 = 1;
     const moduleId2 = 2;
@@ -224,6 +225,15 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
       },
+      {
+        id: courseId4,
+        name: 'Redes de Computadores',
+        qtd_hours: 80,
+        admin_id: adminId,
+        percent_complet: 0,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
     ]);
 
     await queryInterface.bulkInsert('Modules', [
@@ -361,6 +371,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete('Student_courses', null, {});
     await queryInterface.bulkDelete('Certificates', null, {});
     await queryInterface.bulkDelete('Course_module', null, {});
     await queryInterface.bulkDelete('Modules', null, {});
