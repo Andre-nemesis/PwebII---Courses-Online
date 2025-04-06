@@ -241,7 +241,6 @@ const ModulesList = ({ userRole, adminRole }) => {
                 flexDirection: { xs: 'column', sm: 'row' },
                 gap: 2,
                 mb: 3,
-                alignItems: 'center'
               }}
             >
               <SearchBar 
@@ -249,20 +248,6 @@ const ModulesList = ({ userRole, adminRole }) => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 sx={{ flexGrow: 1 }}
               />
-
-              <Button
-                startIcon={<Tune />}
-                sx={{
-                  color: "#2176FF",
-                  backgroundColor: "#040D33",
-                  border: "1px solid #2176FF",
-                  "&:hover": { backgroundColor: "#2176FF", color: "#EAEFF7" },
-                  height: "40px",
-                  minWidth: "120px",
-                }}
-              >
-                Filtrar
-              </Button>
 
               <Button 
                 variant="contained"

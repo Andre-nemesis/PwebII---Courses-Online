@@ -8,17 +8,17 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const MainScreenTeacher = () => {
-  const [coursesModules, setCoursesModules] = useState(null);
+  // const [coursesModules, setCoursesModules] = useState(null);
   const [coursesStudents, setCoursesStudents] = useState(null);
-  const [modulesTeachers, setModulesTeachers] = useState(null);
+  // const [modulesTeachers, setModulesTeachers] = useState(null);
   const [adminCourse, setAdminCourse] = useState(null);
   const [openError, setOpenError] = useState(false);
   const [errorInfo, setErrorInfo] = useState({ type: "error", message: "" });
 
   const [studentsIndex, setStudentsIndex] = useState(0);
   const [adminIndex, setAdminIndex] = useState(0);
-  const [modulesIndex, setModulesIndex] = useState(0);
-  const [teachersIndex, setTeachersIndex] = useState(0);
+  // const [modulesIndex, setModulesIndex] = useState(0);
+  // const [teachersIndex, setTeachersIndex] = useState(0);
 
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down("sm")); // Até 600px
@@ -44,13 +44,13 @@ const MainScreenTeacher = () => {
         console.log("Cursos por Admin:", response.data);
         setAdminCourse(response.data);
 
-        response = await api.get('/courses/view/modules-by-course');
-        console.log("Módulos por Curso:", response.data);
-        setCoursesModules(response.data);
+        // response = await api.get('/courses/view/modules-by-course');
+        // console.log("Módulos por Curso:", response.data);
+        // setCoursesModules(response.data);
 
-        response = await api.get('/modules/view/modules-by-teacher');
-        console.log("Módulos por Professor:", response.data);
-        setModulesTeachers(response.data);
+        // response = await api.get('/modules/view/modules-by-teacher');
+        // console.log("Módulos por Professor:", response.data);
+        // setModulesTeachers(response.data);
       } catch (error) {
         setOpenError(true);
         setErrorInfo({ type: "error", message: "Falha ao carregar dados." });
@@ -175,7 +175,7 @@ const MainScreenTeacher = () => {
           description="Número de cursos criados"
         />
 
-        <CarouselSection
+        {/* <CarouselSection
           title="Módulos por Curso"
           data={coursesModules}
           index={modulesIndex}
@@ -184,9 +184,9 @@ const MainScreenTeacher = () => {
           titleField="courseName"
           valueField="moduleCount"
           description="Número de módulos associados"
-        />
+        /> */}
 
-        <CarouselSection
+        {/* <CarouselSection
           title="Módulos por Professor"
           data={modulesTeachers}
           index={teachersIndex}
@@ -195,7 +195,7 @@ const MainScreenTeacher = () => {
           titleField="userName"
           valueField="moduleCount"
           description="Número de módulos lecionados"
-        />
+        /> */}
 
         <ErrorMessageModal
           open={openError}
