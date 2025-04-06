@@ -43,8 +43,8 @@ const CoursesList = ({ userRole, adminRole }) => {
     const fetchCourses = async () => {
       try {
         const response = await api.get('/courses/');
-        setFilteredCourses(response.data);
-
+        setCourses(response.data);              // ✅ adiciona isso
+        setFilteredCourses(response.data);      // ✅ mantém isso
       } catch (err) {
         setError(`Erro ao carregar os cursos: ${err.message}`);
       } finally {

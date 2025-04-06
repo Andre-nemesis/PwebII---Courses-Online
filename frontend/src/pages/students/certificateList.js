@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
+
 import {
-  Box, Typography, TextField, IconButton,
+  Box, Typography, IconButton,
   Grid, Card, CardContent, Button, Container,
 } from "@mui/material";
-import { ArrowBackIos, ArrowForwardIos, Search } from "@mui/icons-material";
+import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 
 import api from "../../service/api";
 import Menu from "../../components/Menu";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import SearchBar from "../../components/SearchBar"; 
 
 const Certificates = () => {
   const [certificates, setCertificates] = useState([]);
@@ -21,6 +23,8 @@ const Certificates = () => {
 
   const navigate = useNavigate();
   const itemsPerPage = 6;
+
+  //Não tem a rota na API kkkk 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -81,18 +85,7 @@ const Certificates = () => {
         </Container>
 
         <Container sx={{ maxWidth: "100%", px: 2 }}>
-          <TextField
-            fullWidth
-            placeholder="Pesquisar certificado"
-            variant="outlined"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            InputProps={{
-              endAdornment: <Search sx={{ color: "white" }} />,
-              style: { backgroundColor: "#1E3A8A", color: "white" },
-            }}
-            sx={{ mb: 4 }}
-          />
+          <SearchBar onChange={(e) => setSearch(e.target.value)} /> {}
 
           <Grid container spacing={2}>
             {paginated.map((cert, i) => (
