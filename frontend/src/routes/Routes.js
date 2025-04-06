@@ -10,6 +10,7 @@ import SubscribedCourses from '../pages/students/subcribetCourses.js';
 import TeachersList from '../pages/Admins/teachersList.js';
 import StudentsList from '../pages/Admins/studentsList.js';
 import HomePage from '../pages/students/studentMainScreen.js';
+import Certificates from '../pages/students/certificateList.js';
 import AdminList from '../pages/Admins/adminList.js';
 import ModulesTeacherList from '../pages/teachers/modulesCreatedList.js';
 import ModulesList from '../pages/teachers/modulesList.js';
@@ -88,6 +89,7 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
                 <Route path="student/mainScreen" element={<HomePage userRole={type} />} />
                 <Route path="student/courses" element={<CoursesList />} />
                 <Route path="student/subscribed-courses" element={<SubscribedCourses />} />
+                <Route path="student/certificates" element={<Certificates />} />
                 <Route path="student/settings" element={<ProfileSettings userRole={type} />} />
               </>
             )}
