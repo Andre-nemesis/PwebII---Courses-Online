@@ -20,8 +20,9 @@ import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../../components/SearchBar.js";
 import CreateModuleModal from "../../components/CreateModuleModal.js";
+import CoursesList from "../students/coursesList.js";
 
-const ModulesList = ({ userRole, adminRole }) => {
+const CoursesList = ({ userRole, adminRole }) => {
   const [modules, setModules] = useState([]);
   const [filteredModules, setFilteredModules] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -360,4 +361,4 @@ const ModulesList = ({ userRole, adminRole }) => {
   );
 };
 
-export default ModulesList;
+export default CoursesList;

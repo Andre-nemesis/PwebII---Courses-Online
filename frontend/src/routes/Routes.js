@@ -79,6 +79,7 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
               <>
                 <Route path="teacher/mainScreen" element={<HomePageTeacher userRole={type} />} />
                 <Route path="teacher/module/view" element={<ModulesList userRole={type} />} />
+                <Route path="teacher/course/view" element={<CoursesList userRole={type} />} />
                 <Route path="teacher/settings" element={<ProfileSettings userRole={type} />} />
               </>
             )}
