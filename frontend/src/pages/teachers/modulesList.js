@@ -30,6 +30,7 @@ const ModulesList = ({ userRole, adminRole }) => {
   const [role, setRole] = useState(null);
   const [roleAdmin, setRoleAdmin] = useState(null);
   const [authenticated, setAuthenticated] = useState(true);
+  const [isSearch, setSearch] = useState(false);
   const navigate = useNavigate();
 
   const [openModal, setOpenModal] = useState(false);
@@ -89,6 +90,26 @@ const ModulesList = ({ userRole, adminRole }) => {
     return null;
   }
 
+  const handleSearchChange = async (e) => {
+    const value = e.target.value.trim();
+    setSearchTerm(value);
+
+    if (!value) {
+      setFilteredModules(modules);
+      setSearch(false);
+      return;
+    }
+
+    const modulesByTerm = await modulesByTerm(value);
+    if (modulesByTerm && modulesByTerm.length > 0) {
+      setFilteredModules(modulesByTerm);
+      setSearch(true);
+    } else {
+      setFilteredModules([]);
+      setSearch(true);
+    }
+  };
+
   return (
     <Box sx={{ 
       display: "flex", 
@@ -111,49 +132,7 @@ const ModulesList = ({ userRole, adminRole }) => {
               Lista de Módulos
             </Typography>
 
-            <Paper
-              component="form"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                backgroundColor: "#2A3A66",
-                borderRadius: 2,
-                mb: 3,
-                p: 1,
-              }}
-            >
-              <InputBase
-                sx={{ 
-                  ml: 2, 
-                  flex: 1, 
-                  color: "#C8D0DA", 
-                  backgroundColor: "#1E2951", 
-                  border: "1px solid #C8D0DA",
-                  p: 1
-                }}
-                placeholder="Pesquisar módulo..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <IconButton sx={{ color: "#C8D0DA" }}>
-                <Search />
-              </IconButton>
-
-              <Button
-                startIcon={<Tune />}
-                sx={{
-                  color: "#2176FF",
-                  borderRadius: 2,
-                  backgroundColor: "#040D33",
-                  border: "1px solid #2176FF",
-                  "&:hover": { backgroundColor: "#2176FF", color: "#EAEFF7" },
-                  ml: 1,
-                  p: 1,
-                }}
-              >
-                Filtrar
-              </Button>
-            </Paper>
+            <SearchBar onChange={handleSearchChange} />
 
             {loading ? (
               <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -164,9 +143,9 @@ const ModulesList = ({ userRole, adminRole }) => {
             ) : filteredModules.length === 0 ? (
               <Typography color="white">Nenhum módulo encontrado</Typography>
             ) : (
-              <Grid container spacing={2}>
+              <Grid container spacing={3}>
                 {filteredModules.map((mod, index) => (
-                  <Grid item xs={12} sm={6} md={4} key={mod.id || index}>
+                  <Grid item xs={12} sm={6} md={4} key={mod.id || index}  marginTop="25px">
                     <Paper
                       sx={{
                         p: 2,
@@ -243,11 +222,7 @@ const ModulesList = ({ userRole, adminRole }) => {
                 mb: 3,
               }}
             >
-              <SearchBar 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                sx={{ flexGrow: 1 }}
-              />
+              <SearchBar onChange={handleSearchChange} />
 
               <Button 
                 variant="contained"
@@ -278,7 +253,7 @@ const ModulesList = ({ userRole, adminRole }) => {
             ) : filteredModules.length === 0 ? (
               <Typography color="white">Nenhum módulo encontrado</Typography>
             ) : (
-              <Grid container spacing={2}>
+              <Grid container spacing={3}>
                 {filteredModules.map((mod, index) => (
                   <Grid item sx={{mb:4}} xs={12} sm={6} md={4} key={mod.id || index}>
                     <Paper

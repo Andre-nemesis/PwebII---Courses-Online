@@ -31,8 +31,14 @@ const AdminList = () => {
         const fetchAdmins = async () => {
             try {
                 const response = await api.get('/admin/viewAdmins');
-                setAdmins(response.data);
-                setFilteredUsers(response.data);
+                
+                const sortedAdmins = response.data.sort((a, b) => 
+                    a.User.name.localeCompare(b.User.name)
+                );
+
+                setAdmins(sortedAdmins);
+                setFilteredUsers(sortedAdmins);
+
             } catch (err) {
                 setErrorInfo({ message: err.message });
                 setOpenError(true);

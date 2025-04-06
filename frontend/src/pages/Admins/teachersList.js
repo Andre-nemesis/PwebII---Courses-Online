@@ -32,8 +32,13 @@ const TeachersList = () => {
     const fetchTeachers = async () => {
       try {
         const response = await api.get('/admin/viewTeacher');
-				setTeachers(response.data);
-        setFilteredUsers(response.data);
+				
+        const sortedTeachers = response.data.sort((a, b) => 
+          a.User.name.localeCompare(b.User.name)
+        );
+
+				setTeachers(sortedTeachers);
+        setFilteredUsers(sortedTeachers);
     
       } catch (err) {
         setError('Erro ao buscar professores'+err);
@@ -43,7 +48,7 @@ const TeachersList = () => {
     };
 
     fetchTeachers();
-  }, [refreshKey]);
+  }, []);
 
   const fetchUsersByTermo = async (termo) => {
 		try {
@@ -127,16 +132,17 @@ const TeachersList = () => {
   const handleCloseMessage = () => setOpenMessage(false);
   const handleCloseError = () => setOpenError(false);
   
-  const handleUpdateTeacher = (updatedTeacher) => {
-    if (updatedTeacher.id) {
-      setTeachers(prevTeachers =>
-        prevTeachers.map(teacher => 
-          teacher.id === updatedTeacher.id ? updatedTeacher : teacher
-        )
-      );
+  const handleUpdateTeacher = async (updatedTeacher) => {
+    try {
+      const response = await api.get('/admin/viewTeacher');
       
-    } else {
-      setRefreshKey(prev => prev + 1);
+      setTeachers(response.data);
+      setFilteredUsers(response.data);
+
+    } catch (err) {
+      setError('Erro ao buscar professores' + err);
+    } finally {
+      setLoading(false);
     }
   };
   

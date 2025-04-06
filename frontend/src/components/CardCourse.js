@@ -1,10 +1,9 @@
 import React from "react";
 import { Card, CardContent, Typography, Box, Button } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 
-const CardCourse = ({ id, title, description, type,role }) => {
+const CardCourse = ({ id, title, description, type, role }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
