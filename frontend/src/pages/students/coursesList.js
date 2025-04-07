@@ -77,10 +77,17 @@ const CoursesList = () => {
   const fetchCoursesData = async () => {
     try {
       setLoading(true);
-      const response = await api.get("/courses/");
-      setCourses(response.data);
-      setFilteredCourses(response.data);
-      setCourseIndex(0); // Resetar índice ao atualizar
+      const allCoursesResponse = await api.get("/courses/");
+      let allCourses = allCoursesResponse.data;
+  
+      if (role === "student" && admin_id) {
+        const enrolledCourseIds = await fetchStudentCourses(admin_id);
+        allCourses = allCourses.filter(course => !enrolledCourseIds.includes(course.id));
+      }
+  
+      setCourses(allCourses);
+      setFilteredCourses(allCourses);
+      setCourseIndex(0);
       setFilteredCourseIndex(0);
     } catch (err) {
       setErrorInfo({ type: "error", message: err.message });
@@ -88,7 +95,19 @@ const CoursesList = () => {
     } finally {
       setLoading(false);
     }
+  };  
+
+  const fetchStudentCourses = async (studentId) => {
+    try {
+      const response = await api.get(`/students/${studentId}/courses`);
+      return response.data.map((course) => course.id);
+    } catch (err) {
+      setErrorInfo({ type: "error", message: err.message });
+      setOpenError(true);
+      return [];
+    }
   };
+  
 
   const fetchModules = async () => {
     try {

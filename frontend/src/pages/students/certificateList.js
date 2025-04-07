@@ -33,7 +33,7 @@ const Certificates = () => {
         setRole(decoded.role);
         setId(decoded.id);
       } catch (err) {
-        setErrorInfo({ type: "error", message: "Erro de autênticação" });
+        setErrorInfo({ type: "error", message: "Erro de autenticação" });
         setOpenError(true);
         setAuthenticated(false);
       }
@@ -42,22 +42,38 @@ const Certificates = () => {
     }
   }, []);
 
+  const fetchCertificatesByStudent = async (studentId) => {
+    try {
+      const response = await api.get(`/certificates/student/${studentId}`);
+      return response.data;
+    } catch (err) {
+      throw new Error("Erro ao buscar certificados");
+    }
+  };
+
   useEffect(() => {
     if (id) {
-      const fetchData = async () => {
+      const getCertificates = async () => {
         try {
-          const response = await api.get(`/certificates/student/${id}`);
-          console.log(response.data, id);
-          setCertificates(response.data);
-          setFiltered(response.data);
-        } catch (err) {
-          setErrorInfo({ type: "error", message: "Erro ao buscar certificados" });
+          const data = await fetchCertificatesByStudent(id);
+          setCertificates(data);
+          setFiltered(data);
+        } catch (error) {
+          setErrorInfo({ type: "error", message: error.message });
           setOpenError(true);
         }
       };
-      fetchData();
+      getCertificates();
     }
   }, [id]);
+
+  useEffect(() => {
+    const filteredResults = certificates.filter(cert =>
+      cert.Course.name.toLowerCase().includes(search.toLowerCase())
+    );
+    setFiltered(filteredResults);
+    setPage(0);
+  }, [search, certificates]);
 
   if (!authenticated) {
     navigate("/login");
@@ -65,7 +81,6 @@ const Certificates = () => {
   }
 
   const handleCloseError = () => setOpenError(false);
-
   const paginated = filtered.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
 
   return (
@@ -120,7 +135,6 @@ const Certificates = () => {
                         Ver Certificado
                       </Button>
                     )}
-
                   </CardContent>
                 </Card>
               </Grid>
@@ -144,7 +158,12 @@ const Certificates = () => {
             </IconButton>
           </Box>
         </Container>
-        <ErrorMessageModal open={openError} onClose={handleCloseError} type={errorInfo.type} message={errorInfo.message} />
+        <ErrorMessageModal
+          open={openError}
+          onClose={handleCloseError}
+          type={errorInfo.type}
+          message={errorInfo.message}
+        />
       </Box>
     </Box>
   );
