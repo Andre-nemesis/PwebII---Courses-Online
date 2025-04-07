@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import {
-  Box, Typography, IconButton,
-  Grid, Card, CardContent, Button, Container,
+  Box,
+  Typography,
+  IconButton,
+  Grid,
+  Card,
+  CardContent,
+  Button,
+  Container,
 } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import api from "../../service/api";
@@ -23,7 +29,7 @@ const Certificates = () => {
   const [errorInfo, setErrorInfo] = useState({ type: "error", message: "" });
 
   const navigate = useNavigate();
-  const itemsPerPage = 6;
+  const itemsPerPage = 3; // Ajustado para 3 cards por página
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -68,11 +74,16 @@ const Certificates = () => {
   }, [id]);
 
   useEffect(() => {
-    const filteredResults = certificates.filter(cert =>
-      cert.Course.name.toLowerCase().includes(search.toLowerCase())
-    );
-    setFiltered(filteredResults);
-    setPage(0);
+    // Filtrar certificados com base na busca
+    if (search) {
+      const filteredCertificates = certificates.filter((cert) =>
+        cert.Course.name.toLowerCase().includes(search.toLowerCase())
+      );
+      setFiltered(filteredCertificates);
+      setPage(0); // Resetar a página ao filtrar
+    } else {
+      setFiltered(certificates);
+    }
   }, [search, certificates]);
 
   if (!authenticated) {
@@ -108,11 +119,14 @@ const Certificates = () => {
                       {cert.Course.name}
                     </Typography>
                     {cert.final_score < 7 ? (
-                      <Typography variant="body2" color="error">Reprovado</Typography>
+                      <Typography variant="body2" color="error">
+                        Reprovado
+                      </Typography>
                     ) : (
-                      <Typography variant="body2" color="success">Concluído</Typography>
+                      <Typography variant="body2" color="success">
+                        Concluído
+                      </Typography>
                     )}
-
                     <Typography variant="body2" sx={{ mt: 1 }}>
                       Nota: {cert.final_score}
                     </Typography>
@@ -130,7 +144,7 @@ const Certificates = () => {
                         variant="text"
                         sx={{ color: "#00BFFF", mt: 1 }}
                         endIcon={<ArrowForwardIos />}
-                        onClick={() => window.open(cert.url, "_blank")}
+                        onClick={() => window.open(cert.download_link, "_blank")} // Ajustado para download_link
                       >
                         Ver Certificado
                       </Button>

@@ -24,11 +24,33 @@ const certificateController = {
 
   // busca por ID
 
+  async verifyCertificate(req, res) {
+    try {
+      const { course,id } = req.params;
+      const certificate = await db.Certificate.findAll({
+        where: { student_id: id,course_id:course },
+        include: [
+          {
+            model: db.Student, as: "Student", include: [
+              { model: db.Users, as: "User" },
+            ]
+          },
+          { model: db.Course, as: "Course" }
+        ]
+      });
+
+      if (certificate.len>0) return res.status(200).json({result:true});
+      else return res.status(200).json({ result:false});
+    } catch (error) {
+      res.status(500).json({ error: 'Erro ao buscar certificado', details: error.message });
+    }
+  },
+
   async getById(req, res) {
     try {
       const { id } = req.params;
       const certificate = await db.Certificate.findAll({
-        where: { student_id:id },
+        where: { student_id: id },
         include: [
           {
             model: db.Student, as: "Student", include: [
@@ -47,18 +69,16 @@ const certificateController = {
     }
   },
 
-  // funçao para criar 
-
   async create(req, res) {
     try {
       const { student_id, course_id, certificate_code, status, final_score, download_link } = req.body;
-
-      // validação de aluno
-      const student = await db.Student.findByPk(student_id);
+      const student = await db.Student.findOne({
+        where: { id: student_id }
+      });
       if (!student) return res.status(404).json({ error: 'Aluno não encontrado' });
-
-      // validação de curso
-      const course = await db.Course.findByPk(course_id);
+      const course = await db.Course.findOne({
+        where: { id: course_id }
+      });
       if (!course) return res.status(404).json({ error: 'Curso não encontrado' });
 
       const newCertificate = await db.Certificate.create({
@@ -70,7 +90,13 @@ const certificateController = {
         download_link
       });
 
-      res.status(201).json(newCertificate);
+      const studentCourse = await db.Student_courses.findOne({
+        where: { student_id, course_id }
+      });
+      
+      await studentCourse.update({percent_complet:100})
+
+        res.status(201).json(newCertificate);
     } catch (error) {
       res.status(500).json({ error: 'Erro ao criar certificado', details: error.message });
     }
