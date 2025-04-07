@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Typography, Container, Box, Button } from "@mui/material";
+import { v4 as uuidv4 } from "uuid";
 import Menu from "../components/Menu";
 import api from "../service/api";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +17,7 @@ const CourseDetails = () => {
   const [roleAdmin, setRoleAdmin] = useState(null);
   const [userId, setUserId] = useState(null);
   const [isSubscribed, setIsSubscribed] = useState(null);
+  const [hasCertificate, setHasCertificate] = useState(null);
   const [authenticated, setAuthenticated] = useState(null);
   const navigate = useNavigate();
   const [openError, setOpenError] = useState(false);
@@ -50,7 +52,10 @@ const CourseDetails = () => {
 
         if (decoded.role === "student" && decoded.id) {
           const subscribeResponse = await api.post(`/students/course/verify/${id}/user/${decoded.id}`);
+          const certificateResponse = await api.get(`/certificates/verify/${id}/${decoded.id}`);
+
           setIsSubscribed(subscribeResponse.data.result);
+          setHasCertificate(certificateResponse.data.result);
         }
       } catch (error) {
         setErrorInfo({ type: "error", message: error.message || "Erro ao carregar dados do curso." });
@@ -62,6 +67,28 @@ const CourseDetails = () => {
 
     fetchData();
   }, [id, navigate]);
+
+  const createCertificate = async () => {
+    try {
+      const certificateCode = uuidv4();
+      const downloadLink = `${window.location.origin}/certificates/download/${certificateCode}`;
+      const certificateData = {
+        course_id: id,
+        student_id: userId,
+        certificate_code: certificateCode,
+        status: "Aprovado",
+        final_score: 10,
+        download_link: downloadLink,
+      };
+      await api.post("/certificates/", certificateData);
+      setErrorInfo({ type: "success", message: "Curso concluído com sucesso!" });
+      setOpenError(true);
+      setHasCertificate(true);
+    } catch (error) {
+      setErrorInfo({ type: "error", message: error.message || "Erro ao gerar certificado." });
+      setOpenError(true);
+    }
+  };
 
   const handleSubscribeCourse = async () => {
     try {
@@ -86,7 +113,7 @@ const CourseDetails = () => {
   }
 
   if (!authenticated) {
-    return null; // Redirecionamento já tratado no useEffect
+    return null;
   }
 
   return (
@@ -95,12 +122,7 @@ const CourseDetails = () => {
         color: "white",
         padding: 4,
         marginTop: "20px",
-        width: {
-          xs: "100%",
-          sm: "100%",
-          md: "calc(100% - 240px)",
-          lg: "calc(100% - 240px)",
-        },
+        width: { xs: "100%", sm: "100%", md: "calc(100% - 240px)", lg: "calc(100% - 240px)" },
         ml: { lg: "240px", md: "240px" },
       }}
     >
@@ -112,10 +134,7 @@ const CourseDetails = () => {
 
       {modules.length > 0 ? (
         modules.map((module) => (
-          <Box
-            key={module.id}
-            sx={{ mb: 3, p: 2, backgroundColor: "#0A0F29", borderRadius: 2 }}
-          >
+          <Box key={module.id} sx={{ mb: 3, p: 2, backgroundColor: "#0A0F29", borderRadius: 2 }}>
             <Typography variant="h6" sx={{ fontWeight: "bold" }}>
               {module.name}
             </Typography>
@@ -134,13 +153,15 @@ const CourseDetails = () => {
         </Button>
       )}
 
-      {role === "student" && isSubscribed === true && (
-        <Button
-          variant="contained"
-          onClick={() => navigate(`/courses/${id}/progress`)}
-          sx={{ mt: 2 }}
-        >
+      {role === "student" && isSubscribed === true && hasCertificate === false && (
+        <Button variant="contained" onClick={createCertificate} sx={{ mt: 2 }}>
           Concluir Curso
+        </Button>
+      )}
+
+      {role === "student" && isSubscribed === true && hasCertificate === true && (
+        <Button variant="contained" onClick={() => navigate('/student/certificates')} sx={{ mt: 2 }}>
+          Ver Certificado
         </Button>
       )}
 
