@@ -7,6 +7,7 @@ const router = express.Router();
 router.post('/',verifyToken,authorizeRole('admin'),studentController.create);
 router.post('/course/subscribe/:id/user/:user', verifyToken, authorizeRole('student'),studentController.subcribeCourse);
 router.post('/course/desubscribe/:id/user/:user', verifyToken, authorizeRole('student'),studentController.unsubcribeCourse);
+router.post('/course/verify/:id/user/:user', verifyToken, authorizeRole('student'),studentController.isSubcribed);
 
 //gets
 router.get('/viewCompleteCourse', verifyToken, authorizeRole('student'), studentController.viewCompletedCourses);

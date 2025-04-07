@@ -197,10 +197,10 @@ const courseController = {
 
   async create(req, res) {
     try {
-      const { name, qtd_hours, module,id } = req.body;
+      const { name, qtd_hours, module,admin_id } = req.body;
   
       const newCourse = await db.Course.create({ 
-        admin_id:id,
+        admin_id,
         name, 
         qtd_hours, 
       });
@@ -213,7 +213,6 @@ const courseController = {
         db.Course_module.create({ 
           course_id: newCourse.id, 
           module_id: id,
-          percent_complet: 0
         })
       );
   

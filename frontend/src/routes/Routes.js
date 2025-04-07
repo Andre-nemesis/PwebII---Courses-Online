@@ -72,7 +72,7 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
                 <Route path="admin/students" element={<StudentsList />} />
                 <Route path="admin/admins" element={<AdminList />} />
                 <Route path="admin/module/view" element={<ModulesTeacherList userRole={type} admRole={role} />} />
-                <Route path="admin/module/view/all" element={<ModulesList userRole={type} adminRole={role} />} />
+                <Route path="admin/module/view/all" element={<ModulesList  />} />
                 <Route path="admin/settings" element={<ProfileSettings userRole={type} roleAdmin={role} />} />
                 <Route path="admin/courses/:id/modules" element={<CourseDetails />} />
               </>
@@ -83,7 +83,7 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
               <>
                 <Route path="manager/mainScreen" element={<DashboardPage />} />
                 <Route path="manager/courses" element={<CoursesList />} />
-                <Route path="manager/module/view" element={<ModulesList userRole={type} adminRole={role} />} />
+                <Route path="manager/module/view" element={<ModulesList  />} />
                 <Route path="manager/courses/:id/modules" element={<CourseDetails />} />
                 <Route path="manager/settings" element={<ProfileSettings userRole={type} roleAdmin={role} />} />
               </>
@@ -93,7 +93,7 @@ const AppRoutes = ({ isAuthenticated, setAuthenticated, type, role }) => {
             {type === 'teacher' && (
               <>
                 <Route path="teacher/mainScreen" element={<MainScreenTeacher userRole={type} roleAdm={role} />} />
-                <Route path="teacher/module/view" element={<ModulesList userRole={type} />} />
+                <Route path="teacher/module/view" element={<ModulesList  />} />
                 <Route path="teacher/course/view" element={<CoursesList userRole={type} />} />
                 <Route path="teacher/courses/:id/modules" element={<CourseDetails />} />
                 <Route path="teacher/settings" element={<ProfileSettings userRole={type} />} />

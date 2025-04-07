@@ -149,12 +149,12 @@ const moduleController = {
   async update(req, res) {
     try {
       const { id } = req.params;
-      const { name, teacher_id } = req.body;
+      const { name, teacher_id, qtd_hours } = req.body;
 
       const module = await db.Module.findByPk(id);
       if (!module) return res.status(404).json({ error: 'Módulo não encontrado' });
 
-      await module.update({ name, teacher_id });
+      await module.update({ name, teacher_id,qtd_hours });
 
       res.json(module);
     } catch (error) {

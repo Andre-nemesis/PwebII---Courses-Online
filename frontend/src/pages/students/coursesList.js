@@ -13,18 +13,18 @@ import {
   InputLabel,
   FormControl,
   Checkbox,
-  ListItemText
+  ListItemText,
 } from "@mui/material";
 import CardCourse from "../../components/CardCourse.js";
 import api from "../../service/api.js";
 import Menu from "../../components/Menu.js";
 import SearchBar from "../../components/SearchBar.js";
 import { ArrowBackIos, ArrowForwardIos, Add } from "@mui/icons-material";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from 'react-router-dom';
-import SuccessMessageModal from '../../components/SuccessMessageModal';
-import ErrorMessageModal from '../../components/ErrorMessageModal';
+import { useNavigate } from "react-router-dom";
+import SuccessMessageModal from "../../components/SuccessMessageModal";
+import ErrorMessageModal from "../../components/ErrorMessageModal";
 
 const CoursesList = () => {
   const [courses, setCourses] = useState([]);
@@ -38,15 +38,15 @@ const CoursesList = () => {
   const [isSearch, setSearch] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [modules, setModules] = useState([]);
-  const [id, setId] = useState(null);
+  const [admin_id, setId] = useState(null);
   const [courseIndex, setCourseIndex] = useState(0);
   const [filteredCourseIndex, setFilteredCourseIndex] = useState(0);
-  const cardsPerPage = 4;
+  const cardsPerPage = 3; // Ajustado para 3 cards por página
   const [newCourse, setNewCourse] = useState({
-    id: '',
-    name: '',
-    qtd_hours: '',
-    module: []
+    admin_id: "",
+    name: "",
+    qtd_hours: "",
+    module: [],
   });
   const navigate = useNavigate();
   const [openMessage, setOpenMessage] = useState(false);
@@ -64,57 +64,60 @@ const CoursesList = () => {
         setId(decoded.id);
         setRoleAdmin(decoded.role_adm || null);
       } catch (err) {
-        setError('Token inválido');
-        setErrorInfo({ type: 'error', message: err.message });
+        setError("Token inválido");
+        setErrorInfo({ type: "error", message: err.message });
         setOpenError(true);
         setAuthenticated(false);
       }
     } else {
       setAuthenticated(false);
     }
-
-    const fetchCourses = async () => {
-      try {
-        const response = await api.get('/courses/');
-        setCourses(response.data);
-        setFilteredCourses(response.data);
-      } catch (err) {
-        setErrorInfo({ type: 'error', message: err.message });
-        setOpenError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const fetchModules = async () => {
-      try {
-        const response = await api.get('/modules/');
-        setModules(response.data);
-      } catch (err) {
-        setErrorInfo({ type: 'error', message: err.message });
-        setOpenError(true);
-      }
-    };
-
-    if(role === "student"){
-      fetchCourses();
-    }else{
-      fetchCourses();
-      fetchModules();
-    }
-    
-    
   }, []);
+
+  const fetchCoursesData = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get("/courses/");
+      setCourses(response.data);
+      setFilteredCourses(response.data);
+      setCourseIndex(0); // Resetar índice ao atualizar
+      setFilteredCourseIndex(0);
+    } catch (err) {
+      setErrorInfo({ type: "error", message: err.message });
+      setOpenError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchModules = async () => {
+    try {
+      const response = await api.get("/modules/");
+      setModules(response.data);
+    } catch (err) {
+      setErrorInfo({ type: "error", message: err.message });
+      setOpenError(true);
+    }
+  };
+
+  useEffect(() => {
+    if (authenticated) {
+      fetchCoursesData();
+      if (role !== "student") {
+        fetchModules();
+      }
+    }
+  }, [authenticated, role]);
 
   const fetchCoursesByTermo = async (termo) => {
     try {
       const response = await api.get(`/courses/search/${encodeURI(termo)}`);
       if (!response.data) {
-        throw new Error('Erro ao buscar cursos por termo.');
+        throw new Error("Erro ao buscar cursos por termo.");
       }
       return response.data;
     } catch (error) {
-      setErrorInfo({ type: 'error', message: error.message });
+      setErrorInfo({ type: "error", message: error.message });
       setOpenError(true);
       return null;
     }
@@ -123,7 +126,7 @@ const CoursesList = () => {
   const handleSearchChange = async (e) => {
     const value = e.target.value.trim();
     setSearchTerm(value);
-    setFilteredCourseIndex(0); 
+    setFilteredCourseIndex(0);
 
     if (!value) {
       setFilteredCourses(courses);
@@ -166,42 +169,46 @@ const CoursesList = () => {
   };
 
   const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setNewCourse({ admin_id: "", name: "", qtd_hours: "", module: [] }); // Resetar o formulário
+  };
+
+  const handleCourseCreated = () => {
+    fetchCoursesData(); // Atualizar o carrossel
+    handleCloseModal();
+    setMessageInfo({ type: "success", message: "Curso cadastrado com sucesso!" });
+    setOpenMessage(true);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewCourse(prev => ({ ...prev, [name]: value }));
+    setNewCourse((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleModuleChange = (event) => {
-    const { target: { value } } = event;
-    setNewCourse(prev => ({
+    const {
+      target: { value },
+    } = event;
+    setNewCourse((prev) => ({
       ...prev,
-      module: typeof value === 'string' ? value.split(',') : value,
+      module: typeof value === "string" ? value.split(",") : value,
     }));
   };
 
   const handleSubmit = async () => {
     try {
-      newCourse.id = id;
-      await api.post('/courses/', newCourse);
-      const response = await api.get('/courses/');
-      setCourses(response.data);
-      setFilteredCourses(response.data);
-      setCourseIndex(0);
-      setFilteredCourseIndex(0);
-      handleCloseModal();
-      setNewCourse({ name: '', qtd_hours: '', module: [] });
-      setMessageInfo({ type: "success", message: "Curso cadastrado com sucesso!" });
-      setOpenMessage(true);
+      const courseData = { ...newCourse, admin_id }; 
+      await api.post("/courses/", courseData);
+      handleCourseCreated(); 
     } catch (err) {
-      setErrorInfo({ type: 'error', message: err.message });
+      setErrorInfo({ type: "error", message: err.message });
       setOpenError(true);
     }
   };
 
   if (!authenticated) {
-    navigate('/login');
+    navigate("/login");
     return null;
   }
 
@@ -209,15 +216,15 @@ const CoursesList = () => {
   const handleCloseError = () => setOpenError(false);
 
   const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
     width: 400,
-    bgcolor: 'background.paper',
+    bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,
-    borderRadius: 2
+    borderRadius: 2,
   };
 
   const visibleCourses = isSearch
@@ -268,7 +275,6 @@ const CoursesList = () => {
                         xs={12}
                         sm={6}
                         md={4}
-                        lg={3}
                         key={course.id}
                         sx={{ display: "flex", justifyContent: "center" }}
                       >
@@ -289,19 +295,21 @@ const CoursesList = () => {
                 )}
 
                 <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-                  <IconButton 
+                  <IconButton
                     onClick={handlePrevCourses}
                     sx={{ color: "white" }}
                     disabled={isSearch ? filteredCourseIndex === 0 : courseIndex === 0}
                   >
                     <ArrowBackIos />
                   </IconButton>
-                  <IconButton 
+                  <IconButton
                     onClick={handleNextCourses}
                     sx={{ color: "white" }}
-                    disabled={isSearch 
-                      ? filteredCourseIndex + cardsPerPage >= filteredCourses.length 
-                      : courseIndex + cardsPerPage >= courses.length}
+                    disabled={
+                      isSearch
+                        ? filteredCourseIndex + cardsPerPage >= filteredCourses.length
+                        : courseIndex + cardsPerPage >= courses.length
+                    }
                   >
                     <ArrowForwardIos />
                   </IconButton>
@@ -337,7 +345,7 @@ const CoursesList = () => {
                     backgroundColor: "#00BFFF",
                     "&:hover": { backgroundColor: "#0099cc" },
                     ml: 10,
-                    mt: 0.1
+                    mt: 0.1,
                   }}
                   onClick={handleOpenModal}
                 >
@@ -364,7 +372,6 @@ const CoursesList = () => {
                         xs={12}
                         sm={6}
                         md={4}
-                        lg={3}
                         key={course.id}
                         sx={{ display: "flex", justifyContent: "center" }}
                       >
@@ -385,19 +392,21 @@ const CoursesList = () => {
                 )}
 
                 <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-                  <IconButton 
+                  <IconButton
                     onClick={handlePrevCourses}
                     sx={{ color: "white" }}
                     disabled={isSearch ? filteredCourseIndex === 0 : courseIndex === 0}
                   >
                     <ArrowBackIos />
                   </IconButton>
-                  <IconButton 
+                  <IconButton
                     onClick={handleNextCourses}
                     sx={{ color: "white" }}
-                    disabled={isSearch 
-                      ? filteredCourseIndex + cardsPerPage >= filteredCourses.length 
-                      : courseIndex + cardsPerPage >= courses.length}
+                    disabled={
+                      isSearch
+                        ? filteredCourseIndex + cardsPerPage >= filteredCourses.length
+                        : courseIndex + cardsPerPage >= courses.length
+                    }
                   >
                     <ArrowForwardIos />
                   </IconButton>
@@ -441,8 +450,8 @@ const CoursesList = () => {
                     label="Módulos"
                     renderValue={(selected) =>
                       selected
-                        .map(id => modules.find(m => m.id === id)?.name)
-                        .join(', ')
+                        .map((id) => modules.find((m) => m.id === id)?.name)
+                        .join(", ")
                     }
                   >
                     {modules.map((module) => (
@@ -453,7 +462,7 @@ const CoursesList = () => {
                     ))}
                   </Select>
                 </FormControl>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+                <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
                   <Button onClick={handleCloseModal}>Cancelar</Button>
                   <Button
                     variant="contained"
@@ -470,7 +479,6 @@ const CoursesList = () => {
       ) : (
         <>
           <Menu userRole={role} />
-
           <Box
             component="main"
             sx={{
@@ -494,7 +502,9 @@ const CoursesList = () => {
                   <CircularProgress color="primary" />
                 </Box>
               ) : error ? (
-                <Typography color="error" sx={{ textAlign: "center" }}>{error}</Typography>
+                <Typography color="error" sx={{ textAlign: "center" }}>
+                  {error}
+                </Typography>
               ) : filteredCourses.length === 0 ? (
                 <Typography sx={{ color: "white", textAlign: "center" }}>
                   Nenhum curso encontrado
@@ -502,11 +512,22 @@ const CoursesList = () => {
               ) : (
                 <Grid container spacing={4} marginTop="2px">
                   {visibleCourses.map((course) => (
-                    <Grid item xs={12} sm={6} md={4} lg={3} key={course.id} sx={{ display: "flex", justifyContent: "center" }}>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      key={course.id}
+                      sx={{ display: "flex", justifyContent: "center" }}
+                    >
                       <CardCourse
                         id={course.id}
                         title={course.name || "Nome Indisponível"}
-                        description={course.qtd_hours ? `${course.qtd_hours} horas` : "Horas Indisponíveis"}
+                        description={
+                          course.qtd_hours
+                            ? `${course.qtd_hours} horas`
+                            : "Horas Indisponíveis"
+                        }
                         type={role}
                       />
                     </Grid>
@@ -515,19 +536,21 @@ const CoursesList = () => {
               )}
 
               <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-                <IconButton 
+                <IconButton
                   onClick={handlePrevCourses}
                   sx={{ color: "white" }}
                   disabled={isSearch ? filteredCourseIndex === 0 : courseIndex === 0}
                 >
                   <ArrowBackIos />
                 </IconButton>
-                <IconButton 
+                <IconButton
                   onClick={handleNextCourses}
                   sx={{ color: "white" }}
-                  disabled={isSearch 
-                    ? filteredCourseIndex + cardsPerPage >= filteredCourses.length 
-                    : courseIndex + cardsPerPage >= courses.length}
+                  disabled={
+                    isSearch
+                      ? filteredCourseIndex + cardsPerPage >= filteredCourses.length
+                      : courseIndex + cardsPerPage >= courses.length
+                  }
                 >
                   <ArrowForwardIos />
                 </IconButton>
@@ -536,8 +559,18 @@ const CoursesList = () => {
           </Box>
         </>
       )}
-      <SuccessMessageModal open={openMessage} onClose={handleCloseMessage} type={messageInfo.type} message={messageInfo.message} />
-      <ErrorMessageModal open={openError} onClose={handleCloseError} type={errorInfo.type} message={errorInfo.message} />
+      <SuccessMessageModal
+        open={openMessage}
+        onClose={handleCloseMessage}
+        type={messageInfo.type}
+        message={messageInfo.message}
+      />
+      <ErrorMessageModal
+        open={openError}
+        onClose={handleCloseError}
+        type={errorInfo.type}
+        message={errorInfo.message}
+      />
     </Box>
   );
 };

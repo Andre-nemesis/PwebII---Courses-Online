@@ -183,8 +183,26 @@ const studentController = {
       if (studentCourse) {
         return res.status(400).json({ error: 'Você já está inscrito neste curso' });
       }
-      await db.Student_courses.create({ student_id: user, course_id: id });
+      await db.Student_courses.create({ student_id: user, course_id: id,percent_complet:0 });
       res.status(201).json({ message: 'Inscrição realizada com sucesso' });
+    }
+    catch (error) {
+      res.status(500).json({ error: 'Erro ao inscrever-se no curso', details: error.message });
+    }
+  },
+
+  async isSubcribed(req,res) {
+    const { user } = req.params;
+    const { id } = req.params;
+    try {
+      const studentCourse = await db.Student_courses.findOne({
+        where: { student_id: user, course_id: id }
+      });
+      if (studentCourse) {
+        return res.status(200).json({ message: 'Você já está inscrito neste curso', result:true });
+      }else{
+        return res.status(200).json({ message: 'Não inscrito',result:false });
+      }
     }
     catch (error) {
       res.status(500).json({ error: 'Erro ao inscrever-se no curso', details: error.message });
@@ -194,7 +212,7 @@ const studentController = {
   async subcribeCourseAll(req, res) {
     const { id } = req.params;
     try {
-      const studentCourses = await db.Student_courses.findOne({
+      const studentCourses = await db.Student_courses.findAll({
         where: { student_id: id },
         include: [{ model: db.Course, as: "Course" }]
       });
@@ -206,7 +224,7 @@ const studentController = {
       res.status(200).json({studentCourses});
     }
     catch (error) {
-      res.status(500).json({ error: 'Erro ao inscrever-se no curso', details: error.message });
+      res.status(500).json({ error: 'Erro ao buscar cursos', details: error.message });
     }
   },
 

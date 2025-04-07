@@ -20,13 +20,17 @@ export default (sequelize) => {
       }
     },
     course_id: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'Courses',
-          key: 'id',
-          onDelete: 'CASCADE',
-          onUpdate: 'RESTRICT',
-        }
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Courses',
+        key: 'id',
+        onDelete: 'CASCADE',
+        onUpdate: 'RESTRICT',
+      }
+    },
+    percent_complet: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
     },
     created_at: {
       type: DataTypes.DATE,
@@ -38,17 +42,17 @@ export default (sequelize) => {
       defaultValue: DataTypes.NOW,
     }
   },
-  {
-    sequelize,
-    modelName: 'Student_courses',
-    tableName: 'Student_courses',
-    underscored: true,
-  });
+    {
+      sequelize,
+      modelName: 'Student_courses',
+      tableName: 'Student_courses',
+      underscored: true,
+    });
 
   Student_courses.associate = (models) => {
-    Student_courses.belongsToMany(models.Course, { through : 'Student_courses', foreignKey: 'course_id', as: 'Course' }); 
-    Student_courses.belongsToMany(models.Student, { through: 'Student_courses', foreignKey: 'student_id', as: 'Student' });
-}
+    Student_courses.belongsTo(models.Course, {foreignKey: 'course_id', as: 'Course' });
+    Student_courses.belongsTo(models.Student, {foreignKey: 'student_id', as: 'Student' });
+  }
 
   return Student_courses;
 };
